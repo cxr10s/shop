@@ -827,13 +827,16 @@ body {
             <div class="waiting-title">¡Pedido registrado!</div>
             <div class="waiting-msg">
                 Tu pedido quedó guardado y está esperando confirmación de pago.<br><br>
-                <strong>¿Aún no pagaste?</strong> Vuelve atrás y completa el pago con Nequi.
+                Cuando realices el pago con Nequi esta pantalla se actualizará automáticamente.
             </div>
             <div class="nequi-number-display" id="display-order-id">Pedido #--------</div>
             <div class="status-bar">
                 <div class="dot-anim"><span></span><span></span><span></span></div>
                 Verificando pago con Nequi Negocios
             </div>
+            <button class="btn-primary" style="margin-top:1.2rem;width:100%;max-width:300px;" onclick="volverAPago()">
+                ← Volver a pagar
+            </button>
             <button class="cancel-link" onclick="cancelarEspera()">Cancelar pedido</button>
         </div>
     </div>
@@ -1216,6 +1219,12 @@ function iniciarPolling() {
             }
         } catch(e) {}
     }, 6000);
+}
+
+// ── VOLVER A PAGAR (sin cancelar el pedido) ──────────────────────
+function volverAPago() {
+    clearInterval(pollingTimer);
+    showScreen(1); // Vuelve al QR screen — el pedido sigue guardado
 }
 
 // ── CANCELAR PEDIDO ──────────────────────────────────────────────
