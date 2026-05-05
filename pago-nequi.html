@@ -1078,14 +1078,14 @@ function abrirNequi() {
         // Si la app no está instalada, redirigir a la tienda después de 1.5s
         setTimeout(() => {
             if (isAndroid) {
-                window.location.href = 'https://play.google.com/store/apps/details?id=com.nequi.mobilebanking';
+                window.location.href = '';
             } else if (isIOS) {
-                window.location.href = 'https://apps.apple.com/co/app/nequi/id1354585028';
+                window.location.href = '';
             }
         }, 1500);
     } else {
         // En PC: abrir el portal oficial de Nequi
-        window.open('https://www.nequi.com.co', '_blank');
+        window.open('', '_blank');
     }
 }
 
@@ -1218,11 +1218,6 @@ function iniciarPolling() {
     }, 6000);
 }
 
-// ── VOLVER A PAGAR (sin cancelar el pedido) ──────────────────────
-function volverAPago() {
-    clearInterval(pollingTimer);
-    showScreen(1); // Vuelve al QR screen — el pedido sigue guardado
-}
 
 // ── CANCELAR PEDIDO ──────────────────────────────────────────────
 async function cancelarEspera() {
@@ -1241,7 +1236,7 @@ function mostrarResultado(tipo) {
         success: {
             icon: '✅', cls: 'success',
             title: '¡Pago confirmado!',
-            msg: 'Tu pago fue aprobado exitosamente por Nequi. Tu pedido está siendo procesado.',
+            msg: 'Tu pago fue aprobado exitosamente. Tu pedido está siendo procesado.',
             actions: `<a href="${misPedidos}" class="btn-primary" style="text-decoration:none;">Ver mi pedido</a>
                       <a href="https://cxr10s.github.io/tienda/" class="btn-secondary">Seguir comprando</a>`
         },
