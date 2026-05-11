@@ -781,7 +781,7 @@ body {
         </div>
 
         <!-- Divisor -->
-        <div class="nq-divider"><span>si deseas usa este boton a nequi</span></div>
+        <div class="nq-divider"><span> Estas en PC. ESCANEA EL CODIGO QR desde tu movil</span></div>
         <!-- Botón abrir Nequi -->
         <button class="nq-open-btn" id="nq-open-btn" onclick="abrirNequi()">
             <div class="nequi-logo nequi-logo-sm"><img src="img_nequi.jpeg" alt="N"></div>
@@ -1051,7 +1051,7 @@ function showScreen(idx) {
         // Cambiar label del botón según dispositivo
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         const lbl = document.getElementById('nq-btn-label');
-        if (lbl) lbl.textContent = isMobile ? 'Abrir app Nequi' : 'Ir al portal de Nequi';
+        if (lbl) lbl.textContent = isMobile ? 'Abrir app Nequi' : 'Estas en PC. Escanea el QR con tu Nequi en el móvil';
     }
     if (idx === 2) { next.style.display = 'none'; amountDetail.style.display = 'block'; }
     if (idx === 3) { next.style.display = 'none'; amountDetail.style.display = 'none'; }
