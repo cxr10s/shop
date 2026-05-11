@@ -1,17 +1,21 @@
-/**
- * FACTURA.JS — Minimal Rounded Edition (Mobile hardware style)
- * Jerarquía visual optimizada y bordes suaves.
- */
-
 async function generarFacturaPDF(pedido) {
     try {
-        // 1. CARGA SEGURA DE LIBRERÍA
+        // ==============================
+        // VALIDACIONES
+        // ==============================
+        if (!pedido) {
+            throw new Error('Pedido inválido');
+        }
+
+        // ==============================
+        // CARGAR JSPDF (Optimizado)
+        // ==============================
         if (!window.jspdf?.jsPDF) {
             await new Promise((resolve, reject) => {
                 const script = document.createElement('script');
                 script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
                 script.onload = resolve;
-                script.onerror = () => reject(new Error('Error cargando motor PDF'));
+                script.onerror = () => reject(new Error('No se pudo cargar jsPDF'));
                 document.head.appendChild(script);
             });
         }
@@ -19,118 +23,146 @@ async function generarFacturaPDF(pedido) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // Polyfill para redondeado
-        if (!doc.roundedRect && doc.roundRect) doc.roundedRect = doc.roundRect;
+        // Compatibilidad para rectángulos redondeados
+        if (!doc.roundedRect && doc.roundRect) {
+            doc.roundedRect = doc.roundRect;
+        }
 
-        // 2. CONFIGURACIÓN DE ESTILO (Sutil & Elegante)
-        const C = {
-            dark: [28, 28, 35],
-            accent: [173, 255, 47], 
-            text: [45, 45, 50],
-            muted: [140, 140, 150],
-            light: [245, 246, 250],
-            radius: 4 // El redondeado mínimo estilo hardware
-        };
-
-        const id = String(pedido.id || 'SHOP').substring(0, 8).toUpperCase();
+        // ==============================
+        // DATOS Y COLORES
+        // ==============================
+        const id = String(pedido.id || 'LOCAL').substring(0, 8).toUpperCase();
         const productos = Array.isArray(pedido.productos) ? pedido.productos : [];
         const FECHA = new Date().toLocaleDateString('es-CO');
+        
+        const C = {
+            dark: [20, 20, 28],
+            accent: [173, 255, 47], // Verde Lima
+            text: [40, 40, 40],
+            muted: [120, 120, 120],
+            bg: [248, 249, 252]
+        };
 
-        // 3. HEADER CON BORDES REDONDEADOS INFERIORES
+        // ==============================
+        // HEADER (Diseño Moderno)
+        // ==============================
         doc.setFillColor(...C.dark);
-        // Dibujamos el fondo oscuro con un ligero redondeado en las esquinas inferiores
-        doc.roundedRect(10, 10, 190, 45, C.radius, C.radius, 'F');
+        doc.rect(0, 0, 210, 55, 'F'); // Fondo oscuro
 
+        // Logo y Nombre
         doc.setTextColor(255, 255, 255);
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(24);
-        doc.text('SHOP.', 25, 30);
+        doc.setFontSize(28);
+        doc.text('SHOP', 20, 30);
 
-        // Badge de ID con redondeado tipo "botón de iPhone"
+        // Badge de Factura (Derecha)
         doc.setFillColor(...C.accent);
-        doc.roundedRect(145, 20, 45, 20, 5, 5, 'F');
-        doc.setTextColor(...C.dark);
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'bold');
-        doc.text('PEDIDO', 167.5, 28, { align: 'center' });
-        doc.setFontSize(12);
-        doc.text(`#${id}`, 167.5, 35, { align: 'center' });
-
-        // 4. TARJETA DE CLIENTE (Soft UI)
-        let y = 65;
-        doc.setFillColor(...C.light);
-        doc.roundedRect(20, y, 170, 32, C.radius, C.radius, 'F');
-        
+        doc.roundedRect(140, 15, 50, 25, 3, 3, 'F');
         doc.setTextColor(...C.dark);
         doc.setFontSize(9);
+        doc.text('FACTURA N°', 165, 25, { align: 'center' });
+        doc.setFontSize(14);
+        doc.text(`#${id}`, 165, 34, { align: 'center' });
+
+        // ==============================
+        // INFO DE CLIENTE Y FECHA
+        // ==============================
+        doc.setTextColor(...C.text);
         doc.setFont('helvetica', 'bold');
-        doc.text('DATOS DE FACTURACIÓN', 28, y + 10);
+        doc.setFontSize(10);
+        doc.text('CLIENTE:', 20, 70);
         
         doc.setFont('helvetica', 'normal');
-        doc.setFontSize(11);
-        doc.text(`${pedido.nombre || 'Cliente General'}`, 28, y + 18);
+        doc.setFontSize(12);
+        doc.text(`${pedido.nombre || 'Consumidor Final'}`, 20, 78);
+        
         doc.setFontSize(9);
         doc.setTextColor(...C.muted);
-        doc.text(`ID: ${pedido.documento || 'N/A'}  •  ${FECHA}`, 28, y + 25);
+        doc.text(`Documento: ${pedido.documento || 'N/A'}`, 20, 84);
+        doc.text(`Teléfono: ${pedido.telefono || '—'}`, 20, 89);
 
-        // 5. TABLA DE PRODUCTOS
-        y = 110;
-        // Header de tabla redondeado
-        doc.setFillColor(...C.dark);
-        doc.roundedRect(20, y, 170, 10, 2, 2, 'F');
+        // Fecha y Entrega (Columna Derecha)
+        doc.setTextColor(...C.text);
+        doc.setFont('helvetica', 'bold');
+        doc.text('DETALLES:', 140, 70);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text(`Fecha: ${FECHA}`, 140, 78);
+        doc.text(`Envío: ${pedido.tipo_entrega || 'Estándar'}`, 140, 84);
+
+        // ==============================
+        // TABLA DE PRODUCTOS (Header)
+        // ==============================
+        let y = 110;
+        doc.setFillColor(...C.bg);
+        doc.rect(20, y - 7, 170, 10, 'F'); // Fondo header tabla
         
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(8);
-        doc.text('ARTÍCULO', 28, y + 6.5);
-        doc.text('CANT', 130, y + 6.5, { align: 'center' });
-        doc.text('TOTAL', 182, y + 6.5, { align: 'right' });
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(...C.dark);
+        doc.text('DESCRIPCIÓN', 25, y);
+        doc.text('CANT', 120, y);
+        doc.text('TOTAL', 185, y, { align: 'right' });
 
-        y += 15;
-        productos.forEach((p, i) => {
-            const subtotal = (p.quantity || 0) * (p.price || 0);
+        doc.setDrawColor(230, 230, 230);
+        doc.line(20, y + 3, 190, y + 3);
+
+        // Listado
+        y += 12;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        
+        productos.forEach((p, index) => {
+            const subtotal = Number(p?.quantity || 0) * Number(p?.price || 0);
             
-            // Fila con fondo alterno y bordes suaves
-            if (i % 2 === 0) {
-                doc.setFillColor(250, 250, 252);
-                doc.roundedRect(20, y - 6, 170, 10, 2, 2, 'F');
-            }
-
             doc.setTextColor(...C.text);
-            doc.setFontSize(10);
-            doc.text(String(p.name).substring(0, 40), 28, y + 1);
-            doc.text(String(p.quantity), 130, y + 1, { align: 'center' });
-            doc.setFont('helvetica', 'bold');
-            doc.text(`$${subtotal.toLocaleString('es-CO')}`, 182, y + 1, { align: 'right' });
-            doc.setFont('helvetica', 'normal');
+            doc.text(String(p?.name || 'Producto').substring(0, 45), 25, y);
+            doc.text(String(p?.quantity || 0), 120, y);
+            doc.text(`$${subtotal.toLocaleString('es-CO')}`, 185, y, { align: 'right' });
             
-            y += 12;
+            y += 10;
+            
+            // Línea divisoria suave
+            doc.setDrawColor(245, 245, 245);
+            doc.line(20, y - 4, 190, y - 4);
         });
 
-        // 6. TOTAL FINAL (Estilo Card de Pago)
+        // ==============================
+        // TOTAL (Resaltado)
+        // ==============================
         y += 5;
         const total = Number(pedido.total || 0);
         
         doc.setFillColor(...C.dark);
-        doc.roundedRect(120, y, 70, 18, C.radius, C.radius, 'F');
+        doc.roundedRect(130, y, 60, 15, 2, 2, 'F');
         
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(10);
-        doc.text('TOTAL NETO', 128, y + 11);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text('TOTAL A PAGAR', 135, y + 9);
         
         doc.setTextColor(...C.accent);
-        doc.setFontSize(14);
-        doc.text(`$${total.toLocaleString('es-CO')}`, 182, y + 12, { align: 'right' });
+        doc.setFontSize(13);
+        doc.text(`$${total.toLocaleString('es-CO')}`, 185, y + 10, { align: 'right' });
 
-        // 7. FOOTER
+        // ==============================
+        // FOOTER (Información Legal)
+        // ==============================
         doc.setTextColor(...C.muted);
         doc.setFontSize(8);
-        doc.text('Esta es una confirmación de compra digital.', 105, 285, { align: 'center' });
+        doc.setFont('helvetica', 'italic');
+        doc.text('SHOP S.A.S - NIT # - Centro, Bucaramanga', 105, 270, { align: 'center' });
+        doc.text('Señor/a Usuario/a', 105, 275, { align: 'center' });
+        doc.text('Gracias por su compra. Para cambios o devoluciones conserve este recibo.', 105, 280, { align: 'center' });
+        doc.text('Este documento es una representación gráfica de su pedido.', 105, 285, { align: 'center' });
 
-        // 8. ACCIÓN DE DESCARGA
-        doc.save(`Factura_Shop_${id}.pdf`);
+        // ==============================
+        // GUARDAR
+        // ==============================
+        doc.save(`Factura-${id}.pdf`);
 
     } catch (err) {
-        console.error("Error en PDF Engine:", err);
-        alert("Error al descargar: " + err.message);
+        console.error(err);
+        alert('Hubo un problema al generar el PDF: ' + err.message);
     }
 }
