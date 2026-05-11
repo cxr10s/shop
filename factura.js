@@ -1,216 +1,171 @@
 /**
- * FACTURA.JS — Professional Edition v2.1
- * Core: jsPDF with High-Performance Rendering
- * Design: Modern Minimalist / Sports Branding
+ * FACTURA.JS — Ultra-Resilient Edition v3.0
+ * Corregido: Gestión de carga asíncrona y disparador de descarga.
  */
 
-// Utilidad de formateo de moneda para Colombia (COP)
 const fmt = (n) => `${Math.round(Number(n)).toLocaleString('es-CO')}`;
 
 /**
- * Función principal para generar el PDF
- * @param {Object} pedido - Objeto con la información de la compra
+ * Garantiza que jsPDF esté listo antes de ejecutar la lógica
  */
+const LoadJsPDF = () => {
+    return new Promise((resolve, reject) => {
+        if (window.jspdf) return resolve(window.jspdf);
+        
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        s.async = true;
+        s.onload = () => {
+            // Pequeño delay para asegurar que el namespace esté disponible
+            setTimeout(() => {
+                if (window.jspdf) resolve(window.jspdf);
+                else reject(new Error("Namespace jsPDF no encontrado"));
+            }, 50);
+        };
+        s.onerror = () => reject(new Error("Error de red cargando jsPDF"));
+        document.head.appendChild(s);
+    });
+};
+
 async function generarFacturaPDF(pedido) {
-    // 1. Guardrail: Validación de integridad de datos
-    if (!pedido || !pedido.productos) {
-        console.error('Error: Datos del pedido incompletos.');
-        return;
-    }
+    try {
+        // 1. Validación de entrada
+        if (!pedido || !pedido.productos) {
+            throw new Error("Datos del pedido insuficientes");
+        }
 
-    // 2. Inyección optimizada de dependencia (jsPDF)
-    if (!window.jspdf) {
-        await new Promise((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-            s.async = true; 
-            s.onload = resolve;
-            s.onerror = () => reject('Error cargando motor de PDF');
-            document.head.appendChild(s);
+        // 2. Carga segura del motor
+        const lib = await LoadJsPDF();
+        const { jsPDF } = lib;
+        
+        // 3. Inicialización del documento
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+        const W = 210;
+        const margin = 20;
+        const C = {
+            dark: [20, 20, 28],
+            accent: [173, 255, 47], 
+            purple: [99, 60, 180],
+            text: [40, 40, 45],
+            muted: [130, 130, 145],
+            border: [230, 230, 235],
+            bg: [248, 249, 252]
+        };
+
+        let y = 0;
+
+        // --- RENDERIZADO DE HEADER ---
+        doc.setFillColor(...C.dark);
+        doc.rect(0, 0, W, 55, 'F');
+        doc.setFillColor(...C.accent);
+        doc.rect(0, 0, 5, 55, 'F');
+
+        doc.setTextColor(...C.accent);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(26);
+        doc.text('SHOP.', margin, 22);
+        
+        doc.setTextColor(180, 180, 190);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('NIT: 900.876.543-2 | Bogotá, Colombia', margin, 30);
+        doc.text('tiendadeportiva.com', margin, 35);
+
+        // Badge de Factura
+        const id = (pedido.id || 'LOCAL').substring(0, 8).toUpperCase();
+        doc.setFillColor(...C.purple);
+        doc.roundedRect(W - margin - 55, 12, 55, 30, 3, 3, 'F');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(8);
+        doc.text('ORDEN DE COMPRA', W - margin - 27.5, 20, { align: 'center' });
+        doc.setFontSize(14);
+        doc.text(`#${id}`, W - margin - 27.5, 30, { align: 'center' });
+
+        // --- INFORMACIÓN CLIENTE ---
+        y = 65;
+        doc.setFillColor(...C.bg);
+        doc.roundedRect(margin, y, W - (margin * 2), 35, 2, 2, 'F');
+
+        doc.setTextColor(...C.purple);
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.text('DATOS DEL CLIENTE', margin + 6, y + 8);
+        
+        doc.setTextColor(...C.text);
+        doc.setFontSize(11);
+        doc.text(pedido.nombre || 'Cliente General', margin + 6, y + 16);
+        
+        doc.setTextColor(...C.muted);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Documento: ${pedido.documento || 'N/A'}`, margin + 6, y + 23);
+        doc.text(`Email: ${pedido.email || '—'}`, margin + 6, y + 28);
+
+        // --- TABLA DE PRODUCTOS ---
+        y += 45;
+        doc.setFillColor(...C.dark);
+        doc.roundedRect(margin, y, W - (margin * 2), 10, 1, 1, 'F');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text('DESCRIPCIÓN', margin + 5, y + 6.5);
+        doc.text('CANT', W - 70, y + 6.5, { align: 'right' });
+        doc.text('TOTAL', W - margin - 5, y + 6.5, { align: 'right' });
+
+        y += 10;
+        pedido.productos.forEach((prod, i) => {
+            if (i % 2 !== 0) {
+                doc.setFillColor(...C.bg);
+                doc.rect(margin, y, W - (margin * 2), 11, 'F');
+            }
+            doc.setTextColor(...C.text);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.text(prod.name.substring(0, 45), margin + 5, y + 7);
+            doc.text(String(prod.quantity), W - 70, y + 7, { align: 'right' });
+            
+            const sub = prod.isGift ? 0 : prod.price * prod.quantity;
+            doc.setFont('helvetica', 'bold');
+            doc.text(prod.isGift ? 'GRATIS' : `$${fmt(sub)}`, W - margin - 5, y + 7, { align: 'right' });
+            
+            y += 11;
         });
+
+        // --- TOTALES ---
+        y += 5;
+        const subtotal = pedido.subtotal || 0;
+        const iva = subtotal * 0.19;
+        const total = subtotal + iva + (pedido.envio || 0) - (pedido.descuento || 0);
+
+        const drawTotal = (label, value, isBold = false) => {
+            doc.setTextColor(...(isBold ? C.text : C.muted));
+            doc.setFontSize(isBold ? 11 : 9);
+            doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+            doc.text(label, W - 90, y);
+            doc.text(`$${fmt(value)}`, W - margin - 5, y, { align: 'right' });
+            y += 7;
+        };
+
+        drawTotal('Subtotal:', subtotal);
+        drawTotal('IVA (19%):', iva);
+        if (pedido.envio) drawTotal('Envío:', pedido.envio);
+        y += 2;
+        drawTotal('TOTAL:', total, true);
+
+        // --- PIE DE PÁGINA ---
+        doc.setFontSize(7);
+        doc.setTextColor(...C.muted);
+        doc.text('Gracias por tu compra. Para cambios, presenta este documento en los próximos 30 días.', W/2, 285, { align: 'center' });
+
+        // 4. DISPARADOR DE DESCARGA SEGURO
+        // Usamos un nombre de archivo dinámico basado en el ID
+        doc.save(`Factura_SHOP_${id}.pdf`);
+        console.log("Factura descargada con éxito.");
+
+    } catch (error) {
+        console.error("Fallo Crítico en Generador:", error);
+        alert("No se pudo generar la factura. Detalles: " + error.message);
     }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
-
-    // --- CONFIGURACIÓN DE DISEÑO ---
-    const W = 210;
-    const margin = 20;
-    const C = {
-        dark: [20, 20, 28],      // Fondo elegante
-        accent: [173, 255, 47],  // Verde Lima (High Visibility)
-        purple: [99, 60, 180],   // Marca secundaria
-        text: [40, 40, 45],      // Texto principal
-        muted: [130, 130, 145],  // Texto secundario
-        border: [230, 230, 235], // Divisores
-        bg: [248, 249, 252]      // Fondos de tarjetas
-    };
-
-    let y = 0;
-
-    // --- HELPERS DE RENDERIZADO ---
-    const setF = (color, size, style = 'normal') => {
-        doc.setTextColor(...color);
-        doc.setFontSize(size);
-        doc.setFont('helvetica', style);
-    };
-
-    const drawLine = (ly) => {
-        doc.setDrawColor(...C.border);
-        doc.setLineWidth(0.2);
-        doc.line(margin, ly, W - margin, ly);
-    };
-
-    // --- SECCIÓN 1: HEADER & BRANDING ---
-    doc.setFillColor(...C.dark);
-    doc.rect(0, 0, W, 55, 'F');
-    
-    // Detalle estético lateral
-    doc.setFillColor(...C.accent);
-    doc.rect(0, 0, 5, 55, 'F');
-
-    setF(C.accent, 26, 'bold');
-    doc.text('SHOP.', margin, 22);
-    
-    setF([180, 180, 190], 9);
-    doc.text('NIT: 900.876.543-2', margin, 30);
-    doc.text('Calle 13 #25-66, Bogotá D.C.', margin, 35);
-    doc.text('tiendadeportiva.com', margin, 40);
-
-    // Badge Factura (Derecha)
-    const id = (pedido.id || 'N/A').substring(0, 8).toUpperCase();
-    doc.setFillColor(...C.purple);
-    doc.roundedRect(W - margin - 55, 12, 55, 30, 3, 3, 'F');
-    
-    setF([255, 255, 255], 8, 'bold');
-    doc.text('ORDEN DE COMPRA', W - margin - 27.5, 20, { align: 'center' });
-    doc.setFontSize(14);
-    doc.text(`#${id}`, W - margin - 27.5, 30, { align: 'center' });
-    
-    setF([220, 220, 220], 7.5);
-    const fecha = new Date().toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'numeric' });
-    doc.text(fecha.toUpperCase(), W - margin - 27.5, 38, { align: 'center' });
-
-    // --- SECCIÓN 2: CLIENTE Y ENVÍO ---
-    y = 65;
-    doc.setFillColor(...C.bg);
-    doc.roundedRect(margin, y, W - (margin * 2), 35, 2, 2, 'F');
-
-    setF(C.purple, 7, 'bold');
-    doc.text('CLIENTE', margin + 6, y + 8);
-    setF(C.text, 11, 'bold');
-    doc.text(pedido.nombre || 'Cliente General', margin + 6, y + 16);
-    
-    setF(C.muted, 9);
-    doc.text(`Documento: ${pedido.documento || 'No registrado'}`, margin + 6, y + 23);
-    doc.text(`Email: ${pedido.email || '—'}`, margin + 6, y + 28);
-
-    setF(C.purple, 7, 'bold');
-    doc.text('ENTREGA', W - margin - 60, y + 8);
-    setF(C.text, 9, 'normal');
-    const dir = pedido.direccion_envio || pedido.direccion || 'Recogida en tienda';
-    const dirLines = doc.splitTextToSize(dir, 55);
-    doc.text(dirLines, W - margin - 60, y + 14);
-
-    // --- SECCIÓN 3: TABLA DE PRODUCTOS ---
-    y += 48;
-    
-    // Header de Tabla
-    doc.setFillColor(...C.dark);
-    doc.roundedRect(margin, y, W - (margin * 2), 10, 1, 1, 'F');
-    setF([255, 255, 255], 8, 'bold');
-    doc.text('DESCRIPCIÓN DEL ARTÍCULO', margin + 5, y + 6.5);
-    doc.text('CANT.', W - 70, y + 6.5, { align: 'right' });
-    doc.text('UNITARIO', W - 45, y + 6.5, { align: 'right' });
-    doc.text('SUBTOTAL', W - margin - 5, y + 6.5, { align: 'right' });
-
-    y += 10;
-
-    // Cuerpo de Tabla
-    pedido.productos.forEach((prod, i) => {
-        if (i % 2 !== 0) {
-            doc.setFillColor(...C.bg);
-            doc.rect(margin, y, W - (margin * 2), 11, 'F');
-        }
-        
-        setF(C.text, 9);
-        const name = prod.name + (prod.isGift ? ' (Regalo)' : '');
-        doc.text(name, margin + 5, y + 7);
-        
-        setF(C.muted, 9);
-        doc.text(String(prod.quantity), W - 70, y + 7, { align: 'right' });
-        
-        if (prod.isGift) {
-            setF(C.purple, 8, 'bold');
-            doc.text('GRATIS', W - 45, y + 7, { align: 'right' });
-            doc.text('GRATIS', W - margin - 5, y + 7, { align: 'right' });
-        } else {
-            setF(C.muted, 9);
-            doc.text(`$${fmt(prod.price)}`, W - 45, y + 7, { align: 'right' });
-            setF(C.text, 9, 'bold');
-            doc.text(`$${fmt(prod.price * prod.quantity)}`, W - margin - 5, y + 7, { align: 'right' });
-        }
-        
-        drawLine(y + 11);
-        y += 11;
-    });
-
-    // --- SECCIÓN 4: TOTALES ---
-    y += 10;
-    const calcSubtotal = pedido.subtotal || 0;
-    const calcIva = calcSubtotal * 0.19; // IVA Estándar
-    const calcEnvio = pedido.envio || 0;
-    const calcDesc = pedido.descuento || 0;
-    const calcTotal = calcSubtotal + calcIva + calcEnvio - calcDesc;
-
-    const rowTotal = (label, value, isFinal = false) => {
-        if (isFinal) {
-            doc.setFillColor(...C.dark);
-            doc.roundedRect(W - 90, y - 5, 70, 12, 1, 1, 'F');
-            setF(C.accent, 11, 'bold');
-        } else {
-            setF(C.muted, 9);
-        }
-        doc.text(label, W - 85, y + 2.5);
-        doc.text(`$${fmt(value)}`, W - margin - 5, y + 2.5, { align: 'right' });
-        y += 8;
-    };
-
-    rowTotal('Subtotal Neto', calcSubtotal);
-    rowTotal('IVA (19%)', calcIva);
-    if (calcEnvio > 0) rowTotal('Gastos de Envío', calcEnvio);
-    if (calcDesc > 0) {
-        setF([22, 163, 74], 9); // Color verde para descuentos
-        rowTotal('Descuento aplicado', -calcDesc);
-    }
-    y += 4;
-    rowTotal('TOTAL A PAGAR', calcTotal, true);
-
-    // --- SECCIÓN 5: FOOTER LEGAL & GARANTÍA ---
-    y = 265;
-    drawLine(y);
-    
-    setF(C.muted, 7, 'normal');
-    const legal = [
-        'Esta es una representación gráfica de una factura electrónica.',
-        'Garantía: 30 días por defectos de fábrica con este comprobante.',
-        'Visita cxr10s.github.io/tienda para rastrear tu envío.'
-    ];
-    legal.forEach((text, i) => {
-        doc.text(text, W/2, y + 5 + (i * 4), { align: 'center' });
-    });
-
-    // Barra de cierre estética
-    doc.setFillColor(...C.dark);
-    doc.rect(0, 287, W, 10, 'F');
-    doc.setFillColor(...C.accent);
-    doc.rect(0, 287, 60, 10, 'F');
-    
-    setF(C.dark, 8, 'bold');
-    doc.text('SHOP. OFFICIAL STORE', 30, 293.5, { align: 'center' });
-    setF([255, 255, 255], 7);
-    doc.text(`ID Transacción: ${id}-TX`, W - margin, 293.5, { align: 'right' });
-
-    // 3. Descarga Directa (Trigger)
-    doc.save(`Factura_SHOP_${id}.pdf`);
 }
