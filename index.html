@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Tienda Deportiva </title>
-    <meta name="description" content=" Tu tienda deportiva con las mejores marcas en camisetas, tenis, jeans y accesorios deportivos. Envío gratis en compras superiores.">
+    <title>Tienda Deportiva</title>
+    <meta name="description" content="Tu tienda deportiva con las mejores marcas en camisetas, tenis, jeans y accesorios deportivos. Envío gratis en compras superiores.">
     <meta name="keywords" content="tienda deportiva, ropa deportiva, camisetas adidas, tenis deportivos, cascos ciclismo, accesorios deportivos">
     <meta name="robots" content="index, follow">
     <!-- Open Graph — imagen al compartir en WhatsApp, redes, etc. -->
-    <meta property="og:title" content=" Tienda Deportiva ">
+    <meta property="og:title" content="Tienda Deportiva">
     <meta property="og:description" content="Camisetas, Tenis, Jeans, Cascos y más. Envío gratis desde $150.000 y descuentos hasta el 20%.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://cxr10s.github.io/tienda/">
@@ -19,7 +19,7 @@
     <meta property="og:locale" content="es_CO">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content=" Tienda Deportiva ">
+    <meta name="twitter:title" content="Tienda Deportiva">
     <meta name="twitter:description" content="Camisetas, Tenis, Jeans, Cascos y más. Envío gratis desde $150.000.">
     <meta name="twitter:image" content="https://cxr10s.github.io/tienda/og-image.png">
     <link rel="canonical" href="https://cxr10s.github.io/tienda/">
@@ -1085,6 +1085,87 @@ function compartirWeb() {
     document.addEventListener('keydown', function(e){
         if (e.key === 'Escape') closeMobileMenu();
     });
+    </script>
+
+    <!-- ESTILOS DEL ANUNCIO PROFESIONAL (Jhon Carlos) -->
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .modal-card {
+            background: #fff;
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 12px; /* Redondeado estilo smartphone */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            font-family: 'helvetica', sans-serif;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-card h2 {
+            color: #1c1c1c;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .modal-card p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .modal-card b { color: #633cb4; }
+        .modal-btn {
+            background: #1c1c1c;
+            color: #adff2f; /* Tu color verde lima de la factura */
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+
+    <!-- LÓGICA DEL ANUNCIO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ============================================================
+            // BORRA ESTO CUANDO QUIERAS QUITAR ESTA ADVERTENCIA
+            // ============================================================
+            const modalMarkup = `
+                <div class="modal-overlay" id="jhon-modal">
+                    <div class="modal-card">
+                        <h2>¡HOLA! SOY JHON CARLOS</h2>
+                        <p>
+                            Actualmente me encuentro <b>proyectando esta plataforma</b> con el fin de implementarla en empresas de ventas de alto impacto. 
+                            Este es un prototipo funcional diseñado para optimizar la experiencia de usuario y la gestión comercial.
+                        </p>
+                        <button class="modal-btn" onclick="document.getElementById('jhon-modal').remove()">OK. YA HE LEÍDO</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('afterbegin', modalMarkup);
+            // ============================================================
+        });
     </script>
 </body>
 </html>
