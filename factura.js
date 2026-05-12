@@ -49,11 +49,29 @@ async function generarFacturaPDF(pedido) {
         doc.setFillColor(...C.dark);
         doc.rect(0, 0, 210, 55, 'F'); // Fondo oscuro
 
-        // Logo y Nombre
+        // Logo GitHub (dibujado como círculo + texto SVG simplificado)
+        doc.setFillColor(255, 255, 255);
+        doc.circle(28, 22, 8, 'F');
+        doc.setFillColor(...C.dark);
+        // Cuerpo del octocat simplificado como círculo oscuro interior
+        doc.circle(28, 21, 5.5, 'F');
+        doc.setFillColor(255, 255, 255);
+        doc.circle(28, 20.5, 3.2, 'F');
+        doc.setFillColor(...C.dark);
+        doc.circle(28, 20, 2, 'F');
+        // "orejas"
+        doc.setFillColor(255, 255, 255);
+        doc.circle(25.5, 18.5, 1.2, 'F');
+        doc.circle(30.5, 18.5, 1.2, 'F');
+        // Cola
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(25.5, 25.5, 5, 2, 1, 1, 'F');
+
+        // Nombre SHOP
         doc.setTextColor(255, 255, 255);
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(28);
-        doc.text('SHOP', 20, 30);
+        doc.text('SHOP', 40, 30);
 
         // Badge de Factura (Derecha)
         doc.setFillColor(...C.accent);
