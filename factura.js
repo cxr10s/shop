@@ -143,7 +143,7 @@ async function generarFacturaPDF(pedido) {
         doc.setTextColor(255, 255, 255);
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(9);
-        doc.text('TOTAL A PAGAR', 135, y + 9);
+        doc.text('TOTAL PAGADO', 135, y + 9);
         doc.setTextColor(...C.accent);
         doc.setFontSize(13);
         doc.text(`$${total.toLocaleString('es-CO')}`, 185, y + 10, { align: 'right' });
