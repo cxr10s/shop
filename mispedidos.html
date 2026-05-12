@@ -578,9 +578,9 @@
 <body>
 
 <div class="header">
-    <a href="https://cxr10s.github.io/tienda" class="header-logo">Shop</a>
-    <a href="https://cxr10s.github.io/tienda" class="header-back">
-        <i href="https://cxr10s.github.io/tienda" class="fa-solid fa-arrow-left"></i> Volver a la tienda
+    <a href="https://cxr10s.github.io/shop" class="header-logo">Shop</a>
+    <a href="https://cxr10s.github.io/shop" class="header-back">
+        <i href="https://cxr10s.github.io/shop" class="fa-solid fa-arrow-left"></i> Volver a la tienda
     </a>
 </div>
 
@@ -591,14 +591,14 @@
         <div class="search-hero">
             <div class="search-tag">MIS PEDIDOS</div>
             <h1>Consulta tu<br>pedido</h1>
-            <p>Ingresa tu correo o el ID de tu factura<br>para ver el estado de tu compra.</p>
+            <p>Ingresa tu correo o el # de tu factura<br>para ver el estado de tu compra.</p>
         </div>
 
         <div class="search-box">
             <!-- Tabs selector -->
             <div class="search-tabs">
                 <button class="search-tab active" id="tab-email" onclick="switchSearchTab('email')">
-                    ✉️ Por correo
+                    <img src="correo.png" alt="Icono Correo" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;"> Por correo
                 </button>
                 <button class="search-tab" id="tab-id" onclick="switchSearchTab('id')">
                     # Por código
@@ -613,7 +613,7 @@
                         class="email-input"
                         type="email"
                         id="email-input"
-                        placeholder="correo@gmail.com"
+                        placeholder="correo utilizado en tu compra"
                         autocomplete="email"
                         onkeydown="if(event.key==='Enter') buscarPedidos()">
                     <button class="buscar-btn" id="btn-email" onclick="buscarPedidos()">
@@ -624,13 +624,13 @@
 
             <!-- Panel: Código ID -->
             <div id="panel-id" class="search-panel" style="display:none;">
-                <label class="search-label">ID DEL PEDIDO <span style="color:#555; font-weight:400;">(lo encuentras en tu factura)</span></label>
+                <label class="search-label"># DEL PEDIDO <span style="color:#555; font-weight:400;">(lo encuentras en tu factura)</span></label>
                 <div class="search-input-wrap">
                     <input
                         class="email-input"
                         type="text"
                         id="id-input"
-                        placeholder="Ej: 48BF96A6"
+                        placeholder="EJ: 48BF96A6"
                         autocomplete="off"
                         style="font-family:'Space Mono',monospace; text-transform:uppercase; letter-spacing:2px;"
                         onkeydown="if(event.key==='Enter') buscarPorId()">
@@ -881,11 +881,11 @@ function renderPedido(p, abierto) {
     const productosHTML = productos.map(prod => `
         <div class="producto-row">
             <div>
-                <div class="producto-name">${prod.name}${prod.isGift ? ' 🎁' : ''}</div>
+                <div class="producto-name">${prod.name}${prod.isGift ? ' ' : ''}</div>
                 <div class="producto-qty">Cantidad: ${prod.quantity}</div>
             </div>
             <div class="producto-price">
-                ${prod.isGift ? '<span style="color:#22c55e;">GRATIS</span>' : '$' + fmt(prod.price * prod.quantity) + ' COP'}
+                ${prod.isGift ? '<span style="color:#22c55e;">Gratis</span>' : '$' + fmt(prod.price * prod.quantity) + ' COP'}
             </div>
         </div>`).join('');
 
@@ -923,7 +923,7 @@ function renderPedido(p, abierto) {
             <div class="pedido-totales">
                 <div class="total-row"><span>Subtotal</span><span>$${fmt(p.subtotal)} COP</span></div>
                 ${p.descuento > 0 ? `<div class="total-row" style="color:var(--entregado);"><span>Descuento aplicado</span><span>-$${fmt(p.descuento)} COP</span></div>` : ''}
-                <div class="total-row"><span>Envío</span><span>${p.tipo_entrega === 'tienda' ? '—' : (p.envio > 0 ? '$' + fmt(p.envio) + ' COP' : '¡Gratis!')}</span></div>
+                <div class="total-row"><span>Envío</span><span>${p.tipo_entrega === 'tienda' ? '—' : (p.envio > 0 ? '$' + fmt(p.envio) + ' COP' : 'Gratis')}</span></div>
                 <div class="total-row final"><span>TOTAL PAGADO</span><span>$${fmt(p.total)} COP</span></div>
             </div>
             <div style="margin:1rem 0;padding:12px 14px;background:var(--surface2);border-radius:10px;font-size:13px;">
@@ -932,7 +932,7 @@ function renderPedido(p, abierto) {
                     <div style="color:var(--muted);">${p.direccion_envio || p.direccion || '—'}</div>
                 ` : `
                     <div style="font-weight:700;margin-bottom:4px;">🏪 Recogida en tienda</div>
-                    <div style="color:var(--muted);">Calle 13 #25-66 — Recuerda traer el ID: <strong>#${p.id.substring(0,8).toUpperCase()}</strong></div>
+                    <div style="color:var(--muted);">Calle 13 #25-66 — Recuerda traer la factura: <strong>#${p.id.substring(0,8).toUpperCase()}</strong></div>
                 `}
             </div>`}
 
