@@ -1101,10 +1101,7 @@ function compartirWeb() {
         align-items: center;
         z-index: 999999; /* Por encima de todo */
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body.modal-open {
-        overflow: hidden !important;
-    }    
+    }   
     .card-anuncio {
         background: #ffffff;
         width: 90%;
@@ -1179,17 +1176,6 @@ function compartirWeb() {
             // ============================================================
         });
     </script>
-    <script>
-                    // Al cargar la página, bloqueamos el scroll inmediatamente
-                    document.body.classList.add('modal-open');
-                
-                    function cerrarAnuncio() {
-                        // Quitamos el anuncio
-                        document.getElementById('aviso-jhon-carlos').remove();
-                        // Devolvemos el scroll al usuario
-                        document.body.classList.remove('modal-open');
-                    }
-                </script>
     <style>
     .legal-modal {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
