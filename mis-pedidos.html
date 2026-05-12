@@ -964,12 +964,11 @@ async function actualizarPedido(pedidoId, btn) {
     try {
         const res = await fetch(
             `${SUPABASE_URL}/rest/v1/pedidos?id=eq.${pedidoId}&select=*`,
-            { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }}
+            { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }}
         );
         const data = await res.json();
         if (!data || !data[0]) { showToast('No se encontró el pedido'); return; }
 
-        // Actualizar en caché y re-renderizar tarjeta
         const idx = pedidosCache.findIndex(p => p.id === pedidoId);
         if (idx !== -1) pedidosCache[idx] = data[0];
         else pedidosCache.push(data[0]);
@@ -981,6 +980,9 @@ async function actualizarPedido(pedidoId, btn) {
         showToast('✓ Estado actualizado');
     } catch(e) {
         showToast('Error al actualizar. Intenta de nuevo.');
+    } finally {
+        btn.classList.remove('spinning');
+        btn.disabled = false;
     }
 }
 
