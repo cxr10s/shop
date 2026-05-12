@@ -812,7 +812,7 @@
 
             <p id="auth-error-msg" class="auth-error" style="display:none;"></p>
 
-            <p class="auth-terms">Al continuar aceptas nuestros <a href="#">Términos de uso</a> y <a href="#">Política de privacidad</a>.</p>
+            <p class="auth-terms">Al continuar aceptas nuestros <a href="javascript:void(0)" onclick="openModal('terminos')">Términos de uso</a> y <a href="javascript:void(0)" onclick="openModal('privacidad')">Política de privacidad</a>.</p>
         </div>
 
         <!-- Estado: autenticado -->
@@ -1176,5 +1176,71 @@ function compartirWeb() {
             // ============================================================
         });
     </script>
+    <style>
+    .legal-modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+        display: none; justify-content: center; align-items: center; z-index: 100000;
+        padding: 20px;
+    }
+    .legal-content {
+        background: white; width: 100%; max-width: 600px; max-height: 80vh;
+        border-radius: 20px; padding: 30px; overflow-y: auto; position: relative;
+        font-family: sans-serif; line-height: 1.6; color: #333;
+    }
+    .legal-content h2 { color: #111; margin-top: 0; border-bottom: 2px solid #adff2f; display: inline-block; }
+    .legal-content h3 { font-size: 1.1rem; margin-top: 20px; color: #000; }
+    .legal-content p, .legal-content li { font-size: 14px; margin-bottom: 10px; }
+    .close-legal {
+        position: sticky; top: -10px; float: right; background: #eee;
+        border: none; width: 30px; height: 30px; border-radius: 50%;
+        cursor: pointer; font-weight: bold;
+    }
+</style>
+
+<div id="legalModal" class="legal-modal" onclick="closeLegalModal(event)">
+    <div class="legal-content" onclick="event.stopPropagation()">
+        <button class="close-legal" onclick="document.getElementById('legalModal').style.display='none'">✕</button>
+        <div id="legalText"></div>
+    </div>
+</div>
+
+<script>
+const legalData = {
+    terminos: `
+        <h2>Términos de Uso</h2>
+        <p>Bienvenido a nuestra plataforma. Al acceder a esta web, usted acepta los siguientes términos:</p>
+        <h3>1. Uso de la Plataforma</h3>
+        <p>Este sitio es un prototipo avanzado diseñado por <b>Jhon Carlos</b> para la gestión de ventas. El uso indebido de los sistemas o intentos de vulnerar la seguridad están prohibidos.</p>
+        <h3>2. Propiedad Intelectual</h3>
+        <p>Todo el diseño, código fuente (HTML, CSS, JS) y la arquitectura de la base de datos son propiedad exclusiva del desarrollador.</p>
+        <h3>3. Limitación de Responsabilidad</h3>
+        <p>La plataforma se entrega "tal cual". No nos hacemos responsables por errores en el ingreso de datos por parte del usuario final al generar facturas.</p>
+    `,
+    privacidad: `
+        <h2>Política de Privacidad</h2>
+        <p>Su privacidad es nuestra prioridad. Esta política detalla cómo manejamos sus datos:</p>
+        <h3>1. Recolección de Datos</h3>
+        <p>Recopilamos información básica a través de <b>Firebase Authentication</b> (Nombre, correo y foto de perfil) solo para personalizar su experiencia de usuario.</p>
+        <h3>2. Uso de la Información</h3>
+        <p>Los datos de los pedidos se almacenan para permitir la generación de facturas PDF y el historial de compras. No compartimos estos datos con terceros.</p>
+        <h3>3. Seguridad</h3>
+        <p>Implementamos protocolos de seguridad estándar de la industria para proteger su información contra accesos no autorizados.</p>
+        <h3>4. Derechos del Usuario</h3>
+        <p>Usted puede solicitar la eliminación de sus datos en cualquier momento cerrando su cuenta o contactando al administrador.</p>
+    `
+};
+
+function openModal(type) {
+    document.getElementById('legalText').innerHTML = legalData[type];
+    document.getElementById('legalModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLegalModal(e) {
+    document.getElementById('legalModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+</script>
 </body>
 </html>
