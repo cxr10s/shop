@@ -1234,12 +1234,28 @@ const legalData = {
 function openModal(type) {
     document.getElementById('legalText').innerHTML = legalData[type];
     document.getElementById('legalModal').style.display = 'flex';
+    // Bloqueamos siempre al abrir
     document.body.style.overflow = 'hidden';
 }
 
 function closeLegalModal(e) {
     document.getElementById('legalModal').style.display = 'none';
-    document.body.style.overflow = '';
+
+    // REVISIÓN DE SEGURIDAD:
+    // ¿Está el anuncio de Jhon Carlos o el modal de Login abiertos?
+    const anuncio = document.getElementById('aviso-jhon-carlos');
+    const modalLogin = document.getElementById('auth-modal'); // Revisa que este sea el ID de tu modal de login
+    
+    // Si NO hay anuncio Y NO hay login abierto, devolvemos el scroll
+    // Verificamos si el modal de login está visible (si no tiene display:none)
+    const loginVisible = modalLogin && window.getComputedStyle(modalLogin).display !== 'none';
+
+    if (!anuncio && !loginVisible) {
+        document.body.style.overflow = '';
+    } else {
+        // Si algo sigue abierto, nos aseguramos que el scroll siga bloqueado
+        document.body.style.overflow = 'hidden';
+    }
 }
 </script>
 </body>
