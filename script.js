@@ -855,20 +855,20 @@ function closeAllModals() {
 // COMPARTIR LA PÁGINA
 // =============================================
 function shareVia(platform) {
-    const imgUrl = 'https://cxr10s.github.io/Img.png'; // Imagen representativa para compartir
+    const imgUrl = 'https://cxr10s.github.io/og-image.png'; // Imagen representativa para compartir
     const url   = 'https://cxr10s.github.io';
-    const title = 'Tienda Deportiva';
+    const title = 'Shop';
     const text  = 'Mira esta tienda deportiva: Camisetas, Tenis, Jeans, Cascos y más. Envío gratis desde $150.000 COP.';
 
-    const textLargo = `⚡ Shop — Tienda Deportiva Online\n\n` +
+    const textLargo = `Shop \n\n` +
         `Te comparto esta tienda deportiva. Camisetas, tenis, jeans, cascos y equipos deportivos al mejor precio.\n\n` +
         `🎁 Regalo GRATIS desde $150.000\n` +
         `🚚 Envío GRATIS desde $150.000\n` +
         `💳 Descuentos hasta el 20%\n\n` +
         `¡También está disponible para la venta como negocio digital!\n\n` +
-        `👉 ${url}`;
+        `${url}`;
 
-    const titleEmail = '⚡ Shop — Tienda Deportiva Online';
+    const titleEmail = 'Shop ';
 
     const links = {
         whatsapp: `https://wa.me/?text=${encodeURIComponent(url)}`,
