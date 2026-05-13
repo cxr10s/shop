@@ -61,7 +61,7 @@ function addToCart(productId, productName, price, image = null) {
     
     // Verificar si aplica regalo
     checkGiftEligibility();
-
+    saveCart();
 }
 
 
@@ -103,7 +103,7 @@ function removeFromCart(productId) {
     updateCartDisplay();
     updateCartIcon();
     checkGiftEligibility();
-
+    saveCart();
 }
 
 function updateQuantity(productId, change) {
@@ -137,7 +137,7 @@ function updateQuantity(productId, change) {
             updateCartDisplay();
             updateCartIcon();
             checkGiftEligibility();
-            
+            saveCart();
         }
     }
 }
