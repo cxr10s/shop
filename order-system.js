@@ -83,7 +83,7 @@ async function submitReservation(event) {
         updateCartIcon();
         closeReservationModal();
 
-        window.location.href = 'https://cxr10s.github.io/shop/pago-nequi.html';
+        window.location.href = 'https://cxr10s.github.io/tienda/pago-nequi.html';
 
     } catch (error) {
         console.error('Error:', error);
