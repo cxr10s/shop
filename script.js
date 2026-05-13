@@ -63,133 +63,103 @@ function addToCart(productId, productName, price, image = null) {
     checkGiftEligibility();
 }
 
+// =============================================
+// SISTEMA DE CARRITO CORREGIDO
+// =============================================
 
 function removeFromCart(productId) {
+    // 1. Encontrar el ítem antes de borrarlo para lógica de regalos
     const removedItem = cart.find(item => item.id === productId);
 
-    // Si se remueve un regalo, guardar su ID para no repetirlo
     if (removedItem && removedItem.isGift) {
         window._lastRemovedGiftId = productId;
         clearGiftCardHighlights();
-        try { localStorage.setItem('tienda_last_removed_gift', productId); } catch(e) {}
+        localStorage.setItem('tienda_last_removed_gift', productId);
     }
 
+    // 2. Filtrar el carrito (eliminar el producto de la lista en memoria)
     cart = cart.filter(item => item.id !== productId);
 
-    // Quitar regalo si ya no cumple el mínimo ANTES de guardar
+    // 3. Verificar si el subtotal bajó del mínimo para regalos (150k)
     const subtotalSinRegalo = cart.reduce((sum, i) => sum + (i.isGift ? 0 : i.price * i.quantity), 0);
     if (subtotalSinRegalo < 150000) {
-        const giftIndex = cart.findIndex(i => i.isGift === true);
-        if (giftIndex !== -1) {
-            cart.splice(giftIndex, 1);
-            clearGiftCardHighlights();
-        }
+        cart = cart.filter(i => !i.isGift);
+        clearGiftCardHighlights();
     }
 
-    // Guardar estado real en localStorage ANTES de checkGiftEligibility
-    if (cart.length === 0) {
-        try {
-            localStorage.removeItem('tienda_cart');
-            localStorage.removeItem('tienda_last_removed_gift');
-            window._lastRemovedGiftId = null;
-        } catch(e) {}
-    } else {
-        try {
-            localStorage.setItem('tienda_cart', JSON.stringify(cart));
-        } catch(e) {}
-    }
-
-    updateCartDisplay();
+    // 4. ACTUALIZAR TODO
+    updateCartDisplay(); // Esta función llama internamente a saveCart()
     updateCartIcon();
-    checkGiftEligibility();
-}
-
-function updateQuantity(productId, change) {
-    const item = cart.find(item => item.id === productId);
-    if (item) {
-        // Si es un regalo gratis y se intenta aumentar la cantidad, no permitirlo
-        if (item.isGift && change > 0) {
-            showNotification('Solo puedes tener un regalo gratis en tu carrito.');
-            return;
-        }
-        item.quantity += change;
-        if (item.quantity <= 0) {
-            removeFromCart(productId);
-        } else {
-            // Si es un regalo, verificar si sigue siendo elegible
-            if (item.isGift && item.originalPrice) {
-                const subtotal = cart.reduce((sum, item2) => {
-                    if (item2.id === productId) return sum; // Excluir el item actual del cálculo
-                    return sum + (item2.price * item2.quantity);
-                }, 0);
-                const isEligibleForGift = subtotal >= 150000;
-                if (isEligibleForGift) {
-                    item.price = 0;
-                    item.name = item.name.replace(' (REGALO)', '') + ' (REGALO)';
-                } else {
-                    item.price = item.originalPrice;
-                    item.name = item.name.replace(' (REGALO)', '');
-                }
-                item.isGift = isEligibleForGift;
-            }
-            updateCartDisplay();
-            updateCartIcon();
-            checkGiftEligibility();
-        }
+    
+    // Si el carrito quedó vacío, forzamos limpieza visual inmediata
+    if (cart.length === 0) {
+        clearGiftCardHighlights();
     }
-}
-
-// =============================================
-// CARRITO EN LA NUBE (Firestore)
-// El carrito se guarda por usuario de Google.
-// Al cerrar sesión se limpia; al iniciar se restaura.
-// =============================================
-const _STORE_FS_URL  = 'https://firestore.googleapis.com/v1/projects/tiendadeportiva912-b9f0d/databases/(default)/documents/carts';
-
-async function _getFirebaseToken() {
-    try {
-        const auth = window._firebaseAuth;
-        if (!auth || !auth.currentUser) return null;
-        return await auth.currentUser.getIdToken();
-    } catch(e) { return null; }
 }
 
 async function saveCart() {
-    // localStorage
-    try {
-        if (cart.length > 0) {
-            localStorage.setItem('tienda_cart', JSON.stringify(cart));
-            localStorage.setItem('tienda_last_removed_gift', window._lastRemovedGiftId || '');
-        } else {
-            localStorage.removeItem('tienda_cart');
-            localStorage.removeItem('tienda_last_removed_gift');
+    // A. Sincronización Local (LocalStorage)
+    if (cart.length > 0) {
+        localStorage.setItem('tienda_cart', JSON.stringify(cart));
+        if (window._lastRemovedGiftId) {
+            localStorage.setItem('tienda_last_removed_gift', window._lastRemovedGiftId);
         }
-    } catch(e) {}
+    } else {
+        // Si el carrito está vacío, BORRADO TOTAL
+        localStorage.removeItem('tienda_cart');
+        localStorage.removeItem('tienda_last_removed_gift');
+        window._lastRemovedGiftId = null;
+    }
 
+    // B. Sincronización Nube (Firestore)
     const token = await _getFirebaseToken();
     if (!token || !window._currentUser) return;
     const uid = window._currentUser.uid;
 
     try {
         if (cart.length > 0) {
-            // Guardar carrito en Firestore
+            // Actualizar carrito en la nube
             await fetch(`${_STORE_FS_URL}/${uid}`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}` 
+                },
                 body: JSON.stringify({ fields: {
-                    items:           { stringValue: JSON.stringify(cart) },
+                    items: { stringValue: JSON.stringify(cart) },
                     lastRemovedGift: { stringValue: window._lastRemovedGiftId || '' },
-                    updatedAt:       { stringValue: new Date().toISOString() }
+                    updatedAt: { stringValue: new Date().toISOString() }
                 }})
             });
         } else {
-            // Carrito vacío → eliminar documento de Firestore para que no se restaure
+            // Si el carrito está vacío, ELIMINAR documento de la nube para que no "reviva"
             await fetch(`${_STORE_FS_URL}/${uid}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         }
-    } catch(e) {}
+    } catch(e) {
+        console.error("Error sincronizando con la nube:", e);
+    }
+}
+
+function loadCart() {
+    try {
+        const saved = localStorage.getItem('tienda_cart');
+        const savedGift = localStorage.getItem('tienda_last_removed_gift');
+        
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                cart = parsed;
+            } else {
+                cart = []; // Asegurar que sea array vacío si el parse falla
+            }
+        }
+        if (savedGift) window._lastRemovedGiftId = savedGift;
+    } catch(e) {
+        cart = [];
+    }
 }
 
 async function loadCartFromCloud(uid, token) {
