@@ -2182,7 +2182,7 @@ html {
 .close-modal {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
-    color: #666;
+    color: #1a1a1a;
     width: 32px; height: 32px;
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
@@ -2190,7 +2190,7 @@ html {
     transition: all 0.2s;
     font-size: 1rem;
 }
-.close-modal:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.close-modal:hover { background: rgba(255,255,255,0.1); color: #1a1a1a; }
 
 .modal-body { padding: 1.2rem 1.4rem; }
 
