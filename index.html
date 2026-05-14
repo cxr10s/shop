@@ -1226,5 +1226,13 @@ const legalData = {
         <p>Usted puede solicitar la eliminación de sus datos en cualquier momento cerrando su cuenta o contactando al administrador.</p>
     `
 };
+function openModal(type) {
+    document.getElementById('legalText').innerHTML = legalData[type];
+    document.getElementById('legalModal').style.display = 'flex';
+}
+
+function closeLegalModal(e) {
+    document.getElementById('legalModal').style.display = 'none';
+}
 </body>
 </html>
