@@ -1825,7 +1825,7 @@ html {
     border: none;
     font-size: 1.2rem;
     cursor: pointer;
-    color: #fff;
+    color: #1a1a1a;
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -1899,7 +1899,7 @@ html {
 }
 
 .catalog-item .price {
-    color: #917771;
+    color: #e8e8e8;
     font-weight: 700;
     font-size: 1rem;
 }
@@ -2173,7 +2173,7 @@ html {
 }
 
 .modal-header h3 {
-    color: #f0f0f0;
+    color: #1a1a1a;
     font-family: 'DM Sans', sans-serif;
     font-size: 1rem;
     font-weight: 700;
