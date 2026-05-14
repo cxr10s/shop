@@ -114,7 +114,6 @@ async function _getFirebaseToken() {
 }
 
 async function saveCart() {
-    // Limpiar o guardar localStorage
     try {
         if (cart.length > 0) {
             localStorage.setItem('tienda_cart', JSON.stringify(cart));
@@ -142,7 +141,6 @@ async function saveCart() {
                 }})
             });
         } else {
-            // Carrito vacío → borrar Firestore
             await fetch(`${_STORE_FS_URL}/${uid}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -151,12 +149,14 @@ async function saveCart() {
     } catch(e) {}
 }
 
+// Retorna: 'loaded' | 'empty' | 'error'
 async function loadCartFromCloud(uid, token) {
     try {
         const res = await fetch(`${_STORE_FS_URL}/${uid}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        if (!res.ok) return false;
+        if (res.status === 404) return 'empty'; // borrado intencionalmente
+        if (!res.ok) return 'error';
         const data = await res.json();
         const fields = data.fields || {};
         const itemsStr = fields.items?.stringValue;
@@ -166,15 +166,14 @@ async function loadCartFromCloud(uid, token) {
             if (Array.isArray(parsed) && parsed.length > 0) {
                 cart = parsed;
                 if (giftStr) window._lastRemovedGiftId = giftStr;
-                return true;
+                return 'loaded';
             }
         }
-        return false;
-    } catch(e) { return false; }
+        return 'empty';
+    } catch(e) { return 'error'; }
 }
 
 function loadCart() {
-    // Solo carga local si NO hay sesión activa (fallback sin login)
     try {
         const saved = localStorage.getItem('tienda_cart');
         if (saved) cart = JSON.parse(saved);
@@ -218,28 +217,33 @@ function _initCartAuthSync() {
 
 async function _handleAuthCartChange(user) {
     if (user) {
-        // Limpiar local ANTES de cargar nube
-        try {
-            localStorage.removeItem('tienda_cart');
-            localStorage.removeItem('tienda_last_removed_gift');
-        } catch(e) {}
-        cart = [];
-        window._lastRemovedGiftId = null;
-
         const token = await _getFirebaseToken();
         if (token) {
-            const loaded = await loadCartFromCloud(user.uid, token);
-            if (!loaded) {
-                // Nube vacía → carrito vacío, no restaurar nada
+            const result = await loadCartFromCloud(user.uid, token);
+
+            if (result === 'loaded') {
+                // Nube tiene datos → usarlos, limpiar local
+                try {
+                    localStorage.removeItem('tienda_cart');
+                    localStorage.removeItem('tienda_last_removed_gift');
+                } catch(e) {}
+            } else if (result === 'empty') {
+                // Carrito fue vaciado intencionalmente → respetar
                 cart = [];
                 window._lastRemovedGiftId = null;
+                try {
+                    localStorage.removeItem('tienda_cart');
+                    localStorage.removeItem('tienda_last_removed_gift');
+                } catch(e) {}
             }
+            // result === 'error' → no tocar nada (mantener lo que hay)
         }
         updateCartDisplay();
         updateCartIcon();
         const yaHayRegalo = cart.some(i => i.isGift === true);
         if (!yaHayRegalo) checkGiftEligibility();
     } else {
+        // Cerró sesión
         cart = [];
         window._lastRemovedGiftId = null;
         try {
@@ -772,7 +776,6 @@ function shareVia(platform) {
 // INICIALIZAR
 // =============================================
 window.addEventListener('DOMContentLoaded', function() {
-    // Solo cargar local si no hay sesión (se sobreescribe en _handleAuthCartChange)
     loadCart();
     _initCartAuthSync();
     if (cart.length > 0) {
