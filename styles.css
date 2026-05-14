@@ -446,7 +446,7 @@ img {
 .btn-ghost {
     font-family: 'Times New Roman', Times, serif;
     background: transparent;
-    color: #DED7D7;
+    color: #e8e8e8;
     border: 2px solid rgba(222,215,215,0.3);
     padding: 1rem 2rem;
     font-size: 1rem;
@@ -458,8 +458,8 @@ img {
 }
 
 .btn-ghost:hover {
-    border-color: #917771;
-    color: #917771;
+    border-color: #e8e8e8;
+    color: #e8e8e8;
     transform: translateY(-2px);
 }
 
@@ -557,7 +557,7 @@ img {
 .btn-primary {
     font-family: 'Times New Roman', Times, serif;
     background: transparent;
-    color: #DED7D7;
+    color: #e8e8e8;
     border: 2px solid rgba(222,215,215,0.3);
     padding: 1rem 2rem;
     font-size: 1rem;
@@ -570,7 +570,7 @@ img {
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 17px #888;
+    box-shadow: 0 5px 17px #e8e8e8;
 }
 
 
@@ -718,7 +718,7 @@ img {
 
 .product-card .price {
     font-size: 1.15rem;
-    color: #917771;
+    color: #e8e8e8;
     font-weight: 800;
     letter-spacing: 0.3px;
 }
@@ -1809,13 +1809,13 @@ html {
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem 1.5rem;
-    background: #917771;
+    background: #e8e8e8;
     border-bottom: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px 16px 0 0;
 }
 
 .modal-header h3 {
-    color: #fff;
+    color: #1a1a1a;
     font-size: 1.3rem;
     font-weight: 700;
 }
@@ -2503,7 +2503,7 @@ body.modal-open {
 .product-card .price {
     font-family: 'DM Sans', sans-serif;
     font-size: 1.2rem;
-    color: #adff2f;
+    color: #e8e8e8;
     font-weight: 800;
     letter-spacing: -0.3px;
     margin-bottom: 14px;
