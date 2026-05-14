@@ -830,6 +830,13 @@ let cart = [];
 
 function loadCart() {
     try {
+        // 1. sessionStorage (más fresco, guardado al hacer checkout)
+        const fromSession = sessionStorage.getItem('store_cart');
+        if (fromSession) {
+            cart = JSON.parse(fromSession);
+            return;
+        }
+        // 2. fallback localStorage
         const raw = localStorage.getItem('tienda_cart');
         if (raw) cart = JSON.parse(raw);
     } catch(e) { cart = []; }
