@@ -1821,11 +1821,11 @@ html {
 }
 
 .close-modal {
-    background: rgba(0,0,0,0.25);
+    background: rgba(0, 0, 0, 0.511);
     border: none;
     font-size: 1.2rem;
     cursor: pointer;
-    color: #1a1a1a;
+    color: #e8e8e8;
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -1836,7 +1836,7 @@ html {
 }
 
 .close-modal:hover {
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.511);
     transform: rotate(90deg);
 }
 
