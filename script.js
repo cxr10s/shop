@@ -548,7 +548,7 @@ function getCatalogProducts(category) {
     const catalogProducts = {
         'camisetas': [
             { id: 'camiseta-cat-1', name: 'Camiseta Adidas Liverpool ', price: 74900, image: 'Camiseta adidas4.png' },
-            { id: 'camiseta-cat-2', name: 'Camiseta Adidas Black ', price: 49900, image: 'Camiseta Adidas2.png' },
+            { id: 'camiseta-cat-2', name: 'Camiseta Adidas Black     ', price: 49900, image: 'Camiseta Adidas2.png' },
             { id: 'camiseta-cat-3', name: 'Camiseta Adidas Arsenal Club ', price: 79500, image: 'Camiseta Arsenal.png' },
             { id: 'camiseta-cat-4', name: 'Camiseta Adidas Retro Brasil ', price:99000, image: 'CamisetaBrasil.png' },
             { id: 'camiseta-cat-5', name: 'Camiseta Adidas Madrid Blue ', price: 78400, image: 'Madridblue.png' },
