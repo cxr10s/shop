@@ -894,7 +894,7 @@ function compartirWeb() {
   if (navigator.share) {
     navigator.share({
       title: document.title,
-      text: ' Sitio Web de Tienda Deportiva ',
+      text: ' Sitio Web: Shop ',
       url: 'https://cxr10s.github.io/shop/'
     });
   } else {
@@ -1018,7 +1018,10 @@ function compartirWeb() {
             }));
         } catch(e) {}
         // Redirigir a la página de checkout externa
-        window.location.href = 'https://cxr10s.github.io/shop/checkout.html';
+        try {
+    sessionStorage.setItem('store_cart', JSON.stringify(cart));
+} catch(e) {}
+window.location.href = 'https://cxr10s.github.io/shop/checkout.html';
     }
 
     // ── Update cart auth banner visibility ─────────────────────────
