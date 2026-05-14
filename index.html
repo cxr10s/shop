@@ -1086,5 +1086,145 @@ window.location.href = 'https://cxr10s.github.io/shop/checkout.html';
         if (e.key === 'Escape') closeMobileMenu();
     });
     </script>
+    <style>
+    /* Usamos un ID muy específico para que nada lo bloquee */
+    #aviso-jhon-carlos {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85); /* Fondo oscuro profesional */
+        backdrop-filter: blur(8px); /* Desenfoque estilo iPhone */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999; /* Por encima de todo */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }   
+    .card-anuncio {
+        background: #ffffff;
+        width: 90%;
+        max-width: 420px;
+        padding: 40px 30px;
+        border-radius: 20px; /* Redondeado estilo hardware moderno */
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        animation: entradaAnuncio 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes entradaAnuncio {
+        from { opacity: 0; transform: scale(0.8) translateY(30px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .card-anuncio h2 {
+        color: #111;
+        font-size: 24px;
+        margin-bottom: 15px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+    .card-anuncio p {
+        color: #555;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+    .card-anuncio b {
+        color: #633cb4; /* Color de énfasis */
+        font-weight: 600;
+    }
+    .btn-entendido {
+        background: #111;
+        color: #adff2f; /* El verde lima de tu marca */
+        border: none;
+        padding: 16px 40px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .btn-entendido:hover {
+        background: #222;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    </style>
+
+    <!-- LÓGICA DEL ANUNCIO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalMarkup = `
+                <div id="aviso-jhon-carlos">
+                    <div class="card-anuncio">
+                        <h2>HEY !</h2>
+                        <p>
+                            Hola, un gusto mi nombre es <b>Carlos Peinado</b>. Tengo 18 años, soy estudiante y actualmente me encuentro <b>proyectando esta plataforma</b> con el fin de implementarla en empresas de ventas. <b>Si te interesa, puedes contactarme.. </b>. 
+                            <br>
+                            escribeme a mi correo electronico: <b>menesescarlos2007@gmail.com</b>
+                        </p>
+                        <button class="btn-entendido" onclick="document.getElementById('aviso-jhon-carlos').remove()">
+                        OK. Ya he leído
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('afterbegin', modalMarkup);
+            // ============================================================
+        });
+    </script>
+    <style>
+    .legal-modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+        display: none; justify-content: center; align-items: center; z-index: 100000;
+        padding: 20px;
+    }
+    .legal-content {
+        background: white; width: 100%; max-width: 600px; max-height: 80vh;
+        border-radius: 20px; padding: 30px; overflow-y: auto; position: relative;
+        font-family: sans-serif; line-height: 1.6; color: #333;
+    }
+    .legal-content h2 { color: #111; margin-top: 0; border-bottom: 2px solid #adff2f; display: inline-block; }
+    .legal-content h3 { font-size: 1.1rem; margin-top: 20px; color: #000; }
+    .legal-content p, .legal-content li { font-size: 14px; margin-bottom: 10px; }
+    .close-legal {
+        position: sticky; top: -10px; float: right; background: #eee;
+        border: none; width: 30px; height: 30px; border-radius: 50%;
+        cursor: pointer; font-weight: bold;
+    }
+</style>
+
+<div id="legalModal" class="legal-modal" onclick="closeLegalModal(event)">
+    <div class="legal-content" onclick="event.stopPropagation()">
+        <button class="close-legal" onclick="document.getElementById('legalModal').style.display='none'">✕</button>
+        <div id="legalText"></div>
+    </div>
+</div>
+
+<script>
+const legalData = {
+    terminos: `
+        <h2>Términos de Uso</h2>
+        <p>Bienvenido a nuestra plataforma. Al acceder a esta web, usted acepta los siguientes términos:</p>
+        <h3>1. Uso de la Plataforma</h3>
+        <p>Este sitio es un prototipo avanzado diseñado por <b>Carlos</b> para la gestión de ventas. El uso indebido de los sistemas o intentos de vulnerar la seguridad están prohibidos.</p>
+        <h3>2. Propiedad Intelectual</h3>
+        <p>Todo el diseño, código fuente (HTML, CSS, JS) y la arquitectura de la base de datos son propiedad exclusiva del desarrollador.</p>
+    `,
+    privacidad: `
+        <h2>Política de Privacidad</h2>
+        <p>Su privacidad es nuestra prioridad. Esta política detalla cómo manejamos sus datos:</p>
+        <h3>1. Recolección de Datos</h3>
+        <p>Recopilamos información básica a través de <b>Firebase Authentication</b> (Nombre, correo y foto de perfil) solo para personalizar su experiencia de usuario.</p>
+        <h3>2. Uso de la Información</h3>
+        <p>Los datos de los pedidos se almacenan para permitir la generación de facturas PDF y el historial de compras. No compartimos estos datos con terceros.</p>
+        <h3>3. Seguridad</h3>
+        <p>Implementamos protocolos de seguridad estándar de la industria para proteger su información contra accesos no autorizados.</p>
+        <h3>4. Derechos del Usuario</h3>
+        <p>Usted puede solicitar la eliminación de sus datos en cualquier momento cerrando su cuenta o contactando al administrador.</p>
+    `
+};
 </body>
 </html>
