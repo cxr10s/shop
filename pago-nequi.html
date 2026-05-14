@@ -837,7 +837,7 @@ body {
                 Verificando pago con Nequi Negocios y colaboradores
             </div>
             <button class="cancel-link" onclick="cancelarEspera()">Cancelar pedido</button>
-            Si cancelas se te hara reembolso del dinero. para ello comunicanos mediante Whatsapp
+            <span>Si cancelas se te hara reembolso del dinero. para ello comunicanos mediante Whatsapp</span>
         </div>
     </div>
 
@@ -893,7 +893,7 @@ function init() {
     try { pedidoData = JSON.parse(sessionStorage.getItem('store_pedido') || 'null'); } catch(e) {}
 
     if (!cart.length && !pedidoData) {
-        window.location.href = 'https://cxr10s.github.io/tienda/';
+        window.location.href = 'https://cxr10s.github.io/shop/';
         return;
     }
 
@@ -1233,7 +1233,7 @@ async function cancelarEspera() {
 function mostrarResultado(tipo) {
     showScreen(3);
     const idCorto = pedidoId ? pedidoId.substring(0, 8).toUpperCase() : '--------';
-    const misPedidos = `https://cxr10s.github.io/tienda/mis-pedidos.html`;
+    const misPedidos = `https://cxr10s.github.io/shop/mispedidos.html`;
 
     const configs = {
         success: {
@@ -1241,7 +1241,7 @@ function mostrarResultado(tipo) {
             title: '¡Pago confirmado!',
             msg: 'Tu pago fue aprobado exitosamente. Tu pedido está siendo procesado.',
             actions: `<a href="${misPedidos}" class="btn-primary" style="text-decoration:none;">Ver mi pedido</a>
-                      <a href="https://cxr10s.github.io/tienda/" class="btn-secondary">Seguir comprando</a>`
+                      <a href="https://cxr10s.github.io/shop/" class="btn-secondary">Seguir comprando</a>`
         },
         failed: {
             icon: '❌', cls: 'failed',
@@ -1255,7 +1255,7 @@ function mostrarResultado(tipo) {
             title: 'Tiempo agotado',
             msg: 'No recibimos confirmación a tiempo. Tu pedido quedó guardado. Puedes contactarnos para coordinar el pago.',
             actions: `<a href="${misPedidos}" class="btn-primary" style="text-decoration:none;">Ver mi pedido</a>
-                      <a href="https://cxr10s.github.io/tienda/" class="btn-secondary">Inicio</a>`
+                      <a href="https://cxr10s.github.io/shop/" class="btn-secondary">Inicio</a>`
         }
     };
 
