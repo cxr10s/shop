@@ -345,7 +345,7 @@ img {
 
 /* Hero Section */
 .hero {
-    background: url("bici-removebg-preview.jpg") center/cover no-repeat;
+    background: url("inicio.jpg") center/cover no-repeat;
     min-height: 100vh;
     display: flex;
     align-items: center;
