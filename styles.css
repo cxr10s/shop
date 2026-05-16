@@ -370,14 +370,7 @@ img {
 
 /* Grid de fondo decorativo */
 .hero-bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(145,119,113,0.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(145,119,113,0.07) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
 .hero-content {
