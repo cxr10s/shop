@@ -3264,7 +3264,8 @@ body.modal-open {
         color: #adff2f;
     }
     .hero {
-        background-position: 70% center; /* mueve la imagen horizontalmente */
+        background-position: 50% center; 
         background-size: cover;
+        min-height: 60vh;
     }
 }
