@@ -16,7 +16,7 @@
 ![Nequi](https://img.shields.io/badge/Nequi-6D28D9?style=flat-square&logoColor=white)
 ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222?style=flat-square&logo=github&logoColor=white)
 
-**[→ Ver tienda en linea](https://cxr10s.github.io/tienda/)**
+**[→ Ver tienda en linea](https://cxr10s.github.io/shop/)**
 
 </div>
 
