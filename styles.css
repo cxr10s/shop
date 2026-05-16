@@ -3251,7 +3251,9 @@ body.modal-open {
 /* Colores para movil */
 @media (max-width: 768px) {
     .hero-tag {
-        color: #111;
+        color: #fff
+        background: rgba(145,119,113,0.15);
+        border: 1px solid #fff;
     }
 
     .hero-text p {
@@ -3260,5 +3262,9 @@ body.modal-open {
 
     .stat-label {
         color: #adff2f;
+    }
+    .hero {
+        background-position: 70% center; /* mueve la imagen horizontalmente */
+        background-size: cover;
     }
 }
