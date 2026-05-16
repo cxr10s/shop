@@ -1,3 +1,5 @@
+
+
 /* Fondo general y centrado */
 .wrapper {
   display: flex;
@@ -343,17 +345,8 @@ img {
 
 /* Hero Section */
 .hero {
-    /* ── IMAGEN PRINCIPAL ──────────────────────────────────────────
-       Para cambiar imagen: reemplaza "bici-removebg-preview.jpg"
-       con el nombre de tu nueva imagen.
-    ─────────────────────────────────────────────────────────────── */
-    background-image: url("bici-removebg-preview.jpg");
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    min-height: 100svh;
-    width: 100%;
+    background: url("bici-removebg-preview.jpg") center/cover no-repeat;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     padding: 0 3rem;
@@ -578,7 +571,7 @@ img {
 /* Products Sections */
 .products-section {
     padding: 5rem 2rem;
-    background: #111;
+    background: #1a1a1a;
     position: relative;
 }
 
@@ -941,9 +934,7 @@ img {
     .hero {
         padding: 1.5rem 1rem 2.5rem;
         margin-top: 52px;
-        min-height: 100svh;
-        background-position: center center;
-        background-size: cover;
+        min-height: auto;
     }
 
     .hero-content {
@@ -1150,9 +1141,6 @@ img {
     .hero {
         margin-top: 0;
         padding: 0.8rem 0.8rem 2rem;
-        min-height: 100svh;
-        background-position: center center;
-        background-size: cover;
     }
 
     .hero-text h2 {
