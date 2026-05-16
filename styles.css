@@ -1,3 +1,5 @@
+
+
 /* Fondo general y centrado */
 .wrapper {
   display: flex;
@@ -343,16 +345,7 @@ img {
 
 /* Hero Section */
 .hero {
-    /* ── IMAGEN PRINCIPAL DEL HERO ──────────────────────────────────
-       Para cambiar la imagen: reemplaza "bici-removebg-preview.jpg"
-       con el nombre de tu nueva imagen. Asegúrate de que esté en la
-       misma carpeta que este archivo CSS.
-       Ejemplo: background-image: url("nueva-imagen.jpg");
-    ─────────────────────────────────────────────────────────────── */
-    background-image: url("bici-removebg-preview.jpg");
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background: url("bici-removebg-preview.jpg") center/cover no-repeat;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -366,22 +359,12 @@ img {
     content: '';
     position: absolute;
     inset: 0;
-    /* Degradados combinados: oscurece izquierda para el texto,
-       funde hacia abajo para conectar con la sección siguiente */
-    background:
-        linear-gradient(
-            to right,
-            rgba(0,0,0,0.88) 0%,
-            rgba(0,0,0,0.55) 50%,
-            rgba(0,0,0,0.10) 100%
-        ),
-        linear-gradient(
-            to bottom,
-            rgba(0,0,0,0.10) 0%,
-            rgba(0,0,0,0.10) 55%,
-            rgba(17,17,17,0.85) 80%,
-            rgba(17,17,17,1) 100%
-        );
+    background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.85) 30%,
+        rgba(0,0,0,0.4) 60%,
+        rgba(0,0,0,0.1)
+    );
     z-index: 1;
 }
 
@@ -959,26 +942,6 @@ img {
         padding: 1.5rem 1rem 2.5rem;
         margin-top: 52px;
         min-height: auto;
-        /* En móvil centrar imagen en la parte superior */
-        background-position: center top;
-    }
-
-    .hero::before {
-        /* Móvil: degradado más fuerte desde abajo y oscurecer más */
-        background:
-            linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.55) 0%,
-                rgba(0,0,0,0.45) 40%,
-                rgba(17,17,17,0.90) 75%,
-                rgba(17,17,17,1) 100%
-            ),
-            linear-gradient(
-                to right,
-                rgba(0,0,0,0.60) 0%,
-                rgba(0,0,0,0.10) 60%,
-                rgba(0,0,0,0.60) 100%
-            );
     }
 
     .hero-content {
@@ -1185,7 +1148,6 @@ img {
     .hero {
         margin-top: 0;
         padding: 0.8rem 0.8rem 2rem;
-        background-position: center top;
     }
 
     .hero-text h2 {
