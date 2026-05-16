@@ -13,7 +13,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
-![Nequi](https://img.shields.io/badge/Nequi-6D28D9?style=flat-square&logoColor=white)
+![Nequi](https://img.shields.io/badge/Nequi-6D28D9?style=flat-square&logo=nequi&logoColor=white)
 ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222?style=flat-square&logo=github&logoColor=white)
 
 **[→ Ver tienda en linea](https://cxr10s.github.io/shop/)**
