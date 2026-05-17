@@ -975,36 +975,32 @@ function compartirWeb() {
     let _recaptchaWidgetId = null;
 
     function openAuthModal() {
-        const m = document.getElementById('auth-modal');
-        if (m) { m.classList.add('show'); document.body.classList.add('modal-open'); }
-        const err = document.getElementById('auth-error-msg');
-        if (err) err.style.display = 'none';
+    const m = document.getElementById('auth-modal');
+    if (m) { m.classList.add('show'); document.body.classList.add('modal-open'); }
+    const err = document.getElementById('auth-error-msg');
+    if (err) err.style.display = 'none';
 
-        // Resetear botón Google y reCAPTCHA
-        const googleBtn = document.getElementById('google-signin-btn');
-        if (googleBtn) googleBtn.style.display = 'none';
+    const googleBtn = document.getElementById('google-signin-btn');
+    if (googleBtn) googleBtn.style.display = 'none';
 
-        const container = document.getElementById('recaptcha-container');
-        if (container) {
-            container.innerHTML = '';
-            _recaptchaWidgetId = null;
+    function _renderCaptcha() {
+        if (typeof grecaptcha === 'undefined' || !grecaptcha.render) {
+            setTimeout(_renderCaptcha, 300);
+            return;
         }
+        const cont = document.getElementById('recaptcha-container');
+        if (!cont) return;
 
-        // Renderizar reCAPTCHA cuando la API esté lista
-        function _renderCaptcha() {
-            if (typeof grecaptcha === 'undefined' || !grecaptcha.render) {
-                setTimeout(_renderCaptcha, 300);
-                return;
-            }
-            const cont = document.getElementById('recaptcha-container');
-            if (!cont || cont.childElementCount > 0) return;
+        if (_recaptchaWidgetId !== null) {
+            try { grecaptcha.reset(_recaptchaWidgetId); } catch(e) {}
+        } else {
+            cont.innerHTML = '';
             _recaptchaWidgetId = grecaptcha.render(cont, {
                 sitekey: '6LfCIu4sAAAAAGjUZoOAi1XMIqT70vYrjodxCe04',
                 theme: 'dark',
                 callback: function() {
-                    // Usuario completó reCAPTCHA → mostrar botón Google
                     const btn = document.getElementById('google-signin-btn');
-                    if (btn) { btn.style.display = 'flex'; }
+                    if (btn) btn.style.display = 'flex';
                 },
                 'expired-callback': function() {
                     const btn = document.getElementById('google-signin-btn');
@@ -1012,24 +1008,19 @@ function compartirWeb() {
                 }
             });
         }
-        _renderCaptcha();
     }
+    _renderCaptcha();
+}
 
     function closeAuthModal() {
-        const m = document.getElementById('auth-modal');
-        if (m) { m.classList.remove('show'); document.body.classList.remove('modal-open'); }
-        // Resetear reCAPTCHA al cerrar
-        const container = document.getElementById('recaptcha-container');
-        if (container) container.innerHTML = '';
-        _recaptchaWidgetId = null;
-        const googleBtn = document.getElementById('google-signin-btn');
-        if (googleBtn) googleBtn.style.display = 'none';
+    const m = document.getElementById('auth-modal');
+    if (m) { m.classList.remove('show'); document.body.classList.remove('modal-open'); }
+    if (_recaptchaWidgetId !== null) {
+        try { grecaptcha.reset(_recaptchaWidgetId); } catch(e) {}
     }
-    // ESC key closes modal
-    document.addEventListener('keydown', function(e){
-        if (e.key === 'Escape') closeAuthModal();
-    });
-
+    const googleBtn = document.getElementById('google-signin-btn');
+    if (googleBtn) googleBtn.style.display = 'none';
+}
     // ── Auth Guard for addToCart ────────────────────────────────────
     function addToCartGuarded(productId, productName, price, image) {
         if (!window._currentUser) {
