@@ -37,8 +37,14 @@ async function generarFacturaPDF(pedido) {
 
         // Tipo de entrega: 'domicilio' | 'recogida' (o cualquier otro valor)
         const esDomicilio = String(pedido.tipo_entrega || '').toLowerCase() === 'domicilio';
-        const costoEnvio  = Number(pedido.costo_envio || 0);   // 0 = gratis
-        const descuento   = Number(pedido.descuento   || 0);   // valor en pesos del descuento
+        const descuento   = Number(pedido.descuento || 0);   // valor en pesos del descuento
+
+        // Costo de envío: misma lógica que updateCartDisplay en el sitio.
+        // Se calcula sobre el subtotal SIN contar ítems regalo (precio 0 / isGift).
+        const subtotalParaEnvio = Array.isArray(pedido.productos)
+            ? pedido.productos.reduce((s, p) => s + (p.isGift ? 0 : Number(p.price || 0) * Number(p.quantity || 0)), 0)
+            : 0;
+        const costoEnvio = (esDomicilio && subtotalParaEnvio > 0 && subtotalParaEnvio < 150000) ? 25000 : 0;
 
         const C = {
             dark:   [13, 17, 23],
@@ -183,7 +189,7 @@ async function generarFacturaPDF(pedido) {
 
         // ── Fila de descuento (solo si existe) ────────────────────────────
         if (descuento > 0) {
-            doc.setTextColor([220, 50, 50]); // rojo suave para destacar el descuento
+            doc.setTextColor(220, 50, 50); // rojo suave para destacar el descuento
             doc.setFont('helvetica', 'bold');
             doc.text('Descuento aplicado', 25, y);
             doc.text('—', 120, y);
