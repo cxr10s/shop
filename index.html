@@ -32,11 +32,16 @@
     <link rel="preload" href="og-image.png" type="image/png" >
     <!-- Font Awesome 6.4.2 CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- reCAPTCHA Enterprise -->
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcvAu4sAAAAAKtiXqkHMPjufqfEdin8m57So7Lz" async defer></script>
+
     <!-- Firebase SDK (módulo ES) -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+        import { initializeAppCheck, ReCaptchaEnterpriseProvider }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js';
 
         const firebaseConfig = {
             apiKey:            "AIzaSyAp0iwXGg0-Umx8czZlw2Wy2I8Jaj9a3T8",
@@ -49,6 +54,13 @@
         };
 
         const app      = initializeApp(firebaseConfig);
+
+        // App Check con reCAPTCHA Enterprise
+        initializeAppCheck(app, {
+            provider: new ReCaptchaEnterpriseProvider('6LcvAu4sAAAAAKtiXqkHMPjufqfEdin8m57So7Lz'),
+            isTokenAutoRefreshEnabled: true
+        });
+
         const auth     = getAuth(app);
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
@@ -519,6 +531,7 @@
                 </div>
                 <div class="contactos-card-info">
                     <span class="contactos-card-name">Instagram</span>
+                    <span class="contactos-card-handle">@tienda_deportiva912</span>
                 </div>
                 <svg class="contactos-card-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
@@ -529,6 +542,7 @@
                 </div>
                 <div class="contactos-card-info">
                     <span class="contactos-card-name">WhatsApp</span>
+                    <span class="contactos-card-handle">Haz click</span>
                 </div>
                 <svg class="contactos-card-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
@@ -539,6 +553,7 @@
                 </div>
                 <div class="contactos-card-info">
                     <span class="contactos-card-name">X · Twitter</span>
+                    <span class="contactos-card-handle">@CarlosMe_01</span>
                 </div>
                 <svg class="contactos-card-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
@@ -549,6 +564,7 @@
                 </div>
                 <div class="contactos-card-info">
                     <span class="contactos-card-name">GitHub</span>
+                    <span class="contactos-card-handle">github.com/cxr10s</span>
                 </div>
                 <svg class="contactos-card-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
