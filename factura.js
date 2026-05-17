@@ -28,24 +28,33 @@ async function generarFacturaPDF(pedido) {
         }
 
         // ==============================
-        // DATOS Y COLORES
+        // DATOS (campos reales de Supabase, igual que mispedidos.html)
         // ==============================
-        const id = String(pedido.id || 'LOCAL').substring(0, 8).toUpperCase();
+        const id        = String(pedido.id || 'LOCAL').substring(0, 8).toUpperCase();
         const productos = Array.isArray(pedido.productos) ? pedido.productos : [];
-        const FECHA = new Date().toLocaleDateString('es-CO');
-        const HORA  = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
 
-        // Tipo de entrega: 'domicilio' | 'recogida' (o cualquier otro valor)
+        // Fecha y hora REALES del pedido desde created_at de Supabase
+        const fechaCompra = pedido.created_at ? new Date(pedido.created_at) : new Date();
+        const FECHA = fechaCompra.toLocaleDateString('es-CO', { day: '2-digit', month: 'long', year: 'numeric' });
+        const HORA  = fechaCompra.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+
+        // Tipo de entrega: 'domicilio' | 'tienda'  (igual que mispedidos.html)
         const esDomicilio = String(pedido.tipo_entrega || '').toLowerCase() === 'domicilio';
-        const descuento   = Number(pedido.descuento || 0);   // valor en pesos del descuento
 
-        // Costo de envío: misma lógica que updateCartDisplay en el sitio.
-        // Se calcula sobre el subtotal SIN contar ítems regalo (precio 0 / isGift).
-        const subtotalParaEnvio = Array.isArray(pedido.productos)
-            ? pedido.productos.reduce((s, p) => s + (p.isGift ? 0 : Number(p.price || 0) * Number(p.quantity || 0)), 0)
-            : 0;
-        const costoEnvio = (esDomicilio && subtotalParaEnvio > 0 && subtotalParaEnvio < 150000) ? 25000 : 0;
+        // Dirección: direccion_envio primero, luego direccion (mismo fallback que mispedidos.html línea 932)
+        const direccion = pedido.direccion_envio || pedido.direccion || 'No especificada';
 
+        // Valores financieros directamente desde los campos guardados en Supabase:
+        //   pedido.envio      → costo de envío real (0 = gratis, 25000 = con costo)
+        //   pedido.descuento  → descuento en pesos calculado al momento de compra
+        //   pedido.total      → total final ya pagado
+        const descuento  = Number(pedido.descuento || 0);
+        const costoEnvio = Number(pedido.envio     || 0);
+        const total      = Number(pedido.total      || 0);
+
+        // ==============================
+        // COLORES
+        // ==============================
         const C = {
             dark:   [13, 17, 23],
             accent: [173, 255, 47],
@@ -102,20 +111,22 @@ async function generarFacturaPDF(pedido) {
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(12);
-        doc.text(`${pedido.nombre || 'Consumidor Final'}`, 20, 78);
+        doc.text(String(pedido.nombre || 'Consumidor Final'), 20, 78);
 
         doc.setFontSize(9);
         doc.setTextColor(...C.muted);
         doc.text(`Documento: ${pedido.documento || 'N/A'}`, 20, 84);
         doc.text(`Teléfono: ${pedido.telefono || '—'}`, 20, 89);
 
-        // Dirección o mensaje de recogida
+        // Dirección (domicilio) o mensaje de recogida en tienda
         if (esDomicilio) {
-            doc.text(`Dirección: ${pedido.direccion || 'No especificada'}`, 20, 94);
+            // Truncar si es muy larga para que no se salga del margen
+            const dirTexto = String(direccion).substring(0, 60);
+            doc.text(`Dirección: ${dirTexto}`, 20, 94);
         } else {
             doc.setFont('helvetica', 'italic');
-            doc.text('Recogida en tienda — Su paquete estará listo para recoger', 20, 94);
-            doc.text('cuando reciba la notificación de disponibilidad.', 20, 99);
+            doc.text('Recogida en tienda — Su paquete estará listo cuando', 20, 94);
+            doc.text('reciba la notificación de disponibilidad.', 20, 99);
             doc.setFont('helvetica', 'normal');
         }
 
@@ -129,7 +140,7 @@ async function generarFacturaPDF(pedido) {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
 
-        // Hora de compra — primera
+        // Hora real de compra — primera (desde created_at de Supabase)
         doc.text(`Hora: ${HORA}`, 140, 78);
         doc.text(`Fecha: ${FECHA}`, 140, 84);
         doc.text(`Envío: ${esDomicilio ? 'Domicilio' : 'Recogida en tienda'}`, 140, 90);
@@ -155,22 +166,29 @@ async function generarFacturaPDF(pedido) {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
 
-        // Filas de productos
+        // Filas de productos — ítems regalo se muestran en verde como GRATIS
         productos.forEach((p) => {
-            const subtotal = Number(p?.quantity || 0) * Number(p?.price || 0);
+            const lineTotal = p.isGift ? 0 : Number(p.price || 0) * Number(p.quantity || 0);
             doc.setTextColor(...C.text);
-            doc.text(String(p?.name || 'Producto').substring(0, 45), 25, y);
-            doc.text(String(p?.quantity || 0), 120, y);
-            doc.text(`$${subtotal.toLocaleString('es-CO')}`, 185, y, { align: 'right' });
+            doc.text(String(p.name || 'Producto').substring(0, 45), 25, y);
+            doc.text(String(p.quantity || 1), 120, y);
+            if (p.isGift) {
+                doc.setTextColor(34, 197, 94); // verde igual que mispedidos.html
+                doc.text('GRATIS', 185, y, { align: 'right' });
+                doc.setTextColor(...C.text);
+            } else {
+                doc.text(`$${lineTotal.toLocaleString('es-CO')}`, 185, y, { align: 'right' });
+            }
             y += 10;
             doc.setDrawColor(245, 245, 245);
             doc.line(20, y - 4, 190, y - 4);
         });
 
-        // ── Fila de envío (solo si es domicilio) ──────────────────────────
+        // ── Fila de envío: solo si es domicilio — valor de pedido.envio (Supabase) ──
         if (esDomicilio) {
-            doc.setTextColor(...C.text);
             if (costoEnvio > 0) {
+                doc.setTextColor(...C.text);
+                doc.setFont('helvetica', 'normal');
                 doc.text('Costo de envío', 25, y);
                 doc.text('—', 120, y);
                 doc.text(`$${costoEnvio.toLocaleString('es-CO')}`, 185, y, { align: 'right' });
@@ -187,9 +205,9 @@ async function generarFacturaPDF(pedido) {
             doc.line(20, y - 4, 190, y - 4);
         }
 
-        // ── Fila de descuento (solo si existe) ────────────────────────────
+        // ── Fila de descuento: solo si pedido.descuento > 0 ────────────────
         if (descuento > 0) {
-            doc.setTextColor(220, 50, 50); // rojo suave para destacar el descuento
+            doc.setTextColor(220, 50, 50);
             doc.setFont('helvetica', 'bold');
             doc.text('Descuento aplicado', 25, y);
             doc.text('—', 120, y);
@@ -201,9 +219,8 @@ async function generarFacturaPDF(pedido) {
             doc.line(20, y - 4, 190, y - 4);
         }
 
-        // ── TOTAL ──────────────────────────────────────────────────────────
+        // ── TOTAL — pedido.total de Supabase ────────────────────────────────
         y += 5;
-        const total = Number(pedido.total || 0);
         doc.setFillColor(...C.dark);
         doc.roundedRect(130, y, 60, 15, 2, 2, 'F');
         doc.setTextColor(255, 255, 255);
