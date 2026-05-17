@@ -32,16 +32,14 @@
     <link rel="preload" href="og-image.png" type="image/png" >
     <!-- Font Awesome 6.4.2 CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- reCAPTCHA Enterprise -->
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcvAu4sAAAAAKtiXqkHMPjufqfEdin8m57So7Lz" async defer></script>
+    <!-- reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <!-- Firebase SDK (módulo ES) -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-        import { initializeAppCheck, ReCaptchaEnterpriseProvider }
-            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js';
 
         const firebaseConfig = {
             apiKey:            "AIzaSyAp0iwXGg0-Umx8czZlw2Wy2I8Jaj9a3T8",
@@ -54,13 +52,6 @@
         };
 
         const app      = initializeApp(firebaseConfig);
-
-        // App Check con reCAPTCHA Enterprise
-        initializeAppCheck(app, {
-            provider: new ReCaptchaEnterpriseProvider('6LcvAu4sAAAAAKtiXqkHMPjufqfEdin8m57So7Lz'),
-            isTokenAutoRefreshEnabled: true
-        });
-
         const auth     = getAuth(app);
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
@@ -809,7 +800,7 @@
             <h2 class="auth-title">Bienvenido</h2>
             <p class="auth-subtitle">Inicia sesión para realizar pedidos y gestionar tu cuenta.</p>
 
-            <button id="google-signin-btn" class="auth-google-btn" onclick="window._signInWithGoogle && window._signInWithGoogle()">
+            <button id="google-signin-btn" class="auth-google-btn" onclick="window._signInWithGoogle && window._signInWithGoogle()" style="display:none;">
                 <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -818,6 +809,9 @@
                 </svg>
                 <span class="auth-btn-text">Continuar con Google</span>
             </button>
+
+            <!-- reCAPTCHA v2 — se muestra primero, al completarse aparece el botón Google -->
+            <div id="recaptcha-container" style="margin:16px 0 8px;display:flex;justify-content:center;"></div>
 
             <p id="auth-error-msg" class="auth-error" style="display:none;"></p>
 
@@ -978,16 +972,58 @@ function compartirWeb() {
     });
 
     // ── Auth Modal ──────────────────────────────────────────────────
+    let _recaptchaWidgetId = null;
+
     function openAuthModal() {
         const m = document.getElementById('auth-modal');
         if (m) { m.classList.add('show'); document.body.classList.add('modal-open'); }
-        // reset error
         const err = document.getElementById('auth-error-msg');
         if (err) err.style.display = 'none';
+
+        // Resetear botón Google y reCAPTCHA
+        const googleBtn = document.getElementById('google-signin-btn');
+        if (googleBtn) googleBtn.style.display = 'none';
+
+        const container = document.getElementById('recaptcha-container');
+        if (container) {
+            container.innerHTML = '';
+            _recaptchaWidgetId = null;
+        }
+
+        // Renderizar reCAPTCHA cuando la API esté lista
+        function _renderCaptcha() {
+            if (typeof grecaptcha === 'undefined' || !grecaptcha.render) {
+                setTimeout(_renderCaptcha, 300);
+                return;
+            }
+            const cont = document.getElementById('recaptcha-container');
+            if (!cont || cont.childElementCount > 0) return;
+            _recaptchaWidgetId = grecaptcha.render(cont, {
+                sitekey: '6LfCIu4sAAAAAGjUZoOAi1XMIqT70vYrjodxCe04',
+                theme: 'dark',
+                callback: function() {
+                    // Usuario completó reCAPTCHA → mostrar botón Google
+                    const btn = document.getElementById('google-signin-btn');
+                    if (btn) { btn.style.display = 'flex'; }
+                },
+                'expired-callback': function() {
+                    const btn = document.getElementById('google-signin-btn');
+                    if (btn) btn.style.display = 'none';
+                }
+            });
+        }
+        _renderCaptcha();
     }
+
     function closeAuthModal() {
         const m = document.getElementById('auth-modal');
         if (m) { m.classList.remove('show'); document.body.classList.remove('modal-open'); }
+        // Resetear reCAPTCHA al cerrar
+        const container = document.getElementById('recaptcha-container');
+        if (container) container.innerHTML = '';
+        _recaptchaWidgetId = null;
+        const googleBtn = document.getElementById('google-signin-btn');
+        if (googleBtn) googleBtn.style.display = 'none';
     }
     // ESC key closes modal
     document.addEventListener('keydown', function(e){
