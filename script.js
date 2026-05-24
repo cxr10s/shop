@@ -25,7 +25,7 @@ const OFERTAS_CONFIG = {
             basePrice: 340000,
             image: 'Adidas-Ultraboost.png',
             category: 'tenis',
-            sizes: null,
+            sizes: ['36','37','38','39','40','41','42','43','44'],
             description: 'El tenis más cómodo de Adidas. Suela Boost para máxima amortiguación.'
         },
         {
@@ -477,15 +477,11 @@ function updateCartDisplay() {
     const { pct: discountPct, amount: discount } = calcDiscount(subtotal);
     const hasGift = cart.some(item => item.isGift === true);
     
-    let shippingCost = 0;
     const shippingInfo = document.getElementById('shipping-info');
     const shippingAmount = document.getElementById('shipping-amount');
     
-    if (subtotal > 0 && subtotal < 150000) {
-        shippingCost = 25000;
-    }
-    
-    const total = subtotal - discount + shippingCost;
+    // El envío NO se suma al total aquí; el usuario elegirá envío o recogida más adelante
+    const total = subtotal - discount;
     
     cartSubtotal.textContent = `$${subtotal.toLocaleString()} COP`;
     cartTotalElement.textContent = `$${total.toLocaleString()} COP`;
@@ -723,39 +719,39 @@ function getCategoryName(category) {
 function getCatalogProducts(category) {
     const catalogProducts = {
         'camisetas': [
-            { id: 'camiseta-cat-1', name: 'Camiseta Adidas Liverpool ', price: 74900, image: 'Camiseta adidas4.png' },
-            { id: 'camiseta-cat-2', name: 'Camiseta Adidas Black     ', price: 49900, image: 'Camiseta Adidas2.png' },
-            { id: 'camiseta-cat-3', name: 'Camiseta Adidas Arsenal Club ', price: 79500, image: 'Camiseta Arsenal.png' },
-            { id: 'camiseta-cat-4', name: 'Camiseta Adidas Retro Brasil ', price:99000, image: 'CamisetaBrasil.png' },
-            { id: 'camiseta-cat-5', name: 'Camiseta Adidas Madrid Blue ', price: 78400, image: 'Madridblue.png' },
-            { id: 'camiseta-cat-6', name: 'Camiseta Adidas Colombia ', price: 52000, image: 'Colombia.png' }
+            { id: 'camiseta-cat-1', name: 'Camiseta Adidas Liverpool ', price: 74900, image: 'Camiseta adidas4.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-2', name: 'Camiseta Adidas Black     ', price: 49900, image: 'Camiseta Adidas2.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-3', name: 'Camiseta Adidas Arsenal Club ', price: 79500, image: 'Camiseta Arsenal.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-4', name: 'Camiseta Adidas Retro Brasil ', price:99000, image: 'CamisetaBrasil.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-5', name: 'Camiseta Adidas Madrid Blue ', price: 78400, image: 'Madridblue.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-6', name: 'Camiseta Adidas Colombia ', price: 52000, image: 'Colombia.png', sizes: ['S','M','L','XL'] }
         ],
         'tenis': [
-            { id: 'tenis-cat-1', name: 'Tenis Adidas Yeezy', price: 295900, image: 'Tenis Adidas yeezy.png' },
-            { id: 'tenis-cat-2', name: 'Tenis Adidas Boost', price: 229000, image: 'Tenis Adidas Boost.png' },
-            { id: 'tenis-cat-3', name: 'Tenis Adidas Red', price: 172000, image: 'tenisadidas6.png' },
-            { id: 'tenis-cat-4', name: 'Tenis Adidas Black', price: 110000, image: 'tenisadidas5.png' },
-            { id: 'tenis-cat-5', name: 'Tenis Adidas White', price: 214900, image: 'tenisadidas1.png' },
-            { id: 'tenis-cat-6', name: 'Tenis Adidas I', price: 149000, image: 'tenisadidas3.png' },
-            { id: 'tenis-cat-7', name: 'Tenis Adidas II', price: 105000, image: 'tenisadidas2.png' },
-            { id: 'tenis-cat-8', name: 'Tenis Adidas III', price: 99200, image: 'tenisadidas4.png' }
+            { id: 'tenis-cat-1', name: 'Tenis Adidas Yeezy', price: 295900, image: 'Tenis Adidas yeezy.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
+            { id: 'tenis-cat-2', name: 'Tenis Adidas Boost', price: 229000, image: 'Tenis Adidas Boost.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
+            { id: 'tenis-cat-3', name: 'Tenis Adidas Red', price: 172000, image: 'tenisadidas6.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
+            { id: 'tenis-cat-4', name: 'Tenis Adidas Black', price: 110000, image: 'tenisadidas5.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
+            { id: 'tenis-cat-5', name: 'Tenis Adidas White', price: 214900, image: 'tenisadidas1.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
+            { id: 'tenis-cat-6', name: 'Tenis Adidas I', price: 149000, image: 'tenisadidas3.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
+            { id: 'tenis-cat-7', name: 'Tenis Adidas II', price: 105000, image: 'tenisadidas2.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
+            { id: 'tenis-cat-8', name: 'Tenis Adidas III', price: 99200, image: 'tenisadidas4.png', sizes: ['36','37','38','39','40','41','42','43','44'] }
         ],
         'jeans': [
-            { id: 'jeans-cat-1', name: 'Jeans Clasicos', price: 70800, image: 'Jeans clasico hombre l.png' },
-            { id: 'jeans-cat-2', name: 'Jeans Clasicos II', price: 68200, image: 'Jeans clasico hombre ll.png' },
-            { id: 'jeans-cat-3', name: 'Jeans Vintage', price: 80000, image: 'jeans ventage dama l.png' },
-            { id: 'jeans-cat-4', name: 'Jeans Vintage II', price: 80000, image: 'jeans vintage dama ll.png' },
-            { id: 'jeans-cat-5', name: 'Jeans Rotos', price: 72800, image: 'jeans rotos ll.png' },
-            { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 88700, image: 'jeans relaxed ll.png' },
-            { id: 'jeans-cat-7', name: 'Jeans Modernos', price: 73900, image: 'Jeans moderno ll.png' },
+            { id: 'jeans-cat-1', name: 'Jeans Clasicos', price: 70800, image: 'Jeans clasico hombre l.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-2', name: 'Jeans Clasicos II', price: 68200, image: 'Jeans clasico hombre ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-3', name: 'Jeans Vintage', price: 80000, image: 'jeans ventage dama l.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-4', name: 'Jeans Vintage II', price: 80000, image: 'jeans vintage dama ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-5', name: 'Jeans Rotos', price: 72800, image: 'jeans rotos ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 88700, image: 'jeans relaxed ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-7', name: 'Jeans Modernos', price: 73900, image: 'Jeans moderno ll.png', sizes: ['28','30','32','34'] },
         ],
         'cascos': [
-            { id: 'casco-cat-1', name: 'Casco Moto croos', price: 220600, image: 'cross azul.png' },
-            { id: 'casco-cat-2', name: 'Casco Motocicleta', price: 113500, image: 'rojo.png' },
-            { id: 'casco-cat-3', name: 'Casco Carreras', price: 420900, image: 'Casco Racing l.png' },
-            { id: 'casco-cat-4', name: 'Casco Carreras ll', price: 410400, image: 'Casco Racing ll.png' },
-            { id: 'casco-cat-5', name: 'Casco TodoT', price: 199200, image: 'Casco Touring l.png' },
-            { id: 'casco-cat-6', name: 'Casco TodoT ll', price: 189900, image: 'Casco Touring ll.png' }
+            { id: 'casco-cat-1', name: 'Casco Moto croos', price: 220600, image: 'cross azul.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
+            { id: 'casco-cat-2', name: 'Casco Motocicleta', price: 113500, image: 'rojo.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
+            { id: 'casco-cat-3', name: 'Casco Carreras', price: 420900, image: 'Casco Racing l.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
+            { id: 'casco-cat-4', name: 'Casco Carreras ll', price: 410400, image: 'Casco Racing ll.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
+            { id: 'casco-cat-5', name: 'Casco TodoT', price: 199200, image: 'Casco Touring l.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
+            { id: 'casco-cat-6', name: 'Casco TodoT ll', price: 189900, image: 'Casco Touring ll.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] }
         ],
         'deportes': [
             { id: 'deportes-cat-1', name: 'Bicicleta Mount Bike I', price: 890000, image: 'BicicletaCata.png' },
