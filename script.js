@@ -1,4 +1,161 @@
 // =============================================
+// SECCIÓN OFERTAS — Configuración central
+// =============================================
+// Para agregar/quitar productos de Ofertas o cambiar descuentos,
+// edita este objeto. discountPct = porcentaje de descuento de la sección.
+const OFERTAS_CONFIG = {
+    discountPct: 10,   // <-- cambia aquí el % de descuento global de Ofertas
+    products: [
+        // Para agregar: copia cualquier bloque y cambia los valores.
+        // Para quitar: elimina el bloque completo.
+        // "sizes" solo aplica a productos de ropa (camisetas, jeans).
+        // Para productos sin talla (tenis, cascos, deportes) pon sizes: null
+        {
+            id: 'oferta-camiseta-1',
+            name: 'Camiseta Adidas Liverpool',
+            basePrice: 74900,
+            image: 'Camiseta adidas4.png',
+            category: 'camisetas',
+            sizes: ['S','M','L','XL'],
+            description: 'Camiseta oficial Adidas edición Liverpool. Tejido técnico de alta respirabilidad.'
+        },
+        {
+            id: 'oferta-tenis-1',
+            name: 'Tenis Adidas Ultraboost',
+            basePrice: 340000,
+            image: 'Adidas-Ultraboost.png',
+            category: 'tenis',
+            sizes: null,
+            description: 'El tenis más cómodo de Adidas. Suela Boost para máxima amortiguación.'
+        },
+        {
+            id: 'oferta-camiseta-2',
+            name: 'Camiseta Adidas Madrid',
+            basePrice: 87400,
+            image: 'Camiseta_adidas_Madrid.png',
+            category: 'camisetas',
+            sizes: ['S','M','L','XL'],
+            description: 'Camiseta oficial Real Madrid Adidas. Diseño elegante para hincha y casual.'
+        },
+        {
+            id: 'oferta-jeans-1',
+            name: 'Jeans Relaxed',
+            basePrice: 88900,
+            image: 'jeans relaxed ll.png',
+            category: 'jeans',
+            sizes: ['28','30','32','34'],
+            description: 'Jeans de corte relaxed premium. Ideal para el día a día con estilo urbano.'
+        }
+    ]
+};
+
+// =============================================
+// MODAL DE PRODUCTO (talla + precio + descripción)
+// =============================================
+let _currentModalProduct = null;
+let _currentModalSize    = null;
+
+function openProductModal(productData) {
+    _currentModalProduct = productData;
+    _currentModalSize    = null;
+
+    // Resolve image if null (get from product card in DOM)
+    if (!productData.image || productData.image === 'null') {
+        productData.image = getProductImage(productData.id) || 'https://via.placeholder.com/300x300?text=Producto';
+    }
+
+    const modal = document.getElementById('product-detail-modal');
+    if (!modal) return;
+
+    const discountedPrice = productData.salePrice ?? productData.price;
+    const originalPrice   = productData.originalPrice ?? null;
+    const discountPct     = productData.discountPct ?? 0;
+    const sizes           = productData.sizes ?? null;
+
+    // Imagen
+    modal.querySelector('#pdm-img').src = productData.image;
+    modal.querySelector('#pdm-img').alt = productData.name;
+
+    // Nombre
+    modal.querySelector('#pdm-name').textContent = productData.name;
+
+    // Descuento badge
+    const badge = modal.querySelector('#pdm-badge');
+    if (discountPct > 0) {
+        badge.textContent = `-${discountPct}%`;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+
+    // Precio
+    const priceWrap = modal.querySelector('#pdm-price-wrap');
+    if (originalPrice && discountPct > 0) {
+        priceWrap.innerHTML = `<span class="pdm-original-price">$${originalPrice.toLocaleString()} COP</span> <span class="pdm-sale-price">$${discountedPrice.toLocaleString()} COP</span>`;
+    } else {
+        priceWrap.innerHTML = `<span class="pdm-sale-price">$${discountedPrice.toLocaleString()} COP</span>`;
+    }
+
+    // Tallas
+    const sizesSection = modal.querySelector('#pdm-sizes-section');
+    const sizesContainer = modal.querySelector('#pdm-sizes');
+    if (sizes && sizes.length > 0) {
+        sizesSection.style.display = 'block';
+        sizesContainer.innerHTML = sizes.map(s =>
+            `<button class="pdm-size-btn" onclick="selectSize(this, '${s}')">${s}</button>`
+        ).join('');
+    } else {
+        sizesSection.style.display = 'none';
+        _currentModalSize = 'N/A';
+    }
+
+    // Descripción
+    const desc = modal.querySelector('#pdm-desc');
+    if (productData.description) {
+        desc.textContent = productData.description;
+        desc.style.display = 'block';
+    } else {
+        desc.style.display = 'none';
+    }
+
+    // Botón Ver carrito
+    modal.querySelector('#pdm-view-cart').onclick = () => {
+        closeProductModal();
+        setTimeout(toggleCart, 100);
+    };
+
+    // Botón Agregar
+    modal.querySelector('#pdm-add-btn').onclick = () => {
+        const hasSizes = sizes && sizes.length > 0;
+        if (hasSizes && !_currentModalSize) {
+            showNotification('Por favor selecciona una talla');
+            return;
+        }
+        const nameWithSize = hasSizes ? `${productData.name} (${_currentModalSize})` : productData.name;
+        const price = productData.salePrice ?? productData.price;
+        addToCart(productData.id + (hasSizes ? `-${_currentModalSize}` : ''), nameWithSize, price, productData.image, productData.originalPrice, productData.discountPct);
+        closeProductModal();
+    };
+
+    modal.style.display = 'flex';
+    document.body.classList.add('modal-open');
+}
+
+function selectSize(btn, size) {
+    document.querySelectorAll('.pdm-size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    _currentModalSize = size;
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('product-detail-modal');
+    if (modal) modal.style.display = 'none';
+    if (!document.querySelector('.modal.show')) {
+        document.body.classList.remove('modal-open');
+    }
+}
+
+// =============================================
 // SISTEMA DE DESCUENTOS PROGRESIVO
 // =============================================
 function calcDiscount(subtotal) {
@@ -21,7 +178,7 @@ function moveCarousel(sectionId, direction) {
     hideScrollIndicators(container);
 }
 
-function addToCart(productId, productName, price, image = null) {
+function addToCart(productId, productName, price, image = null, originalPrice = null, discountPct = 0) {
     const existingItem = cart.find(item => item.id === productId);
     if (existingItem) {
         existingItem.quantity += 1;
@@ -31,7 +188,9 @@ function addToCart(productId, productName, price, image = null) {
             name: productName,
             price: price,
             quantity: 1,
-            image: image || getProductImage(productId)
+            image: image || getProductImage(productId),
+            originalPrice: originalPrice || null,
+            discountPct: discountPct || 0
         });
     }
     updateCartDisplay();
@@ -296,6 +455,8 @@ function updateCartDisplay() {
         let priceDisplay = `$${item.price.toLocaleString()} COP`;
         if (item.isGift && item.originalPrice) {
             priceDisplay = `<span style="text-decoration: line-through; color: #999;">$${item.originalPrice.toLocaleString()} COP</span> <span style="color: #000; font-weight: bold;">¡GRATIS!</span>`;
+        } else if (!item.isGift && item.originalPrice && item.discountPct > 0) {
+            priceDisplay = `<span style="text-decoration: line-through; color: #888; font-size:0.85em;">$${item.originalPrice.toLocaleString()}</span> <span style="color:#e0e0e0; font-weight:700;">$${item.price.toLocaleString()} COP</span> <span style="background:#c0392b;color:#fff;font-size:0.7em;padding:1px 5px;border-radius:8px;font-weight:700;">-${item.discountPct}%</span>`;
         }
         cartItem.innerHTML = `
             <img src="${item.image}" alt="${item.name}">
@@ -509,11 +670,25 @@ function showCatalog(category) {
     products.forEach(product => {
         const item = document.createElement('div');
         item.className = 'catalog-item';
+        const discPct = product.discountPct || 0;
+        const salePrice = discPct > 0 ? Math.round(product.price * (1 - discPct/100)) : product.price;
+        const priceHTML = discPct > 0
+            ? `<span class="price-original">$${product.price.toLocaleString()} COP</span><span class="price-sale">$${salePrice.toLocaleString()} COP</span><span class="discount-badge">-${discPct}%</span>`
+            : `<span class="price">$${product.price.toLocaleString()} COP</span>`;
+
+        const hasSizes = product.sizes && product.sizes.length > 0;
         item.innerHTML = `
             <img src="${product.image}" alt="${product.name}">
             <h4>${product.name}</h4>
-            <p class="price">$${product.price.toLocaleString()} COP</p>
-            <button class="add-to-cart-btn" onclick="addToCart('${product.id}', '${product.name}', ${product.price}, '${product.image}')">Agregar</button>
+            <p class="price-wrap">${priceHTML}</p>
+            <button class="add-to-cart-btn" onclick='openProductModal(${JSON.stringify({
+                id: product.id, name: product.name, price: salePrice,
+                salePrice: salePrice, originalPrice: discPct > 0 ? product.price : null,
+                discountPct: discPct, image: product.image,
+                sizes: product.sizes || null, description: product.description || null
+            })})'>
+                ${hasSizes ? 'Seleccionar talla' : 'Agregar'}
+            </button>
         `;
         grid.appendChild(item);
     });
@@ -539,7 +714,8 @@ function getCategoryName(category) {
         'tenis': 'Tenis Adidas',
         'jeans': 'Jeans',
         'cascos': 'Cascos para Motos',
-        'deportes': 'Equipos Deportivos'
+        'deportes': 'Equipos Deportivos',
+        'ofertas': '🔥 Ofertas'
     };
     return names[category] || category;
 }
@@ -599,7 +775,11 @@ function getCatalogProducts(category) {
             { id: 'deportes-cat-15', name: 'Mancuerna 20KG', price: 210900, image: 'Mancuerna20KG.png' },
             { id: 'deportes-cat-16', name: 'Mancuerna 25KG', price: 259200, image: 'Mancuerna25KG.png' },
             { id: 'deportes-cat-17', name: 'Mancuerna 30KG', price: 289400, image: 'Mancuerna30KG.png' }
-        ]
+        ],
+        'ofertas': OFERTAS_CONFIG.products.map(p => {
+            const salePrice = Math.round(p.basePrice * (1 - OFERTAS_CONFIG.discountPct / 100));
+            return { id: p.id, name: p.name, price: p.basePrice, salePrice, discountPct: OFERTAS_CONFIG.discountPct, image: p.image, sizes: p.sizes || null, description: p.description || null };
+        })
     };
     return catalogProducts[category] || [];
 }
@@ -773,11 +953,47 @@ function shareVia(platform) {
 }
 
 // =============================================
+// RENDERIZAR SECCIÓN OFERTAS
+// =============================================
+function renderOfertasSection() {
+    const container = document.getElementById('ofertas-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const pct = OFERTAS_CONFIG.discountPct;
+    OFERTAS_CONFIG.products.forEach(p => {
+        const salePrice = Math.round(p.basePrice * (1 - pct / 100));
+        const hasSizes = p.sizes && p.sizes.length > 0;
+        const modalData = JSON.stringify({
+            id: p.id, name: p.name, price: salePrice,
+            salePrice, originalPrice: p.basePrice, discountPct: pct,
+            image: p.image, sizes: p.sizes || null, description: p.description || null
+        }).replace(/'/g, '&#39;');
+        const card = document.createElement('div');
+        card.className = 'product-card oferta-card';
+        card.setAttribute('data-product', JSON.stringify({ id: p.id, name: p.name, price: salePrice, category: 'ofertas' }));
+        card.innerHTML = `
+            <div class="oferta-badge">-${pct}%</div>
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+            <h3>${p.name}</h3>
+            <div class="price-block">
+                <span class="price-original-card">$${p.basePrice.toLocaleString()} COP</span>
+                <span class="price-sale-card">$${salePrice.toLocaleString()} COP</span>
+            </div>
+            <button class="add-to-cart-btn" onclick='openProductModal(${modalData})'>
+                ${hasSizes ? 'Seleccionar talla' : 'Agregar'}
+            </button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// =============================================
 // INICIALIZAR
 // =============================================
 window.addEventListener('DOMContentLoaded', function() {
     loadCart();
     _initCartAuthSync();
+    renderOfertasSection();
     if (cart.length > 0) {
         updateCartDisplay();
         updateCartIcon();
