@@ -3253,21 +3253,362 @@ body.modal-open {
 /* Colores para movil */
 @media (max-width: 768px) {
     .hero-tag {
+        /* cambia el color aquí solo para móvil */
         color: #fff;
         background: rgba(145,119,113,0.15);
         border: 1px solid #fff;
     }
 
     .hero-text p {
+        /* cambia el color aquí solo para móvil */
         color: #fff;
     }
 
     .stat-label {
+        /* cambia el color aquí solo para móvil */
         color: #adff2f;
     }
     .hero {
-        background-position: 50% center; 
+        background-position: 50% center; /* mueve la imagen horizontalmente */
         background-size: cover;
-        min-height: auto;
+        min-height: auto; /* ajusta el tamaño para que se vea bien en móvil */
+    }
+
+}
+/* =============================================
+   SECCIÓN OFERTAS
+   ============================================= */
+.ofertas-section {
+    background: linear-gradient(180deg, #1a0a00 0%, #111 60%);
+    border-top: 2px solid #c0392b;
+}
+
+.ofertas-section .section-header h2 {
+    color: #fff;
+}
+
+.nav-ofertas-link {
+    color: #ff6b35 !important;
+    font-weight: 700 !important;
+    animation: oferta-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes oferta-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.mobile-menu-ofertas {
+    color: #ff6b35 !important;
+    font-weight: 700;
+}
+
+/* Oferta badge on card */
+.oferta-card {
+    border-color: rgba(192,57,43,0.4) !important;
+}
+
+.oferta-card:hover {
+    border-color: rgba(192,57,43,0.8) !important;
+}
+
+.oferta-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #c0392b;
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.78rem;
+    padding: 4px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+/* Price block on cards (with discount) */
+.price-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 0.75rem;
+}
+
+.price-original-card {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.price-sale-card {
+    color: #e0e0e0;
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+/* Catalog item price styles */
+.price-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.price-original {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 0.82rem;
+}
+
+.price-sale {
+    color: #e0e0e0;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.discount-badge {
+    background: #c0392b;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* =============================================
+   PRODUCT DETAIL MODAL (talla)
+   ============================================= */
+.pdm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    backdrop-filter: blur(6px);
+    z-index: 50000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.pdm-modal {
+    background: #f4f4f4;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 880px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: pdm-in 0.28s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes pdm-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.pdm-close {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(0,0,0,0.08);
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    line-height: 1;
+}
+
+.pdm-close:hover { background: rgba(0,0,0,0.15); }
+
+.pdm-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 400px;
+}
+
+.pdm-img-wrap {
+    background: #e8e8e8;
+    border-radius: 20px 0 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.pdm-img-wrap img {
+    width: 100%;
+    max-height: 340px;
+    object-fit: contain;
+}
+
+.pdm-info {
+    padding: 40px 36px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pdm-name-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pdm-name-row h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: #111;
+    line-height: 1.1;
+    flex: 1;
+}
+
+.pdm-discount-badge {
+    background: #111;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 5px 10px;
+    border-radius: 50px;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 6px;
+}
+
+.pdm-price-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pdm-original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 1rem;
+}
+
+.pdm-sale-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #111;
+}
+
+.pdm-sizes-label {
+    font-size: 0.82rem;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.pdm-sizes-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pdm-size-btn {
+    min-width: 52px;
+    height: 52px;
+    border: 2px solid #ccc;
+    background: #fff;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+}
+
+.pdm-size-btn:hover {
+    border-color: #111;
+    background: #f0f0f0;
+}
+
+.pdm-size-btn.active {
+    border-color: #111;
+    background: #111;
+    color: #fff;
+}
+
+.pdm-desc {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.55;
+    font-weight: 500;
+}
+
+.pdm-view-cart-btn {
+    background: #111;
+    color: #adff2f;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+}
+
+.pdm-view-cart-btn:hover { background: #222; }
+
+.pdm-add-btn {
+    background: #fff;
+    color: #111;
+    border: 2px solid #111;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.pdm-add-btn:hover {
+    background: #f0f0f0;
+}
+
+/* Mobile: stack modal */
+@media (max-width: 700px) {
+    .pdm-layout {
+        grid-template-columns: 1fr;
+    }
+    .pdm-img-wrap {
+        border-radius: 20px 20px 0 0;
+        padding: 20px;
+        max-height: 250px;
+    }
+    .pdm-img-wrap img {
+        max-height: 200px;
+    }
+    .pdm-info {
+        padding: 24px 20px 24px;
+        gap: 12px;
+    }
+    .pdm-name-row h2 {
+        font-size: 1.5rem;
+    }
+    .pdm-sale-price {
+        font-size: 1.3rem;
     }
 }
