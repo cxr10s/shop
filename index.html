@@ -14,7 +14,7 @@
     <meta property="og:description" content="Camisetas, Tenis, Jeans, Cascos y más. Envío gratis desde $150.000 y descuentos hasta el 20%.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://cxr10s.github.io/shop/">
-    <meta property="og:image" content="https://cxr10s.github.io/shop/og-image.png">
+    <meta property="og:image" content="https://cxr10s.github.io/shop/favicon3.png">
     <meta property="og:locale" content="es_CO">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
@@ -32,9 +32,6 @@
     <link rel="preload" href="og-image.png" type="image/png" >
     <!-- Font Awesome 6.4.2 CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- reCAPTCHA v2 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
     <!-- Firebase SDK (módulo ES) -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
@@ -171,6 +168,7 @@
             <!-- Nav links (solo desktop) -->
             <ul class="nav-menu" role="menubar">
                 <li role="menuitem"><a href="#inicio" data-section="inicio">Inicio</a></li>
+                <li role="menuitem"><a href="#ofertas" data-section="ofertas" class="nav-ofertas-link">🔥 Ofertas</a></li>
                 <li role="menuitem"><a href="#camisetas" data-section="camisetas">Camisetas</a></li>
                 <li role="menuitem"><a href="#tenis" data-section="tenis">Tenis</a></li>
                 <li role="menuitem"><a href="#jeans" data-section="jeans">Jeans</a></li>
@@ -218,13 +216,12 @@
         <p class="mobile-menu-label">SECCIONES</p>
         <nav class="mobile-menu-nav">
             <a href="#inicio"    class="mobile-menu-item" onclick="scrollToSection('inicio')"><span class="mmi-icon"></span><span>Inicio</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+            <a href="#ofertas"   class="mobile-menu-item mobile-menu-ofertas" onclick="scrollToSection('ofertas')"><span class="mmi-icon">🔥</span><span>Ofertas</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
             <a href="#camisetas" class="mobile-menu-item" onclick="scrollToSection('camisetas')"><span class="mmi-icon"></span><span>Camisetas</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
             <a href="#tenis"     class="mobile-menu-item" onclick="scrollToSection('tenis')"><span class="mmi-icon"></span><span>Tenis</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
             <a href="#jeans"     class="mobile-menu-item" onclick="scrollToSection('jeans')"><span class="mmi-icon"></span><span>Jeans</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
             <a href="#cascos"    class="mobile-menu-item" onclick="scrollToSection('cascos')"><span class="mmi-icon"></span><span>Cascos</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
-            <a href="#deportes"  class="mobile-menu-item" onclick="scrollToSection('deportes')"><span class="mmi-icon"></span><span>Deportes</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width("width") + "px";
-    document.getElementById("height").style.height = parseInt(document.getElementById("height").value) * parseInt(document.getElementById("width").value) / parseInt(document.getElementById("width").value) + "px";
-}
+                        <a href="#deportes"  class="mobile-menu-item" onclick="scrollToSection('deportes')"><span class="mmi-icon"></span><span>Deportes</span><svg class="mmi-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
         </nav>
         <div class="mobile-menu-divider"></div>
         <a href="https://cxr10s.github.io/shop/mispedidos.html" class="mobile-menu-pedidos">
@@ -257,6 +254,21 @@
             </div>
         </div>
     </section>
+    <!-- Ofertas Section -->
+    <section id="ofertas" class="products-section ofertas-section">
+        <div class="section-header">
+            <h2>🔥 Ofertas</h2>
+            <div class="section-header-actions"><a class="btn-catalog" href="#" onclick="showCatalog('ofertas'); return false;">Ver todo <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+        </div>
+        <div class="products-carousel">
+            <button class="carousel-btn prev" onclick="moveCarousel('ofertas', -1)">‹</button>
+            <div class="products-container" id="ofertas-container">
+                <!-- Renderizado dinámicamente por renderOfertasSection() en script.js -->
+            </div>
+            <button class="carousel-btn next" onclick="moveCarousel('ofertas', 1)">›</button>
+        </div>
+    </section>
+
     <!-- Camisetas Adidas Section -->
     <section id="camisetas" class="products-section">
         <div class="section-header">
@@ -270,25 +282,25 @@
                     <img src="Camiseta Alnassr.png" alt="Camiseta Adidas Alnassr" loading="lazy" width="300" height="300">
                     <h3>Camiseta Adidas Alnassr</h3>
                     <p class="price">$62.500 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('camiseta-1', 'Camiseta Adidas Alnassr', 62500)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "camiseta-1", "name": "Camiseta Adidas Alnassr", "price": 62500, "salePrice": 62500, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["S", "M", "L", "XL"], "description": "Camiseta de alta calidad con diseño exclusivo Adidas."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "camiseta-2", "name": "Camiseta Adidas Madrid", "price": 87400, "category": "camisetas"}'>
                     <img loading="lazy" src="Camiseta_adidas_Madrid.png" alt="Camiseta Adidas Madrid">
                     <h3>Camiseta Adidas Madrid</h3>
                     <p class="price">$87.400 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('camiseta-2', 'Camiseta Adidas Madrid', 87400)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "camiseta-2", "name": "Camiseta Adidas Madrid", "price": 87400, "salePrice": 87400, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["S", "M", "L", "XL"], "description": "Camiseta de alta calidad con diseño exclusivo Adidas."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "camiseta-3", "name": "Camiseta Adidas Running", "price": 54900, "category": "camisetas"}'>
                     <img loading="lazy" src="Camiseta Adidas.png" alt="Camiseta Adidas Running">
                     <h3>Camiseta Adidas Running</h3>
                     <p class="price">$54.900 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('camiseta-3', 'Camiseta Adidas Running', 54900)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "camiseta-3", "name": "Camiseta Adidas Running", "price": 54900, "salePrice": 54900, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["S", "M", "L", "XL"], "description": "Camiseta de alta calidad con diseño exclusivo Adidas."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "camiseta-4", "name": "Camiseta Adidas España", "price": 75900, "category": "camisetas"}'>
                     <img loading="lazy" src="CamisetaEspaña.png" alt="Camiseta Adidas España">
                     <h3>Camiseta Adidas España</h3>
                     <p class="price">$75.900 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('camiseta-4', 'Camiseta Adidas España', 75900)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "camiseta-4", "name": "Camiseta Adidas España", "price": 75900, "salePrice": 75900, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["S", "M", "L", "XL"], "description": "Camiseta de alta calidad con diseño exclusivo Adidas."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
             </div>
             <button class="carousel-btn next" onclick="moveCarousel('camisetas', 1)">›</button>
@@ -308,25 +320,25 @@
                     <img loading="lazy" src="Adidas-Ultraboost.png" alt="Tenis Adidas Ultraboost">
                     <h3>Tenis Adidas Ultraboost</h3>
                     <p class="price">$340.000 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('tenis-1', 'Tenis Adidas Ultraboost', 340000)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "tenis-1", "name": "Tenis Adidas Ultraboost", "price": 340000, "salePrice": 340000, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Tenis Adidas de alto rendimiento y comfort."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "tenis-2", "name": "Tenis Adidas Stan Smith", "price": 179000, "category": "tenis"}'>
                     <img loading="lazy" src="Adidas-Stan.png" alt="Tenis Adidas Stan Smith">
                     <h3>Tenis Adidas Stan Smith</h3>
                     <p class="price">$179.000 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('tenis-2', 'Tenis Adidas Stan Smith', 179000)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "tenis-2", "name": "Tenis Adidas Stan Smith", "price": 179000, "salePrice": 179000, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Tenis Adidas de alto rendimiento y comfort."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "tenis-3", "name": "Tenis Adidas NMD", "price": 142000, "category": "tenis"}'>
                     <img loading="lazy" src="adidas_npm.png" alt="Tenis Adidas NMD">
                     <h3>Tenis Adidas NMD</h3>
                     <p class="price">$142.000 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('tenis-3', 'Tenis Adidas NMD', 142000)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "tenis-3", "name": "Tenis Adidas NMD", "price": 142000, "salePrice": 142000, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Tenis Adidas de alto rendimiento y comfort."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "tenis-4", "name": "Tenis Adidas Gazelle", "price": 189000, "category": "tenis"}'>
                     <img loading="lazy" src="Adias gazelle.png" alt="Tenis Adidas Gazelle">
                     <h3>Tenis Adidas Gazelle</h3>
                     <p class="price">$189.000 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('tenis-4', 'Tenis Adidas Gazelle', 189000)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "tenis-4", "name": "Tenis Adidas Gazelle", "price": 189000, "salePrice": 189000, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Tenis Adidas de alto rendimiento y comfort."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
             </div>
             <button class="carousel-btn next" onclick="moveCarousel('tenis', 1)">›</button>
@@ -346,25 +358,25 @@
                     <img loading="lazy" src="Jeans modernos.png" alt="Jeans Clásicos">
                     <h3>Jeans Clásicos</h3>
                     <p class="price">$67.600 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('jeans-1', 'Jeans Clásicos', 67600)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "jeans-1", "name": "Jeans Clásicos", "price": 67600, "salePrice": 67600, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["28", "30", "32", "34"], "description": "Jeans premium con acabado moderno y corte perfecto."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "jeans-2", "name": "Jeans Modernos", "price": 64900, "category": "jeans"}'>
                     <img loading="lazy" src="jeans modernos3.png" alt="Jeans Modernos">
                     <h3>Jeans Modernos</h3>
                     <p class="price">$64.900 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('jeans-2', 'Jeans Modernos', 64900)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "jeans-2", "name": "Jeans Modernos", "price": 64900, "salePrice": 64900, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["28", "30", "32", "34"], "description": "Jeans premium con acabado moderno y corte perfecto."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "jeans-3", "name": "Jeans Rotos", "price": 72000, "category": "jeans"}'>
                     <img loading="lazy" src="jeans rotos.png" alt="Jeans Skinny">
                     <h3>Jeans Rotos</h3>
                     <p class="price">$72.000 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('jeans-3', 'Jeans Rotos', 72000)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "jeans-3", "name": "Jeans Rotos", "price": 72000, "salePrice": 72000, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["28", "30", "32", "34"], "description": "Jeans premium con acabado moderno y corte perfecto."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "jeans-4", "name": "Jeans Relaxed", "price": 88900, "category": "jeans"}'>
                     <img loading="lazy" src="jeans relaxed.png" alt="Jeans Relaxed">
                     <h3>Jeans Relaxed</h3>
                     <p class="price">$88.900 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('jeans-4', 'Jeans Relaxed', 88900)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "jeans-4", "name": "Jeans Relaxed", "price": 88900, "salePrice": 88900, "originalPrice": null, "discountPct": 0, "image": null, "sizes": ["28", "30", "32", "34"], "description": "Jeans premium con acabado moderno y corte perfecto."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
             </div>
             <button class="carousel-btn next" onclick="moveCarousel('jeans', 1)">›</button>
@@ -384,25 +396,25 @@
                     <img loading="lazy" src="Casco Premiun2.png" alt="Casco Blanco">
                     <h3>Casco Blanco</h3>
                     <p class="price">$349.800 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('casco-1', 'Casco Blanco', 349800)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "casco-1", "name": "Casco Blanco", "price": 349800, "salePrice": 349800, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Casco de seguridad certificado con máxima protección."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "casco-2", "name": "Casco Modular Blanco", "price": 168500, "category": "cascos"}'>
                     <img loading="lazy" src="modular.png" alt="Casco Modular Blanco">
                     <h3>Casco Modular Blanco</h3>
                     <p class="price">$168.500 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('casco-2', 'Casco Modular Blanco', 168500)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "casco-2", "name": "Casco Modular Blanco", "price": 168500, "salePrice": 168500, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Casco de seguridad certificado con máxima protección."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "casco-3", "name": "Casco Negro", "price": 349300, "category": "cascos"}'>
                     <img loading="lazy" src="Casco Premiun.png" alt="Casco Negro">
                     <h3>Casco Negro</h3>
                     <p class="price">$349.300 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('casco-3', 'Casco Negro', 349300)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "casco-3", "name": "Casco Negro", "price": 349300, "salePrice": 349300, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Casco de seguridad certificado con máxima protección."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "casco-4", "name": "Casco Integral Azul", "price": 135200, "category": "cascos"}'>
                     <img loading="lazy" src="CascoIntegral.png" alt="Casco Integral Azul">
                     <h3>Casco Integral Azul</h3>
                     <p class="price">$135.200 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('casco-4', 'Casco Integral Azul', 135200)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "casco-4", "name": "Casco Integral Azul", "price": 135200, "salePrice": 135200, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Casco de seguridad certificado con máxima protección."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
             </div>
             <button class="carousel-btn next" onclick="moveCarousel('cascos', 1)">›</button>
@@ -422,31 +434,31 @@
                     <img loading="lazy" src="Biciventa.png" alt="Bicicleta Deportiva">
                     <h3>Bicicleta Deportiva</h3>
                     <p class="price">$899.600 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('bici-1', 'Bicicleta Deportiva', 899600)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "bici-1", "name": "Bicicleta Deportiva", "price": 899600, "salePrice": 899600, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Equipo deportivo de alta calidad."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "casco-deportivo-1", "name": "Casco Ciclista", "price": 49900, "category": "deportes"}'>
                     <img loading="lazy" src="./CascoCiclis.png" alt="Casco Ciclista">
                     <h3>Casco Ciclista</h3>
                     <p class="price">$49.900 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('casco-deportivo-1', 'Casco Ciclista', 49900)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "casco-deportivo-1", "name": "Casco Ciclista", "price": 49900, "salePrice": 49900, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Equipo deportivo de alta calidad."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "BicicletaEstatica-1", "name": "Bicicleta Estatica", "price": 676900, "category": "deportes"}'>
                     <img loading="lazy" src="BicicletaEstatica.png" alt="Bicicleta Estatica">
                     <h3>Bicicleta Estatica</h3>
                     <p class="price">$676.900 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('BicicletaEstatica-1', 'Bicicleta Estatica', 676900)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "BicicletaEstatica-1", "name": "Bicicleta Estatica", "price": 676900, "salePrice": 676900, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Equipo deportivo de alta calidad."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "caminadora-1", "name": "Caminadora", "price": 879900, "category": "deportes"}'>
                     <img loading="lazy" src="Caminadora.png" alt="Caminadora">
                     <h3>Caminadora</h3>
                     <p class="price">$879.900 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('caminadora-1', 'Caminadora', 879900)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "caminadora-1", "name": "Caminadora", "price": 879900, "salePrice": 879900, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Equipo deportivo de alta calidad."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 <div class="product-card" data-product='{"id": "mancuerna-1", "name": "Mancuerna 15KG", "price": 180100, "category": "deportes"}'>
                     <img loading="lazy" src="Mancuerna15KG.png" alt="Mancuerna 15KG">
                     <h3>Mancuerna 15KG</h3>
                     <p class="price">$180.100 COP</p>
-                    <button class="add-to-cart-btn" onclick="addToCartGuarded('mancuerna-1', 'Mancuerna 15KG', 180100)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
+                    <button class="add-to-cart-btn" onclick='openProductModalGuarded({"id": "mancuerna-1", "name": "Mancuerna 15KG", "price": 180100, "salePrice": 180100, "originalPrice": null, "discountPct": 0, "image": null, "sizes": null, "description": "Equipo deportivo de alta calidad."})'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Agregar</button>
                 </div>
                 
             </div>
@@ -787,6 +799,32 @@
         </div>
     </div>
 
+    <!-- Product Detail Modal (talla + precio + descripción) -->
+    <div id="product-detail-modal" class="pdm-overlay" style="display:none;" onclick="if(event.target===this)closeProductModal()">
+        <div class="pdm-modal">
+            <button class="pdm-close" onclick="closeProductModal()">×</button>
+            <div class="pdm-layout">
+                <div class="pdm-img-wrap">
+                    <img id="pdm-img" src="" alt="">
+                </div>
+                <div class="pdm-info">
+                    <div class="pdm-name-row">
+                        <h2 id="pdm-name"></h2>
+                        <span id="pdm-badge" class="pdm-discount-badge"></span>
+                    </div>
+                    <div id="pdm-price-wrap" class="pdm-price-wrap"></div>
+                    <div id="pdm-sizes-section" class="pdm-sizes-section">
+                        <p class="pdm-sizes-label">Talla</p>
+                        <div id="pdm-sizes" class="pdm-sizes-grid"></div>
+                    </div>
+                    <p id="pdm-desc" class="pdm-desc"></p>
+                    <button id="pdm-view-cart" class="pdm-view-cart-btn">VER CARRITO</button>
+                    <button id="pdm-add-btn" class="pdm-add-btn">AGREGAR AL CARRITO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Overlay para modales -->
     <div id="modal-overlay" class="modal-overlay" onclick="closeAllModals()"></div>
 
@@ -800,7 +838,7 @@
             <h2 class="auth-title">Bienvenido</h2>
             <p class="auth-subtitle">Inicia sesión para realizar pedidos y gestionar tu cuenta.</p>
 
-            <button id="google-signin-btn" class="auth-google-btn" onclick="window._signInWithGoogle && window._signInWithGoogle()" style="display:none;">
+            <button id="google-signin-btn" class="auth-google-btn" onclick="window._signInWithGoogle && window._signInWithGoogle()">
                 <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -809,9 +847,6 @@
                 </svg>
                 <span class="auth-btn-text">Continuar con Google</span>
             </button>
-
-            <!-- reCAPTCHA v2 — se muestra primero, al completarse aparece el botón Google -->
-            <div id="recaptcha-container" style="margin:16px 0 8px;display:flex;justify-content:center;"></div>
 
             <p id="auth-error-msg" class="auth-error" style="display:none;"></p>
 
@@ -972,55 +1007,22 @@ function compartirWeb() {
     });
 
     // ── Auth Modal ──────────────────────────────────────────────────
-    let _recaptchaWidgetId = null;
-
     function openAuthModal() {
-    const m = document.getElementById('auth-modal');
-    if (m) { m.classList.add('show'); document.body.classList.add('modal-open'); }
-    const err = document.getElementById('auth-error-msg');
-    if (err) err.style.display = 'none';
-
-    const googleBtn = document.getElementById('google-signin-btn');
-    if (googleBtn) googleBtn.style.display = 'none';
-
-    function _renderCaptcha() {
-        if (typeof grecaptcha === 'undefined' || !grecaptcha.render) {
-            setTimeout(_renderCaptcha, 300);
-            return;
-        }
-        const cont = document.getElementById('recaptcha-container');
-        if (!cont) return;
-
-        if (_recaptchaWidgetId !== null) {
-            try { grecaptcha.reset(_recaptchaWidgetId); } catch(e) {}
-        } else {
-            cont.innerHTML = '';
-            _recaptchaWidgetId = grecaptcha.render(cont, {
-                sitekey: '6LfCIu4sAAAAAGjUZoOAi1XMIqT70vYrjodxCe04',
-                theme: 'dark',
-                callback: function() {
-                    const btn = document.getElementById('google-signin-btn');
-                    if (btn) btn.style.display = 'flex';
-                },
-                'expired-callback': function() {
-                    const btn = document.getElementById('google-signin-btn');
-                    if (btn) btn.style.display = 'none';
-                }
-            });
-        }
+        const m = document.getElementById('auth-modal');
+        if (m) { m.classList.add('show'); document.body.classList.add('modal-open'); }
+        // reset error
+        const err = document.getElementById('auth-error-msg');
+        if (err) err.style.display = 'none';
     }
-    _renderCaptcha();
-}
-
     function closeAuthModal() {
-    const m = document.getElementById('auth-modal');
-    if (m) { m.classList.remove('show'); document.body.classList.remove('modal-open'); }
-    if (_recaptchaWidgetId !== null) {
-        try { grecaptcha.reset(_recaptchaWidgetId); } catch(e) {}
+        const m = document.getElementById('auth-modal');
+        if (m) { m.classList.remove('show'); document.body.classList.remove('modal-open'); }
     }
-    const googleBtn = document.getElementById('google-signin-btn');
-    if (googleBtn) googleBtn.style.display = 'none';
-}
+    // ESC key closes modal
+    document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') closeAuthModal();
+    });
+
     // ── Auth Guard for addToCart ────────────────────────────────────
     function addToCartGuarded(productId, productName, price, image) {
         if (!window._currentUser) {
@@ -1032,6 +1034,19 @@ function compartirWeb() {
             return;
         }
         if (typeof addToCart === 'function') addToCart(productId, productName, price, image);
+    }
+
+    // Open product modal with auth guard + size support
+    function openProductModalGuarded(productData) {
+        if (!window._currentUser) {
+            const btn = document.getElementById('nav-registro-btn');
+            if (btn) { btn.classList.add('shake'); setTimeout(()=> btn.classList.remove('shake'), 600); }
+            openAuthModal();
+            const subtitle = document.querySelector('#auth-logged-out .auth-subtitle');
+            if (subtitle) subtitle.textContent = '⚠️ Debes iniciar sesión para agregar productos al carrito.';
+            return;
+        }
+        if (typeof openProductModal === 'function') openProductModal(productData);
     }
 
     // ── Auth Guard for checkout ─────────────────────────────────────
