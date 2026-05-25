@@ -646,7 +646,7 @@ function getRandomGiftProduct(excludeId) {
 }
 
 function getProductImage(productId) {
-    // Busqueda EXACTA por id para evitar que "camiseta-1" encuentre "oferta-camiseta-1"
+    // Busqueda exacta por id — evita que "camiseta-1" encuentre "oferta-camiseta-1"
     const allCards = document.querySelectorAll('[data-product]');
     for (const card of allCards) {
         try {
@@ -683,7 +683,7 @@ function showCatalog(category) {
             <img src="${product.image}" alt="${product.name}">
             <h4>${product.name}</h4>
             <p class="price-wrap">${priceHTML}</p>
-            <button class="add-to-cart-btn" onclick='openProductModal(${JSON.stringify({
+            <button class="add-to-cart-btn" onclick='openProductModalGuarded(${JSON.stringify({
                 id: product.id, name: product.name, price: salePrice,
                 salePrice: salePrice, originalPrice: discPct > 0 ? product.price : null,
                 discountPct: discPct, image: product.image,
@@ -980,7 +980,7 @@ function renderOfertasSection() {
                 <span class="price-original-card">$${p.basePrice.toLocaleString()} COP</span>
                 <span class="price-sale-card">$${salePrice.toLocaleString()} COP</span>
             </div>
-            <button class="add-to-cart-btn" onclick='openProductModal(${modalData})'>
+            <button class="add-to-cart-btn" onclick='openProductModalGuarded(${modalData})'>
                 ${hasSizes ? 'Seleccionar talla' : 'Agregar'}
             </button>
         `;
