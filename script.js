@@ -13,7 +13,7 @@ const OFERTAS_CONFIG = {
         {
             id: 'oferta-camiseta-1',
             name: 'Camiseta Brasil Retro',
-            basePrice: 90000,
+            basePrice: 99000,
             image: 'CamisetaBrasil.png',
             category: 'camisetas',
             sizes: ['S','M','L','XL'],
@@ -39,12 +39,12 @@ const OFERTAS_CONFIG = {
         },
         {
             id: 'oferta-jeans-1',
-            name: 'Jeans Relaxed',
+            name: 'Jeans ',
             basePrice: 88900,
             image: 'Jeans moderno ll.png',
             category: 'jeans',
             sizes: ['28','30','32','34'],
-            description: 'Jeans de corte relaxed premium. Ideal para el día a día con estilo urbano.'
+            description: 'Jeans de corte moderno. Ideal para el día a día con estilo urbano.'
         }
     ]
 };
@@ -646,10 +646,16 @@ function getRandomGiftProduct(excludeId) {
 }
 
 function getProductImage(productId) {
-    const productCard = document.querySelector(`[data-product*="${productId}"]`);
-    if (productCard) {
-        const img = productCard.querySelector('img');
-        return img ? img.src : 'https://via.placeholder.com/300x300?text=Producto';
+    // Búsqueda exacta de ID para evitar que "camiseta-1" encuentre "oferta-camiseta-1"
+    const allCards = document.querySelectorAll('[data-product]');
+    for (const card of allCards) {
+        try {
+            const data = JSON.parse(card.getAttribute('data-product'));
+            if (data.id === productId) {
+                const img = card.querySelector('img');
+                return img ? img.src : 'https://via.placeholder.com/300x300?text=Producto';
+            }
+        } catch(e) {}
     }
     return 'https://via.placeholder.com/300x300?text=Producto';
 }
@@ -742,6 +748,7 @@ function getCatalogProducts(category) {
             { id: 'jeans-cat-4', name: 'Jeans Vintage II', price: 80000, image: 'jeans vintage dama ll.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-5', name: 'Jeans Rotos', price: 72800, image: 'jeans rotos ll.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 88700, image: 'jeans relaxed ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-7', name: 'Jeans Modernos', price: 73900, image: 'Jeans moderno ll.png', sizes: ['28','30','32','34'] },
         ],
         'cascos': [
             { id: 'casco-cat-1', name: 'Casco Moto croos', price: 220600, image: 'cross azul.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
