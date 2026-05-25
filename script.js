@@ -4,7 +4,7 @@
 // Para agregar/quitar productos de Ofertas o cambiar descuentos,
 // edita este objeto. discountPct = porcentaje de descuento de la sección.
 const OFERTAS_CONFIG = {
-    discountPct: 10,   // <-- cambia aquí el % de descuento global de Ofertas
+    discountPct: 15,   // <-- cambia aquí el % de descuento global de Ofertas
     products: [
         // Para agregar: copia cualquier bloque y cambia los valores.
         // Para quitar: elimina el bloque completo.
@@ -12,12 +12,12 @@ const OFERTAS_CONFIG = {
         // Para productos sin talla (tenis, cascos, deportes) pon sizes: null
         {
             id: 'oferta-camiseta-1',
-            name: 'Camiseta Adidas Liverpool',
-            basePrice: 74900,
-            image: 'Camiseta adidas4.png',
+            name: 'Camiseta Brasil Retro',
+            basePrice: 90000,
+            image: 'CamisetaBrasil.png',
             category: 'camisetas',
             sizes: ['S','M','L','XL'],
-            description: 'Camiseta oficial Adidas edición Liverpool. Tejido técnico de alta respirabilidad.'
+            description: 'Camiseta oficial Adidas edición Brasil. Tejido técnico de alta respirabilidad.'
         },
         {
             id: 'oferta-tenis-1',
@@ -41,7 +41,7 @@ const OFERTAS_CONFIG = {
             id: 'oferta-jeans-1',
             name: 'Jeans Relaxed',
             basePrice: 88900,
-            image: 'jeans relaxed ll.png',
+            image: 'Jeans moderno ll.png',
             category: 'jeans',
             sizes: ['28','30','32','34'],
             description: 'Jeans de corte relaxed premium. Ideal para el día a día con estilo urbano.'
@@ -722,7 +722,6 @@ function getCatalogProducts(category) {
             { id: 'camiseta-cat-1', name: 'Camiseta Adidas Liverpool ', price: 74900, image: 'Camiseta adidas4.png', sizes: ['S','M','L','XL'] },
             { id: 'camiseta-cat-2', name: 'Camiseta Adidas Black     ', price: 49900, image: 'Camiseta Adidas2.png', sizes: ['S','M','L','XL'] },
             { id: 'camiseta-cat-3', name: 'Camiseta Adidas Arsenal Club ', price: 79500, image: 'Camiseta Arsenal.png', sizes: ['S','M','L','XL'] },
-            { id: 'camiseta-cat-4', name: 'Camiseta Adidas Retro Brasil ', price:99000, image: 'CamisetaBrasil.png', sizes: ['S','M','L','XL'] },
             { id: 'camiseta-cat-5', name: 'Camiseta Adidas Madrid Blue ', price: 78400, image: 'Madridblue.png', sizes: ['S','M','L','XL'] },
             { id: 'camiseta-cat-6', name: 'Camiseta Adidas Colombia ', price: 52000, image: 'Colombia.png', sizes: ['S','M','L','XL'] }
         ],
@@ -743,7 +742,6 @@ function getCatalogProducts(category) {
             { id: 'jeans-cat-4', name: 'Jeans Vintage II', price: 80000, image: 'jeans vintage dama ll.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-5', name: 'Jeans Rotos', price: 72800, image: 'jeans rotos ll.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 88700, image: 'jeans relaxed ll.png', sizes: ['28','30','32','34'] },
-            { id: 'jeans-cat-7', name: 'Jeans Modernos', price: 73900, image: 'Jeans moderno ll.png', sizes: ['28','30','32','34'] },
         ],
         'cascos': [
             { id: 'casco-cat-1', name: 'Casco Moto croos', price: 220600, image: 'cross azul.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
