@@ -4,7 +4,7 @@
 // Para agregar/quitar productos de Ofertas o cambiar descuentos,
 // edita este objeto. discountPct = porcentaje de descuento de la sección.
 const OFERTAS_CONFIG = {
-    discountPct: 20,   // <-- cambia aquí el % de descuento global de Ofertas
+    discountPct: 15,   // <-- cambia aquí el % de descuento global de Ofertas
     products: [
         // Para agregar: copia cualquier bloque y cambia los valores.
         // Para quitar: elimina el bloque completo.
