@@ -1145,73 +1145,38 @@ window.location.href = 'https://cxr10s.github.io/shop/checkout.html';
         if (e.key === 'Escape') closeMobileMenu();
     });
     </script>
+    <!-- ============================================================
+         ANUNCIO_BIENVENIDA — Presentación personal (Carlos Peinado)
+         Para restaurar: descomenta todo el bloque de abajo
+         y elimina el bloque MANTENIMIENTO
+         ============================================================
     <style>
-    /* Usamos un ID muy específico para que nada lo bloquee */
     #aviso-jhon-carlos {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.85); /* Fondo oscuro profesional */
-        backdrop-filter: blur(8px); /* Desenfoque estilo iPhone */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 999999; /* Por encima de todo */
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }   
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 999999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
     .card-anuncio {
-        background: #ffffff;
-        width: 90%;
-        max-width: 420px;
-        padding: 40px 30px;
-        border-radius: 20px; /* Redondeado estilo hardware moderno */
-        text-align: center;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        background: #fff; width: 90%; max-width: 420px; padding: 40px 30px;
+        border-radius: 20px; text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         animation: entradaAnuncio 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     @keyframes entradaAnuncio {
         from { opacity: 0; transform: scale(0.8) translateY(30px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .card-anuncio h2 {
-        color: #111;
-        font-size: 24px;
-        margin-bottom: 15px;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-    }
-    .card-anuncio p {
-        color: #555;
-        font-size: 16px;
-        line-height: 1.6;
-        margin-bottom: 30px;
-    }
-    .card-anuncio b {
-        color: #633cb4; /* Color de énfasis */
-        font-weight: 600;
-    }
+    .card-anuncio h2 { color:#111; font-size:24px; margin-bottom:15px; font-weight:800; letter-spacing:-0.5px; }
+    .card-anuncio p  { color:#555; font-size:16px; line-height:1.6; margin-bottom:30px; }
+    .card-anuncio b  { color:#633cb4; font-weight:600; }
     .btn-entendido {
-        background: #111;
-        color: #adff2f; /* El verde lima de tu marca */
-        border: none;
-        padding: 16px 40px;
-        border-radius: 12px;
-        font-weight: bold;
-        font-size: 14px;
-        cursor: pointer;
-        width: 100%;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        background:#111; color:#adff2f; border:none; padding:16px 40px;
+        border-radius:12px; font-weight:bold; font-size:14px; cursor:pointer;
+        width:100%; transition:all 0.3s ease; text-transform:uppercase; letter-spacing:1px;
     }
-    .btn-entendido:hover {
-        background: #222;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    }
+    .btn-entendido:hover { background:#222; transform:translateY(-2px); box-shadow:0 10px 20px rgba(0,0,0,0.2); }
     </style>
-
-    <!-- LÓGICA DEL ANUNCIO -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modalMarkup = `
@@ -1219,20 +1184,95 @@ window.location.href = 'https://cxr10s.github.io/shop/checkout.html';
                     <div class="card-anuncio">
                         <h2>HEY !</h2>
                         <p>
-                            Hola, un gusto mi nombre es <b>Carlos Peinado</b>. Tengo 18 años, soy estudiante y actualmente me encuentro <b>proyectando esta plataforma</b> con el fin de implementarla en empresas de ventas. <b>Si te interesa, puedes contactarme.. </b>. 
+                            Hola, un gusto mi nombre es <b>Carlos Peinado</b>. Tengo 18 años, soy estudiante y actualmente me encuentro <b>proyectando esta plataforma</b> con el fin de implementarla en empresas de ventas. <b>Si te interesa, puedes contactarme..</b>.
                             <br>
-                            escribeme a mi correo electronico: <b>menesescarlos2007@gmail.com</b>
+                            Escríbeme a mi correo electrónico: <b>menesescarlos2007@gmail.com</b>
                         </p>
                         <button class="btn-entendido" onclick="document.getElementById('aviso-jhon-carlos').remove()">
-                        OK. Ya he leído
+                            OK. Ya he leído
                         </button>
                     </div>
                 </div>
             `;
             document.body.insertAdjacentHTML('afterbegin', modalMarkup);
-            // ============================================================
         });
     </script>
+    FIN ANUNCIO_BIENVENIDA -->
+
+    <!-- ============================================================
+         MANTENIMIENTO — Modal "Sitio fuera de servicio"
+         Palabra clave para buscar: ANUNCIO_MANTENIMIENTO
+         Para volver al anuncio anterior: elimina este bloque y
+         descomenta el bloque ANUNCIO_BIENVENIDA de arriba
+         ============================================================ -->
+    <style>
+    #modal-mantenimiento {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.92); backdrop-filter: blur(10px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 999999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .mant-card {
+        background: #fff; width: 90%; max-width: 430px;
+        padding: 44px 32px 36px; border-radius: 22px; text-align: center;
+        box-shadow: 0 30px 60px -10px rgba(0,0,0,0.6);
+        animation: mantEntrada 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes mantEntrada {
+        from { opacity: 0; transform: scale(0.85) translateY(24px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .mant-icon { font-size: 48px; margin-bottom: 18px; display: block; }
+    .mant-card h2 { color:#111; font-size:22px; font-weight:800; margin:0 0 14px; letter-spacing:-0.4px; }
+    .mant-card p  { color:#555; font-size:15px; line-height:1.65; margin:0 0 28px; }
+    .mant-card p b { color:#111; font-weight:700; }
+    .btn-mant-entendido {
+        background:#111; color:#adff2f; border:none; padding:15px 0;
+        border-radius:12px; font-weight:700; font-size:14px; cursor:pointer;
+        width:100%; text-transform:uppercase; letter-spacing:1.2px;
+        transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-mant-entendido:hover { background:#222; transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,0.22); }
+    </style>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.style.overflow = 'hidden'; // bloquear scroll mientras el modal esté activo
+        const mantMarkup = `
+            <div id="modal-mantenimiento">
+                <div class="mant-card">
+                    <span class="mant-icon">🔧</span>
+                    <h2>Sitio temporalmente fuera de servicio</h2>
+                    <p>
+                        Por el momento, esta página no se encuentra disponible.<br>
+                        Vuelve a intentarlo en unos momentos.<br><br>
+                        <b>Gracias por tu paciencia</b>
+                    </p>
+                    <button class="btn-mant-entendido" onclick="cerrarMantenimiento()">
+                        Entendido
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('afterbegin', mantMarkup);
+    });
+
+    function cerrarMantenimiento() {
+        // Limpiar toda la caché del sitio
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                names.forEach(function(name) { caches.delete(name); });
+            });
+        }
+        try { localStorage.clear(); } catch(e) {}
+        try { sessionStorage.clear(); } catch(e) {}
+
+        document.body.style.overflow = '';
+        const modal = document.getElementById('modal-mantenimiento');
+        if (modal) modal.remove();
+    }
+    </script>
+    <!-- FIN ANUNCIO_MANTENIMIENTO -->
     <style>
     .legal-modal {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -1265,25 +1305,93 @@ window.location.href = 'https://cxr10s.github.io/shop/checkout.html';
 <script>
 const legalData = {
     terminos: `
-        <h2>Términos de Uso</h2>
-        <p>Bienvenido a nuestra plataforma. Al acceder a esta web, usted acepta los siguientes términos:</p>
-        <h3>1. Uso de la Plataforma</h3>
-        <p>Este sitio es un prototipo avanzado diseñado por <b>Carlos</b> para la gestión de ventas. El uso indebido de los sistemas o intentos de vulnerar la seguridad están prohibidos.</p>
-        <h3>2. Propiedad Intelectual</h3>
-        <p>Todo el diseño, código fuente (HTML, CSS, JS) y la arquitectura de la base de datos son propiedad exclusiva del desarrollador.</p>
-    `,
-    privacidad: `
-        <h2>Política de Privacidad</h2>
-        <p>Su privacidad es nuestra prioridad. Esta política detalla cómo manejamos sus datos:</p>
-        <h3>1. Recolección de Datos</h3>
-        <p>Recopilamos información básica a través de <b>Firebase Authentication</b> (Nombre, correo y foto de perfil) solo para personalizar su experiencia de usuario.</p>
-        <h3>2. Uso de la Información</h3>
-        <p>Los datos de los pedidos se almacenan para permitir la generación de facturas PDF y el historial de compras. No compartimos estos datos con terceros.</p>
-        <h3>3. Seguridad</h3>
-        <p>Implementamos protocolos de seguridad estándar de la industria para proteger su información contra accesos no autorizados.</p>
-        <h3>4. Derechos del Usuario</h3>
-        <p>Usted puede solicitar la eliminación de sus datos en cualquier momento cerrando su cuenta o contactando al administrador.</p>
-    `
+    <h2>Términos de Uso</h2>
+    <p style="color:#888; font-size:13px;">Última actualización: junio de 2026 · Aplica para usuarios en Colombia</p>
+
+    <h3>1. Aceptación</h3>
+    <p>Al navegar o realizar una compra en <b>Shop</b> (cxr10s.github.io/shop), aceptas estos términos en su totalidad. Si no estás de acuerdo, por favor abstente de usar el sitio.</p>
+
+    <h3>2. Quién opera este sitio</h3>
+    <p>Shop es una tienda digital administrada por <b>Carlos Meneses Peinado</b>, persona natural con domicilio en Bucaramanga, Colombia. No somos una sociedad constituida; operamos como vendedor independiente.</p>
+
+    <h3>3. Productos y precios</h3>
+    <p>Los precios están expresados en <b>pesos colombianos (COP)</b> e incluyen IVA cuando aplica. Nos reservamos el derecho de modificar precios sin previo aviso. El precio válido es el que aparece al momento de confirmar tu pedido.</p>
+
+    <h3>4. Proceso de compra</h3>
+    <p>La compra se perfecciona una vez realizas el pago vía <b>Nequi</b> y recibes confirmación de tu pedido por parte del administrador. El envío o la recogida se coordina directamente por WhatsApp.</p>
+
+    <h3>5. Devoluciones y garantías</h3>
+    <p>Tienes <b>5 días hábiles</b> desde la recepción para reportar productos defectuosos o que no correspondan a lo solicitado. No se aceptan devoluciones por cambio de opinión. Las reclamaciones se gestionan vía WhatsApp o correo electrónico.</p>
+
+    <h3>6. Limitación de responsabilidad</h3>
+    <p>Shop no se hace responsable por demoras en envíos causadas por terceros (transportadoras, fuerza mayor), ni por errores tipográficos en precios o descripciones de productos. Haremos lo posible por corregirlos a la brevedad.</p>
+
+    <h3>7. Conducta del usuario</h3>
+    <p>Queda prohibido usar este sitio para realizar pedidos fraudulentos, suplantar identidades o intentar vulnerar los sistemas de autenticación (Firebase) o base de datos (Supabase/Firestore). Cualquier abuso será reportado a las autoridades competentes.</p>
+
+    <h3>8. Propiedad intelectual</h3>
+    <p>El diseño, código fuente, logotipos y contenidos de Shop son propiedad de Carlos Meneses Peinado. Queda prohibida su reproducción total o parcial sin autorización escrita.</p>
+
+    <h3>9. Ley aplicable</h3>
+    <p>Estos términos se rigen por las leyes de la República de Colombia, incluyendo la <b>Ley 1480 de 2011</b> (Estatuto del Consumidor) y la <b>Ley 1341 de 2009</b>. Cualquier disputa se resolverá ante los jueces competentes de Bucaramanga, Santander.</p>
+
+    <h3>10. Modificaciones</h3>
+    <p>Podemos actualizar estos términos en cualquier momento. El uso continuado del sitio tras los cambios implica su aceptación.</p>
+`,
+
+privacidad: `
+    <h2>Política de Privacidad</h2>
+    <p style="color:#888; font-size:13px;">Última actualización: junio de 2026 · Cumplimiento con la Ley 1581 de 2012 (Colombia)</p>
+
+    <h3>1. Responsable del tratamiento</h3>
+    <p><b>Carlos Meneses Peinado</b> — menesescarlos2007@gmail.com — Bucaramanga, Colombia. Es la persona responsable del tratamiento de tus datos personales en esta plataforma.</p>
+
+    <h3>2. Datos que recopilamos</h3>
+    <p>Recopilamos únicamente los datos necesarios para operar:</p>
+    <ul>
+        <li><b>Autenticación:</b> nombre, correo electrónico y foto de perfil, obtenidos a través de <b>Google (Firebase Auth)</b> con tu consentimiento explícito al iniciar sesión.</li>
+        <li><b>Pedidos:</b> nombre completo, teléfono, dirección de entrega y notas del pedido, que ingresas voluntariamente en el formulario de compra.</li>
+        <li><b>Técnicos:</b> datos de sesión almacenados temporalmente en <code>sessionStorage</code> de tu navegador. Se eliminan al cerrar la pestaña.</li>
+    </ul>
+
+    <h3>3. Finalidad del tratamiento</h3>
+    <p>Tus datos se usan exclusivamente para:</p>
+    <ul>
+        <li>Procesar y gestionar tu pedido.</li>
+        <li>Coordinar el pago por Nequi y la entrega.</li>
+        <li>Generar tu factura en PDF.</li>
+        <li>Permitirte consultar tu historial en <b>Mis Pedidos</b>.</li>
+    </ul>
+    <p>No usamos tus datos para publicidad ni los vendemos a terceros.</p>
+
+    <h3>4. Almacenamiento</h3>
+    <p>Los pedidos se guardan en <b>Supabase (PostgreSQL)</b> y el carrito se sincroniza con <b>Google Firestore</b>, ambos servicios con cifrado en tránsito (TLS) y en reposo. Los servidores están ubicados en EE.UU. bajo políticas de privacidad de Google y Supabase Inc.</p>
+
+    <h3>5. Cookies y almacenamiento local</h3>
+    <p>Este sitio <b>no usa cookies de rastreo</b> ni publicidad. Usamos <code>localStorage</code> solo para mantener el estado del carrito entre sesiones, y <code>sessionStorage</code> para datos temporales del checkout. Puedes limpiarlos desde la configuración de tu navegador en cualquier momento.</p>
+
+    <h3>6. Compartición de datos</h3>
+    <p>Tus datos <b>no se comparten con terceros comerciales</b>. Solo los servicios técnicos necesarios acceden a ellos: Google Firebase (autenticación), Supabase (base de datos) y el administrador de la tienda para gestionar tu pedido.</p>
+
+    <h3>7. Tus derechos (Ley 1581/2012)</h3>
+    <p>Como titular de los datos, tienes derecho a:</p>
+    <ul>
+        <li><b>Conocer</b> qué datos tenemos sobre ti.</li>
+        <li><b>Actualizar o corregir</b> tu información.</li>
+        <li><b>Solicitar la eliminación</b> de tus datos personales.</li>
+        <li><b>Revocar</b> la autorización de tratamiento.</li>
+    </ul>
+    <p>Para ejercer estos derechos, escríbenos a <b>menesescarlos2007@gmail.com</b> desde el correo con el que creaste tu cuenta. Respondemos en máximo <b>10 días hábiles</b>.</p>
+
+    <h3>8. Seguridad</h3>
+    <p>Implementamos medidas técnicas razonables: autenticación OAuth 2.0 con Google, reglas de seguridad en Firestore, claves API restringidas por dominio, y conexiones HTTPS en todo el sitio. Ningún sistema es 100% infalible; en caso de incidente, te notificaremos a la brevedad.</p>
+
+    <h3>9. Menores de edad</h3>
+    <p>Este sitio no está dirigido a menores de 18 años. Si eres menor, necesitas autorización de un adulto para realizar compras. No recopilamos datos de menores de forma intencional.</p>
+
+    <h3>10. Cambios a esta política</h3>
+    <p>Cualquier actualización se publicará en esta misma sección. El uso continuado del sitio implica aceptación de los cambios.</p>
+`
 };
 function openModal(type) {
     document.getElementById('legalText').innerHTML = legalData[type];
