@@ -113,36 +113,9 @@
             Vuelve a intentarlo en unos momentos.<br><br>
             <b>Gracias por tu paciencia</b>
         </p>
-        <button class="btn-mant-entendido" onclick="redirigirSegunNavegador()">
-    Entendido
-</button>
-
-<script>
-function redirigirSegunNavegador() {
-    const ua = navigator.userAgent;
-
-    if (ua.includes("Edg")) {
-        // Microsoft Edge
-        window.location.href = "https://www.bing.com";
-    } 
-    else if (ua.includes("Chrome") && !ua.includes("Edg")) {
-        // Google Chrome
-        window.location.href = "https://www.google.com";
-    } 
-    else if (ua.includes("Firefox")) {
-        // Mozilla Firefox
-        window.location.href = "https://www.google.com";
-    } 
-    else if (ua.includes("Safari") && !ua.includes("Chrome")) {
-        // Safari
-        window.location.href = "https://www.google.com";
-    } 
-    else {
-        // Cualquier otro navegador
-        window.location.href = "https://www.google.com";
-    }
-}
-</script>
+        <button class="btn-mant-entendido" onclick="window.open('about:blank', '_blank')">
+        Entendido
+        </button>
     </div>
 </body>
 </html>
