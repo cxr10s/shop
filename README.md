@@ -4,7 +4,7 @@
 
 ### Tienda Deportiva — Colombia
 
-![Estado](https://img.shields.io/badge/Estado_De_La_Web_●_-En-adff2f?style=flat-square&labelColor=0a0a0a)
+![Estado](https://img.shields.io/badge/Estado_De_La_Web_●_-En_Mantenimiento-adff2f?style=flat-square&labelColor=orange)
 
 > comercio deportivo moderno con autenticación Google, pagos reales con Nequi y carrito sincronizado en la nube.
 
