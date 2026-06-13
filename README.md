@@ -22,20 +22,20 @@
 
 ---
 
-## ✨ Características
+##  Características
 
 | | Función | Descripción |
 |---|---|---|
-| 🛒 | **Carrito en la nube** | Sincronizado con la cuenta de Google via Firestore. Se restaura en cualquier dispositivo. |
-| 🔐 | **Autenticación Google** | Firebase Auth. El modal se actualiza en tiempo real sin recargar la pagina. |
-| 💳 | **Pagos con Nequi** | Integracion completa con firma de integridad y redireccion de resultado. |
-| 🧾 | **Facturas PDF** | Generacion automatica con PDF para usuarios |
-| 📦 | **Consulta de pedidos** | Búsqueda por correo o ID de factura con historial completo del estado. |
-| 🎁 | **Descuentos** | Descuentos progresivos por cantidad desde $150.000 COP. |
+|  | **Carrito en la nube** | Sincronizado con la cuenta de Google via Firestore. Se restaura en cualquier dispositivo. |
+|  | **Autenticación Google** | Firebase Auth. El modal se actualiza en tiempo real sin recargar la pagina. |
+|  | **Pagos con Nequi** | Integracion completa con firma de integridad y redireccion de resultado. |
+|  | **Facturas PDF** | Generacion automatica con PDF para usuarios |
+|  | **Consulta de pedidos** | Búsqueda por correo o ID de factura con historial completo del estado. |
+|  | **Descuentos** | Descuentos progresivos por cantidad desde $150.000 COP. |
 
 ---
 
-## 🗂️ Estructura del proyecto
+## Estructura del proyecto
 
 ```
 tienda/
@@ -51,7 +51,7 @@ tienda/
 
 ---
 
-## ⚙️ Herramientas
+## Herramientas
 
 | Capa | Tecnología |
 |---|---|
@@ -65,22 +65,10 @@ tienda/
 
 ---
 
-## 🚀 Ejecucion
+## Ejecucion
 
 El proyecto se sirve directamente desde **GitHub Pages** sin necesidad de build ni servidor.
 
 ```
 https://cxr10s.github.io/shop/
-```
-
-Para correrlo localmente, simplemente abre el link en un navegador o usa Live Server en VS Code.
-
-
----
-
-## 👤 Autor
-
-**Jhon Carlos Meneses Peinado**  
-**Perfil** [@cxr10s](https://github.com/cxr10s) — Colombia
-
 ---
