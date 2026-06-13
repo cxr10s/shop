@@ -71,4 +71,3 @@ El proyecto se sirve directamente desde **GitHub Pages** sin necesidad de build 
 
 ```
 https://cxr10s.github.io/shop/
----
