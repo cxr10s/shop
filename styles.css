@@ -2797,22 +2797,6 @@ body.modal-open {
 }
 .auth-signout-btn:hover { background: rgba(255,107,107,0.08); }
 
-/* ── Pedidos realizados */
-.auth-pedidos-stat {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: rgba(173,255,47,0.06);
-    border: 1px solid rgba(173,255,47,0.18);
-    border-radius: 10px;
-    padding: 8px 14px;
-    margin-bottom: 1rem;
-    font-family: 'DM Sans', sans-serif;
-}
-.auth-pedidos-label { font-size: 0.78rem; color: #999; }
-.auth-pedidos-value { font-size: 0.95rem; font-weight: 700; color: #D3D7D7; }
-
 /* Shake animation for nav button */
 @keyframes shake {
     0%,100% { transform: translateX(0); }
