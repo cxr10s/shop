@@ -38,10 +38,8 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile }
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-        import { getStorage, ref as _storageRef, uploadBytes, getDownloadURL }
-            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
         const firebaseConfig = {
             apiKey:            "AIzaSyAp0iwXGg0-Umx8czZlw2Wy2I8Jaj9a3T8",
@@ -55,7 +53,6 @@
 
         const app      = initializeApp(firebaseConfig);
         const auth     = getAuth(app);
-        const storage  = getStorage(app);
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
@@ -63,48 +60,6 @@
         window._currentUser     = null;
         window._firebaseSignOut = () => signOut(auth);
 
-        // Ayudante: evita que una llamada se quede colgada esperando respuesta
-        function _conTimeout(promesa, ms) {
-            return Promise.race([
-                promesa,
-                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
-            ]);
-        }
-
-        // ── Actualizar nombre / foto de perfil (sección "Mis datos") ──────
-        window._actualizarMisDatos = async function(nuevoNombre, archivoFoto) {
-            const user = auth.currentUser;
-            if (!user) throw new Error('No hay sesión activa');
-
-            let photoURL  = user.photoURL || null;
-            let fotoError = false;
-
-            // La foto se sube aparte: si falla o tarda demasiado, no bloquea el
-            // guardado del nombre — seguimos sin cambiar la foto y avisamos.
-            if (archivoFoto) {
-                try {
-                    const fileRef = _storageRef(storage, `avatars/${user.uid}`);
-                    await _conTimeout(uploadBytes(fileRef, archivoFoto), 15000);
-                    photoURL = await _conTimeout(getDownloadURL(fileRef), 10000);
-                } catch (e) {
-                    console.error('Error subiendo la foto de perfil:', e);
-                    fotoError = true;
-                }
-            }
-
-            await _conTimeout(updateProfile(user, {
-                displayName: nuevoNombre,
-                photoURL:    photoURL
-            }), 10000);
-
-            window._currentUser = user;
-            _updateNavUser(user);
-            _updateModalState(user);
-
-            return { displayName: user.displayName, photoURL: user.photoURL, fotoError };
-        };
-
-        // ── Contador de "Pedidos realizados" (solo pedidos pagados) ───────
         window._cargarPedidosCount = async function(email) {
             const el = document.getElementById('auth-pedidos-count');
             if (!el || !email) return;
@@ -182,7 +137,6 @@
                 if (av) av.src = user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U') + '&background=adff2f&color=000';
                 if (nm) nm.textContent = user.displayName || 'Usuario';
                 if (em) em.textContent = user.email || '';
-                if (user.email && window._cargarPedidosCount) window._cargarPedidosCount(user.email);
             } else {
                 loggedOut.style.display = 'flex';
                 loggedIn.style.display  = 'none';
@@ -930,7 +884,7 @@
         <div id="auth-logged-in" style="display:none; flex-direction:column; align-items:center; width:100%;">
             <img id="auth-user-avatar" src="" alt="Avatar" class="auth-avatar">
             <h2 class="auth-title" style="margin-top:1rem;" id="auth-user-name">Usuario</h2>
-            <p class="auth-subtitle" id="auth-user-email" style="margin-bottom:0.6rem;"></p>
+            <p class="auth-subtitle" id="auth-user-email"></p>
 
             <div class="auth-pedidos-stat">
                 <span class="auth-pedidos-label">Pedidos realizados</span>
@@ -938,243 +892,16 @@
             </div>
 
             <div class="auth-divider"></div>
-
             <a href="https://cxr10s.github.io/shop/mispedidos.html" class="auth-action-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                 Mis pedidos
             </a>
-
-            <button type="button" class="auth-action-link auth-misdatos-toggle" id="auth-misdatos-toggle" onclick="toggleMisDatos()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span style="flex:1; text-align:left;">Mis datos</span>
-                <svg id="auth-misdatos-chevron" class="auth-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-
-            <div id="auth-misdatos-panel" class="auth-misdatos-panel">
-                <div class="auth-misdatos-avatar-wrap">
-                    <img id="auth-misdatos-avatar-preview" src="" alt="Foto de perfil" class="auth-misdatos-avatar-img">
-                    <label for="auth-misdatos-avatar-input" id="auth-misdatos-avatar-edit" class="auth-misdatos-avatar-edit" aria-label="Cambiar foto de perfil">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                    </label>
-                    <input type="file" id="auth-misdatos-avatar-input" accept="image/*" hidden>
-                </div>
-
-                <div class="auth-misdatos-field">
-                    <label for="auth-misdatos-name">Nombre para mostrar</label>
-                    <input type="text" id="auth-misdatos-name" disabled maxlength="60">
-                </div>
-
-                <div class="auth-misdatos-field">
-                    <label for="auth-misdatos-email">Correo</label>
-                    <input type="text" id="auth-misdatos-email" disabled>
-                    <span class="auth-misdatos-hint">Tu correo no se puede cambiar</span>
-                </div>
-
-                <p id="auth-misdatos-msg" class="auth-misdatos-msg"></p>
-
-                <div class="auth-misdatos-actions">
-                    <button type="button" class="auth-misdatos-edit-btn" id="auth-misdatos-edit-btn" onclick="activarEdicionMisDatos()">Editar</button>
-                    <div class="auth-misdatos-edit-actions" id="auth-misdatos-edit-actions">
-                        <button type="button" class="auth-misdatos-cancel-btn" onclick="cancelarEdicionMisDatos()">Cancelar</button>
-                        <button type="button" class="auth-misdatos-save-btn" id="auth-misdatos-save-btn" onclick="guardarMisDatos()">Guardar</button>
-                    </div>
-                </div>
-            </div>
-
             <button class="auth-signout-btn" onclick="window._firebaseSignOut && window._firebaseSignOut();">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Cerrar sesión
             </button>
         </div>
     </div>
-
-    <!-- ── Sección "Mis datos" del modal de cuenta ── -->
-    <script>
-    let _misDatosFotoArchivo = null;
-    let _misDatosOriginal    = { nombre: '', avatar: '' };
-
-    function toggleMisDatos() {
-        const panel   = document.getElementById('auth-misdatos-panel');
-        const chevron = document.getElementById('auth-misdatos-chevron');
-        if (!panel) return;
-        const abrir = !panel.classList.contains('show');
-        panel.classList.toggle('show', abrir);
-        if (chevron) chevron.classList.toggle('rotated', abrir);
-        if (abrir) poblarMisDatos();
-        else salirModoEdicionMisDatos(true);
-    }
-
-    function poblarMisDatos() {
-        const user = window._currentUser;
-        if (!user) return;
-        const nombreInput = document.getElementById('auth-misdatos-name');
-        const emailInput  = document.getElementById('auth-misdatos-email');
-        const avatarImg   = document.getElementById('auth-misdatos-avatar-preview');
-        const fotoDefault = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U') + '&background=adff2f&color=000';
-
-        if (nombreInput) nombreInput.value = user.displayName || '';
-        if (emailInput)  emailInput.value  = user.email || '';
-        if (avatarImg)   avatarImg.src     = user.photoURL || fotoDefault;
-
-        _misDatosOriginal = {
-            nombre: nombreInput ? nombreInput.value : '',
-            avatar: avatarImg  ? avatarImg.src      : ''
-        };
-        _misDatosFotoArchivo = null;
-        salirModoEdicionMisDatos(false);
-    }
-
-    function activarEdicionMisDatos() {
-        const nombreInput = document.getElementById('auth-misdatos-name');
-        const editBtn     = document.getElementById('auth-misdatos-edit-btn');
-        const editActions = document.getElementById('auth-misdatos-edit-actions');
-        const avatarEdit  = document.getElementById('auth-misdatos-avatar-edit');
-        if (nombreInput) nombreInput.disabled = false;
-        if (editBtn) editBtn.classList.add('hidden');
-        if (editActions) editActions.classList.add('show');
-        if (avatarEdit) avatarEdit.classList.add('show');
-        const msg = document.getElementById('auth-misdatos-msg');
-        if (msg) { msg.className = 'auth-misdatos-msg'; msg.textContent = ''; }
-    }
-
-    function cancelarEdicionMisDatos() {
-        salirModoEdicionMisDatos(true);
-    }
-
-    function salirModoEdicionMisDatos(revertir) {
-        const nombreInput = document.getElementById('auth-misdatos-name');
-        const editBtn     = document.getElementById('auth-misdatos-edit-btn');
-        const editActions = document.getElementById('auth-misdatos-edit-actions');
-        const avatarEdit  = document.getElementById('auth-misdatos-avatar-edit');
-        const avatarImg   = document.getElementById('auth-misdatos-avatar-preview');
-        const fileInput   = document.getElementById('auth-misdatos-avatar-input');
-
-        if (revertir) {
-            if (nombreInput) nombreInput.value = _misDatosOriginal.nombre;
-            if (avatarImg)   avatarImg.src     = _misDatosOriginal.avatar;
-        }
-        if (fileInput) fileInput.value = '';
-        _misDatosFotoArchivo = null;
-        if (nombreInput) nombreInput.disabled = true;
-        if (editBtn) editBtn.classList.remove('hidden');
-        if (editActions) editActions.classList.remove('show');
-        if (avatarEdit) avatarEdit.classList.remove('show');
-    }
-
-    function mostrarMisDatosMsg(texto, esError) {
-        const msg = document.getElementById('auth-misdatos-msg');
-        if (!msg) return;
-        msg.textContent = texto;
-        msg.className = 'auth-misdatos-msg ' + (esError ? 'is-error' : 'is-success');
-    }
-
-    // Comprime/redimensiona la imagen en el navegador antes de subirla,
-    // así el guardado no se queda esperando por fotos pesadas (típico de celulares).
-    function comprimirImagenPerfil(file, maxLado, calidad) {
-        return new Promise((resolve, reject) => {
-            const url = URL.createObjectURL(file);
-            const img = new Image();
-            img.onload = () => {
-                let { width, height } = img;
-                if (width > height && width > maxLado) {
-                    height = Math.round(height * (maxLado / width));
-                    width  = maxLado;
-                } else if (height > maxLado) {
-                    width  = Math.round(width * (maxLado / height));
-                    height = maxLado;
-                }
-                const canvas = document.createElement('canvas');
-                canvas.width  = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                URL.revokeObjectURL(url);
-                canvas.toBlob(blob => {
-                    if (blob) resolve(blob);
-                    else reject(new Error('No se pudo procesar la imagen'));
-                }, 'image/jpeg', calidad);
-            };
-            img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo leer la imagen')); };
-            img.src = url;
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const fileInput = document.getElementById('auth-misdatos-avatar-input');
-        if (!fileInput) return;
-        fileInput.addEventListener('change', function() {
-            const file = this.files && this.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                mostrarMisDatosMsg('Selecciona un archivo de imagen válido.', true);
-                this.value = '';
-                return;
-            }
-            if (file.size > 15 * 1024 * 1024) {
-                mostrarMisDatosMsg('La imagen es demasiado pesada. Usa una de menos de 15MB.', true);
-                this.value = '';
-                return;
-            }
-
-            const avatarImg = document.getElementById('auth-misdatos-avatar-preview');
-            comprimirImagenPerfil(file, 480, 0.82).then(blobComprimido => {
-                _misDatosFotoArchivo = blobComprimido;
-                if (avatarImg) avatarImg.src = URL.createObjectURL(blobComprimido);
-            }).catch(err => {
-                console.error('No se pudo comprimir la imagen, se usará el archivo original:', err);
-                _misDatosFotoArchivo = file;
-                if (avatarImg) avatarImg.src = URL.createObjectURL(file);
-            });
-        });
-    });
-
-    // Evita que el guardado se quede colgado indefinidamente si algo falla en red
-    function _conTimeoutMisDatos(promesa, ms) {
-        return Promise.race([
-            promesa,
-            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
-        ]);
-    }
-
-    async function guardarMisDatos() {
-        const nombreInput = document.getElementById('auth-misdatos-name');
-        const saveBtn     = document.getElementById('auth-misdatos-save-btn');
-        const nombre = nombreInput ? nombreInput.value.trim() : '';
-
-        if (!nombre) {
-            mostrarMisDatosMsg('El nombre no puede estar vacío.', true);
-            return;
-        }
-        if (!window._actualizarMisDatos) {
-            mostrarMisDatosMsg('No se pudo conectar con tu cuenta. Intenta de nuevo.', true);
-            return;
-        }
-
-        if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Guardando...'; }
-
-        try {
-            const resultado = await _conTimeoutMisDatos(
-                window._actualizarMisDatos(nombre, _misDatosFotoArchivo),
-                25000
-            );
-            if (resultado && resultado.fotoError) {
-                mostrarMisDatosMsg('⚠️ El nombre se guardó, pero la foto no se pudo subir. Intenta de nuevo.', true);
-            } else {
-                mostrarMisDatosMsg('✅ Datos actualizados correctamente.', false);
-            }
-            poblarMisDatos();
-        } catch (err) {
-            console.error(err);
-            if (err && err.message === 'timeout') {
-                mostrarMisDatosMsg('La operación tardó demasiado. Verifica tu conexión e intenta de nuevo.', true);
-            } else {
-                mostrarMisDatosMsg('Hubo un problema al guardar. Intenta de nuevo.', true);
-            }
-        } finally {
-            if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Guardar'; }
-        }
-    }
-    </script>
 
     <!-- Scripts -->
     <script>
@@ -1319,22 +1046,10 @@ function compartirWeb() {
         // reset error
         const err = document.getElementById('auth-error-msg');
         if (err) err.style.display = 'none';
-        // Refrescar contador de pedidos por si hizo un pedido desde la última vez que se abrió
-        if (window._currentUser && window._currentUser.email && window._cargarPedidosCount) {
-            window._cargarPedidosCount(window._currentUser.email);
-        }
     }
     function closeAuthModal() {
         const m = document.getElementById('auth-modal');
         if (m) { m.classList.remove('show'); document.body.classList.remove('modal-open'); }
-        // Colapsar la sección "Mis datos" para la próxima vez que se abra
-        const panel   = document.getElementById('auth-misdatos-panel');
-        const chevron = document.getElementById('auth-misdatos-chevron');
-        if (panel && panel.classList.contains('show')) {
-            panel.classList.remove('show');
-            if (chevron) chevron.classList.remove('rotated');
-            if (typeof salirModoEdicionMisDatos === 'function') salirModoEdicionMisDatos(true);
-        }
     }
     // ESC key closes modal
     document.addEventListener('keydown', function(e){
