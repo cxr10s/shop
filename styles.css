@@ -2797,7 +2797,7 @@ body.modal-open {
 }
 .auth-signout-btn:hover { background: rgba(255,107,107,0.08); }
 
-/* ── Pedidos realizados (stat) ── */
+/* ── Pedidos realizados */
 .auth-pedidos-stat {
     display: flex;
     align-items: center;
@@ -2811,136 +2811,7 @@ body.modal-open {
     font-family: 'DM Sans', sans-serif;
 }
 .auth-pedidos-label { font-size: 0.78rem; color: #999; }
-.auth-pedidos-value { font-size: 0.95rem; font-weight: 700; color: #adff2f; }
-
-/* ── "Mis datos" toggle ── */
-.auth-misdatos-toggle { cursor: pointer; }
-.auth-chevron { transition: transform 0.2s ease; flex-shrink: 0; }
-.auth-chevron.rotated { transform: rotate(180deg); }
-
-/* ── "Mis datos" panel ── */
-.auth-misdatos-panel {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 0.5rem;
-    animation: authMisdatosIn 0.2s ease;
-}
-.auth-misdatos-panel.show { display: flex; }
-
-@keyframes authMisdatosIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.auth-misdatos-avatar-wrap {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 14px;
-}
-.auth-misdatos-avatar-img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255,255,255,0.15);
-    display: block;
-}
-.auth-misdatos-avatar-edit {
-    display: none;
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 24px;
-    height: 24px;
-    align-items: center;
-    justify-content: center;
-    background: #adff2f;
-    color: #111;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid #111;
-    transition: transform 0.15s;
-}
-.auth-misdatos-avatar-edit:hover { transform: scale(1.08); }
-.auth-misdatos-avatar-edit.show { display: flex; }
-
-.auth-misdatos-field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: 12px;
-    text-align: left;
-}
-.auth-misdatos-field label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.72rem;
-    color: #777;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-}
-.auth-misdatos-field input {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 9px 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    color: #f0f0f0;
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-    width: 100%;
-    box-sizing: border-box;
-}
-.auth-misdatos-field input:disabled { color: #888; cursor: default; }
-.auth-misdatos-field input:not(:disabled) {
-    background: rgba(255,255,255,0.06);
-    border-color: rgba(173,255,47,0.35);
-}
-.auth-misdatos-field input:not(:disabled):focus { border-color: #adff2f; }
-.auth-misdatos-hint { font-size: 0.7rem; color: #555; }
-
-.auth-misdatos-msg {
-    display: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.78rem;
-    border-radius: 8px;
-    padding: 7px 10px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-.auth-misdatos-msg.is-error   { display: block; background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.2);  color: #ff6b6b; }
-.auth-misdatos-msg.is-success { display: block; background: rgba(173,255,47,0.08);  border: 1px solid rgba(173,255,47,0.25); color: #adff2f; }
-
-.auth-misdatos-actions { display: flex; justify-content: flex-end; gap: 8px; }
-.auth-misdatos-edit-btn,
-.auth-misdatos-cancel-btn,
-.auth-misdatos-save-btn {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 600;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.05);
-    color: #ddd;
-    transition: background 0.2s;
-}
-.auth-misdatos-edit-btn:hover,
-.auth-misdatos-cancel-btn:hover { background: rgba(255,255,255,0.1); }
-.auth-misdatos-save-btn { background: #adff2f; color: #111; border-color: #adff2f; }
-.auth-misdatos-save-btn:hover { background: #9de62a; }
-.auth-misdatos-save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.auth-misdatos-edit-btn.hidden { display: none; }
-.auth-misdatos-edit-actions { display: none; gap: 8px; }
-.auth-misdatos-edit-actions.show { display: flex; }
+.auth-pedidos-value { font-size: 0.95rem; font-weight: 700; color: #D3D7D7; }
 
 /* Shake animation for nav button */
 @keyframes shake {
