@@ -63,29 +63,45 @@
         window._currentUser     = null;
         window._firebaseSignOut = () => signOut(auth);
 
+        // Ayudante: evita que una llamada se quede colgada esperando respuesta
+        function _conTimeout(promesa, ms) {
+            return Promise.race([
+                promesa,
+                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+            ]);
+        }
+
         // ── Actualizar nombre / foto de perfil (sección "Mis datos") ──────
         window._actualizarMisDatos = async function(nuevoNombre, archivoFoto) {
             const user = auth.currentUser;
             if (!user) throw new Error('No hay sesión activa');
 
-            let photoURL = user.photoURL || null;
+            let photoURL  = user.photoURL || null;
+            let fotoError = false;
 
+            // La foto se sube aparte: si falla o tarda demasiado, no bloquea el
+            // guardado del nombre — seguimos sin cambiar la foto y avisamos.
             if (archivoFoto) {
-                const fileRef = _storageRef(storage, `avatars/${user.uid}`);
-                await uploadBytes(fileRef, archivoFoto);
-                photoURL = await getDownloadURL(fileRef);
+                try {
+                    const fileRef = _storageRef(storage, `avatars/${user.uid}`);
+                    await _conTimeout(uploadBytes(fileRef, archivoFoto), 15000);
+                    photoURL = await _conTimeout(getDownloadURL(fileRef), 10000);
+                } catch (e) {
+                    console.error('Error subiendo la foto de perfil:', e);
+                    fotoError = true;
+                }
             }
 
-            await updateProfile(user, {
+            await _conTimeout(updateProfile(user, {
                 displayName: nuevoNombre,
                 photoURL:    photoURL
-            });
+            }), 10000);
 
             window._currentUser = user;
             _updateNavUser(user);
             _updateModalState(user);
 
-            return { displayName: user.displayName, photoURL: user.photoURL };
+            return { displayName: user.displayName, photoURL: user.photoURL, fotoError };
         };
 
         // ── Contador de "Pedidos realizados" (solo pedidos pagados) ───────
@@ -1052,6 +1068,37 @@
         msg.className = 'auth-misdatos-msg ' + (esError ? 'is-error' : 'is-success');
     }
 
+    // Comprime/redimensiona la imagen en el navegador antes de subirla,
+    // así el guardado no se queda esperando por fotos pesadas (típico de celulares).
+    function comprimirImagenPerfil(file, maxLado, calidad) {
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.onload = () => {
+                let { width, height } = img;
+                if (width > height && width > maxLado) {
+                    height = Math.round(height * (maxLado / width));
+                    width  = maxLado;
+                } else if (height > maxLado) {
+                    width  = Math.round(width * (maxLado / height));
+                    height = maxLado;
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width  = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                URL.revokeObjectURL(url);
+                canvas.toBlob(blob => {
+                    if (blob) resolve(blob);
+                    else reject(new Error('No se pudo procesar la imagen'));
+                }, 'image/jpeg', calidad);
+            };
+            img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo leer la imagen')); };
+            img.src = url;
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const fileInput = document.getElementById('auth-misdatos-avatar-input');
         if (!fileInput) return;
@@ -1063,20 +1110,31 @@
                 this.value = '';
                 return;
             }
-            if (file.size > 3 * 1024 * 1024) {
-                mostrarMisDatosMsg('La imagen debe pesar menos de 3MB.', true);
+            if (file.size > 15 * 1024 * 1024) {
+                mostrarMisDatosMsg('La imagen es demasiado pesada. Usa una de menos de 15MB.', true);
                 this.value = '';
                 return;
             }
-            _misDatosFotoArchivo = file;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const avatarImg = document.getElementById('auth-misdatos-avatar-preview');
-                if (avatarImg) avatarImg.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+
+            const avatarImg = document.getElementById('auth-misdatos-avatar-preview');
+            comprimirImagenPerfil(file, 480, 0.82).then(blobComprimido => {
+                _misDatosFotoArchivo = blobComprimido;
+                if (avatarImg) avatarImg.src = URL.createObjectURL(blobComprimido);
+            }).catch(err => {
+                console.error('No se pudo comprimir la imagen, se usará el archivo original:', err);
+                _misDatosFotoArchivo = file;
+                if (avatarImg) avatarImg.src = URL.createObjectURL(file);
+            });
         });
     });
+
+    // Evita que el guardado se quede colgado indefinidamente si algo falla en red
+    function _conTimeoutMisDatos(promesa, ms) {
+        return Promise.race([
+            promesa,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+        ]);
+    }
 
     async function guardarMisDatos() {
         const nombreInput = document.getElementById('auth-misdatos-name');
@@ -1095,12 +1153,23 @@
         if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Guardando...'; }
 
         try {
-            await window._actualizarMisDatos(nombre, _misDatosFotoArchivo);
-            mostrarMisDatosMsg('✅ Datos actualizados correctamente.', false);
+            const resultado = await _conTimeoutMisDatos(
+                window._actualizarMisDatos(nombre, _misDatosFotoArchivo),
+                25000
+            );
+            if (resultado && resultado.fotoError) {
+                mostrarMisDatosMsg('⚠️ El nombre se guardó, pero la foto no se pudo subir. Intenta de nuevo.', true);
+            } else {
+                mostrarMisDatosMsg('✅ Datos actualizados correctamente.', false);
+            }
             poblarMisDatos();
         } catch (err) {
             console.error(err);
-            mostrarMisDatosMsg('Hubo un problema al guardar. Intenta de nuevo.', true);
+            if (err && err.message === 'timeout') {
+                mostrarMisDatosMsg('La operación tardó demasiado. Verifica tu conexión e intenta de nuevo.', true);
+            } else {
+                mostrarMisDatosMsg('Hubo un problema al guardar. Intenta de nuevo.', true);
+            }
         } finally {
             if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Guardar'; }
         }
