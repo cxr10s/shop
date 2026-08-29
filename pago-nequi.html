@@ -889,8 +889,15 @@ const TABS    = ['tab-entrega','tab-pago','tab-confirm'];
 
 // ── INIT ────────────────────────────────────────────────────────
 function init() {
-    try { cart = JSON.parse(localStorage.getItem('tienda_cart') || '[]'); } catch(e) {}
     try { pedidoData = JSON.parse(sessionStorage.getItem('store_pedido') || 'null'); } catch(e) {}
+
+    // Fuente de verdad: los productos ya calculados en checkout (store_pedido).
+    // localStorage 'tienda_cart' solo se usa como respaldo si no hay pedidoData.
+    if (pedidoData?.productos?.length) {
+        cart = pedidoData.productos;
+    } else {
+        try { cart = JSON.parse(localStorage.getItem('tienda_cart') || '[]'); } catch(e) {}
+    }
 
     if (!cart.length && !pedidoData) {
         window.location.href = 'https://cxr10s.github.io/shop/';
@@ -1146,7 +1153,7 @@ async function guardarPedido(nequiPhone) {
 
     const pedido = {
         ...(pedidoData || {}),
-        productos: cart.map(i => ({
+        productos: (pedidoData?.productos?.length ? pedidoData.productos : cart).map(i => ({
             id: i.id, name: i.name, price: i.price,
             quantity: i.quantity, isGift: i.isGift || false
         })),
