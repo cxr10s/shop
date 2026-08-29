@@ -408,6 +408,32 @@ body {
 
 .phone-note svg { width: 15px; height: 15px; flex-shrink: 0; }
 
+/* ── MODAL: correo enviado ── */
+.pago-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,17,23,0.6);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+}
+.pago-modal-overlay.active { display: flex; }
+.pago-modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem 1.75rem;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.pago-modal-icon { font-size: 40px; margin-bottom: 0.75rem; }
+.pago-modal-title { font-size: 18px; font-weight: 700; color: #111; margin-bottom: 0.5rem; }
+.pago-modal-msg { font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 1.5rem; }
+#pago-modal-btn { width: 100%; }
+
 /* ── SCREEN 3: Esperando confirmación ── */
 .waiting-box {
     text-align: center;
@@ -814,38 +840,31 @@ body {
             </ol>
         </details>
 
-        <!-- Botón ya pagué -->
-        <button class="nq-paid-btn" id="nq-paid-btn" onclick="confirmarPago()">
-            <span class="btn-txt">✓ Ya realicé el pago</span>
+        <!-- Botón recibir datos de pago -->
+        <button class="nq-paid-btn" id="nq-paid-btn" onclick="recibirDatosPago()">
+            <span class="btn-txt">✓ Recibir datos de pago</span>
             <div class="btn-spin"></div>
         </button>
 
     </div>
 
-    <!-- SCREEN 3: Pago en verificación -->
-    <div class="screen" id="screen-waiting">
-        <div class="waiting-box">
-            <div class="nequi-phone-anim"><img src="img_nequi_rounded.png" alt="NEQUI"></div>
-            <div class="waiting-title">¡Pedido registrado!</div>
-            <div class="waiting-msg">
-                Tu pedido quedó guardado y está esperando confirmación de pago.<br><br>
-                Cuando realices el pago con Nequi uno de nuestros trabajadores comfirmara tu pago y esta pantalla se actualizará automáticamente.
-            </div>
-            <div class="nequi-number-display" id="display-order-id">Pedido #--------</div>
-            <div class="status-bar">
-                <div class="dot-anim"><span></span><span></span><span></span></div>
-                Verificando pago con Nequi Negocios y colaboradores
-            </div>
-            <button class="cancel-link" onclick="cancelarEspera()">Cancelar pedido</button>
-            <p>Si cancelas se te hara reembolso del dinero. para ello comunicanos mediante Whatsapp</p>
-        </div>
-    </div>
-
-    <!-- SCREEN 4: Resultados -->
+    <!-- SCREEN 3: Resultados -->
     <div class="screen" id="screen-result">
         <div class="result-box" id="result-box"></div>
     </div>
 
+</div>
+
+<!-- Modal: correo enviado -->
+<div class="pago-modal-overlay" id="pago-modal-overlay">
+    <div class="pago-modal-box">
+        <div class="pago-modal-icon">📧</div>
+        <div class="pago-modal-title">¡Revisa tu correo!</div>
+        <div class="pago-modal-msg">
+            Hemos enviado a tu correo el QR o llave para realizar el pago.
+        </div>
+        <button class="btn-primary" id="pago-modal-btn" onclick="cerrarModalPago()">Entendido</button>
+    </div>
 </div>
 
 <!-- Resumen de montos -->
@@ -871,20 +890,26 @@ body {
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────
 const SUPABASE_URL  = 'https://qvaaistunotxgpyqebya.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2YWFpc3R1bm90eGdweXFlYnlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMTk2MzMsImV4cCI6MjA4OTY5NTYzM30.eG62aFEYEtigW7Vb9wJ2VCDK4HVzKCxEredHmVNZXjU';
 
+const EMAILJS_PUBLIC_KEY  = '_QeHPuEy03OrqCucj';
+const EMAILJS_SERVICE_ID  = 'service_2596ed9';
+const EMAILJS_TPL_PAGO    = 'template_zkyc2fi';
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
 // ── ESTADO ──────────────────────────────────────────────────────
-let currentScreen = 0; // 0=entrega, 1=nequi, 2=waiting, 3=result
+let currentScreen = 0; // 0=entrega, 1=nequi, 2=result
 let tipoEntrega   = null;
 let cart          = [];
 let pedidoData    = null;
 let pedidoId      = null;
-let pollingTimer   = null;
 
-const SCREENS = ['screen-entrega','screen-nequi','screen-waiting','screen-result'];
+const SCREENS = ['screen-entrega','screen-nequi','screen-result'];
 const TABS    = ['tab-entrega','tab-pago','tab-confirm'];
 
 // ── INIT ────────────────────────────────────────────────────────
@@ -1031,7 +1056,7 @@ function showScreen(idx) {
     currentScreen = idx;
 
     // Tabs
-    const tabMap = [0, 1, 1, 2];
+    const tabMap = [0, 1, 2];
     TABS.forEach((t,i) => {
         const el = document.getElementById(t);
         el.className = 'tab';
@@ -1107,8 +1132,8 @@ function copiarLlave() {
     });
 }
 
-// ── CONFIRMAR PAGO (Ya pagué) ────────────────────────────────────
-async function confirmarPago() {
+// ── RECIBIR DATOS DE PAGO ─────────────────────────────────────────
+async function recibirDatosPago() {
     const btn = document.getElementById('nq-paid-btn');
     btn.disabled = true;
     btn.classList.add('loading');
@@ -1116,28 +1141,38 @@ async function confirmarPago() {
     try {
         // Guardar pedido en Supabase con estado_pago: pendiente
         pedidoId = await guardarPedido('nequi-qr');
-
-        // Limpiar carrito y sesión
-        localStorage.removeItem('tienda_cart');
-        localStorage.removeItem('tienda_last_removed_gift');
-        sessionStorage.removeItem('store_pedido');
-        sessionStorage.removeItem('store_user');
-        cart = [];
-
-        // Mostrar pantalla de espera/verificación
         const idCorto = pedidoId.substring(0, 8).toUpperCase();
-        const displayEl = document.getElementById('display-order-id');
-        if (displayEl) displayEl.textContent = 'Pedido #' + idCorto;
+        const { total } = getTotals();
 
-        showScreen(2);
-        iniciarPolling(); // Sigue escuchando si el admin actualiza el estado
+        // Enviar correo con el QR y la llave de pago
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_PAGO, {
+            email:     pedidoData?.email  || '',
+            nombre:    pedidoData?.nombre || 'Cliente',
+            pedido_id: idCorto,
+            total:     fmt(total)
+        });
+
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        document.getElementById('pago-modal-overlay').classList.add('active');
 
     } catch(err) {
         console.error(err);
-        showToast('❌ Error al registrar. Intenta de nuevo.');
+        showToast('❌ Error al enviar el correo. Intenta de nuevo.');
         btn.disabled = false;
         btn.classList.remove('loading');
     }
+}
+
+// ── CERRAR MODAL: limpiar carrito y volver al inicio ──────────────
+function cerrarModalPago() {
+    localStorage.removeItem('tienda_cart');
+    localStorage.removeItem('tienda_last_removed_gift');
+    sessionStorage.removeItem('store_pedido');
+    sessionStorage.removeItem('store_user');
+    sessionStorage.removeItem('store_cart');
+    cart = [];
+    window.location.href = 'https://cxr10s.github.io/shop/';
 }
 
 function goBack() {
@@ -1203,42 +1238,9 @@ async function actualizarEstadoPago(id, estadoPago, estado) {
     });
 }
 
-// ── POLLING — detecta si el admin actualiza el estado ────────────
-function iniciarPolling() {
-    clearInterval(pollingTimer);
-    pollingTimer = setInterval(async () => {
-        if (!pedidoId || pedidoId.startsWith('local-')) return;
-        try {
-            const res = await fetch(
-                `${SUPABASE_URL}/rest/v1/pedidos?id=eq.${pedidoId}&select=estado_pago`,
-                { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }}
-            );
-            const data = await res.json();
-            if (!data || !data[0]) return;
-            const ep = data[0].estado_pago;
-
-            if (ep === 'pagado') {
-                clearInterval(pollingTimer);
-                mostrarResultado('success');
-            } else if (ep === 'cancelado' || ep === 'rechazado' || ep === 'error') {
-                clearInterval(pollingTimer);
-                mostrarResultado('failed');
-            }
-        } catch(e) {}
-    }, 6000);
-}
-
-
-// ── CANCELAR PEDIDO ──────────────────────────────────────────────
-async function cancelarEspera() {
-    clearInterval(pollingTimer);
-    if (pedidoId) await actualizarEstadoPago(pedidoId, 'cancelado', 'cancelado');
-    mostrarResultado('failed');
-}
-
 // ── MOSTRAR RESULTADO ────────────────────────────────────────────
 function mostrarResultado(tipo) {
-    showScreen(3);
+    showScreen(2);
     const idCorto = pedidoId ? pedidoId.substring(0, 8).toUpperCase() : '--------';
     const misPedidos = `https://cxr10s.github.io/shop/mispedidos.html`;
 
