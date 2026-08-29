@@ -231,105 +231,58 @@ body {
 }
 .envio-note.free { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
 
-/* ── SCREEN 2: Nequi QR ── */
-.nq-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 1.4rem; gap: 10px;
+/* ── SCREEN 2: Tarjeta de pago (rediseño estilo Nequi) ── */
+.np-card {
+    background: linear-gradient(180deg, #fbfbfe 0%, #f5f4fb 100%);
+    border: 1px solid #ece9f7;
+    border-radius: 20px;
+    padding: 2.2rem 1.6rem 1.8rem;
+    text-align: center;
 }
-.nq-logo-wrap { display: flex; align-items: center; gap: 10px; }
-.nq-logo-text .nq-title { font-size: 17px; font-weight: 700; color: #111; }
-.nq-logo-text .nq-sub   { font-size: 12px; color: #888; margin-top: 1px; }
-.nq-amount-badge {
-    background: #f0f4ff; border: 1.5px solid #c7d7ff;
-    border-radius: 100px; padding: 6px 14px;
-    font-size: 14px; font-weight: 700; color: #1a56db;
-    font-family: 'DM Mono', monospace; white-space: nowrap;
+.np-logo {
+    position: relative;
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    color: #2A0A64;
+    margin-bottom: .7rem;
 }
-.nq-qr-section { display: flex; justify-content: center; margin-bottom: 1.2rem; }
-.nq-qr-wrap { text-align: center; }
-.nq-qr-img {
-    width: 200px; height: 200px;
-    object-fit: cover; object-position: center;
-    border-radius: 16px;
-    border: 3px solid #e8e8ed;
-    display: block; margin: 0 auto 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+.np-logo-dot { position: absolute; top: -4px; left: -9px; color: #E4007C; font-size: 20px; }
+.np-title {
+    font-size: 21px; font-weight: 800; color: #16121f;
+    letter-spacing: .5px; margin-bottom: .3rem;
 }
-.nq-qr-caption {
-    display: flex; align-items: center; justify-content: center; gap: 5px;
-    font-size: 12px; color: #888;
+.np-sub { font-size: 13.5px; color: #8b8b9a; margin-bottom: 1.1rem; }
+.np-hr { height: 1px; background: #e8e6f2; margin: 1.1rem 0; }
+.np-total-label { font-size: 13.5px; color: #8b8b9a; margin-bottom: .4rem; }
+.np-total-amount {
+    font-family: 'DM Mono', monospace; font-size: 40px; font-weight: 700;
+    color: #2A0A64; line-height: 1;
 }
-.nq-divider {
-    display: flex; align-items: center; gap: 10px;
-    margin: 1rem 0; font-size: 12px; color: #bbb;
+.np-total-currency { font-size: 12.5px; color: #a3a3b3; letter-spacing: 1.5px; margin-top: .35rem; }
+.np-recibir-btn {
+    width: 100%; background: #2A0A64; color: #fff; border: none;
+    border-radius: 14px; padding: 1rem; font-family: 'Inter', sans-serif;
+    font-size: 15.5px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .15s;
 }
-.nq-divider::before,.nq-divider::after { content:''; flex:1; height:1px; background:#e8e8ed; }
-.nq-open-btn {
-    width: 100%; padding: 13px 16px;
-    background: linear-gradient(135deg, #6D1AF3, #9B3FF8);
-    color: #fff; border: none; border-radius: 12px;
-    font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    gap: 10px; margin-bottom: 1rem;
-    transition: all .2s; box-shadow: 0 4px 16px rgba(109,26,243,0.3);
-}
-.nq-open-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(109,26,243,0.4); }
-.nequi-logo-sm { width: 24px; height: 24px; border-radius: 6px; overflow: hidden; }
-.nequi-logo-sm img { width: 100%; height: 100%; object-fit: cover; }
-.nq-key-box {
-    background: #f8f8fb; border: 1px solid #e8e8ed;
-    border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem;
-}
-.nq-key-row {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
-}
-.nq-key-icon { font-size: 14px; }
-.nq-key-val {
-    flex: 1; font-family: 'DM Mono', monospace;
-    font-size: 15px; font-weight: 600; color: #111; letter-spacing: 2px;
-}
-.nq-copy-btn {
-    background: #fff; border: 1px solid #ddd; border-radius: 6px;
-    padding: 3px 10px; font-size: 12px; color: #555;
-    cursor: pointer; font-family: 'Inter', sans-serif;
-    transition: all .18s;
-}
-.nq-copy-btn:hover { border-color: #1a56db; color: #1a56db; }
-.nq-key-label { font-size: 11px; color: #aaa; }
-.nq-steps {
-    border: 1px solid #e8e8ed; border-radius: 10px;
-    margin-bottom: 1rem; overflow: hidden;
-}
-.nq-steps summary {
-    padding: 10px 14px; font-size: 13px; font-weight: 600;
-    color: #555; cursor: pointer; display: flex;
-    justify-content: space-between; list-style: none;
-    user-select: none;
-}
-.nq-steps summary span { color: #1a56db; font-weight: 600; }
-.nq-steps-list {
-    padding: 4px 14px 12px 30px;
-    font-size: 13px; color: #555; line-height: 2;
-    border-top: 1px solid #f0f0f0;
-}
-.nq-paid-btn {
-    width: 100%; padding: 14px;
-    background: #16a34a; color: #fff;
-    border: none; border-radius: 12px;
-    font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
-    cursor: pointer; display: flex; align-items: center;
-    justify-content: center; gap: 8px; transition: all .2s;
-}
-.nq-paid-btn:hover { background: #15803d; transform: translateY(-1px); }
-.nq-paid-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-.nq-paid-btn .btn-spin {
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,.3);
+.np-recibir-btn:hover { background: #230852; transform: translateY(-1px); }
+.np-recibir-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.np-recibir-btn .btn-spin {
+    width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.35);
     border-top-color: #fff; border-radius: 50%;
     animation: spin .7s linear infinite; display: none;
 }
-.nq-paid-btn.loading .btn-txt { display: none; }
-.nq-paid-btn.loading .btn-spin { display: block; }
+.np-recibir-btn.loading .btn-txt { display: none; }
+.np-recibir-btn.loading .btn-spin { display: block; }
+.np-info-box {
+    display: flex; align-items: center; gap: .55rem;
+    background: #f4f3fa; border-radius: 12px; padding: .85rem 1rem;
+    margin-top: 1.1rem; text-align: left; font-size: 12.5px; color: #6b6b7d;
+}
+.np-info-icon { flex-shrink: 0; color: #9d97c9; }
 
 /* ── SCREEN 2: Nequi QR ── */
 .nequi-header {
@@ -524,41 +477,6 @@ body {
     font-family: 'Inter', sans-serif;
     margin-top: .5rem;
 }
-
-/* ── SCREEN 4: Resultados ── */
-.result-box {
-    text-align: center;
-    padding: 2rem 0;
-}
-
-.result-icon {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 1.4rem;
-    font-size: 2.5rem;
-}
-
-.result-icon.success { background: #f0fdf4; border: 2px solid #bbf7d0; }
-.result-icon.failed  { background: #fef2f2; border: 2px solid #fecaca; }
-.result-icon.pending { background: #fff7ed; border: 2px solid #fed7aa; }
-
-.result-title { font-size: 24px; font-weight: 800; color: #111; margin-bottom: 8px; }
-.result-msg { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 1.5rem; max-width: 320px; margin-left:auto; margin-right:auto; }
-
-.result-id {
-    background: #f4f4f7;
-    border-radius: 8px;
-    padding: 9px 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    color: #555;
-    margin-bottom: 1.5rem;
-    display: inline-block;
-    letter-spacing: 1px;
-}
-
-.result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
 /* ── RESUMEN (aside) ── */
 .amount-detail {
@@ -782,75 +700,31 @@ body {
         </div>
     </div>
 
-    <!-- SCREEN 2: Pago con Nequi — QR + opciones -->
+    <!-- SCREEN 2: Pago — tarjeta de resumen -->
     <div class="screen" id="screen-nequi">
+        <div class="np-card">
+            <div class="np-logo"><span class="np-logo-dot">•</span>N</div>
+            <div class="np-title">PAGO</div>
+            <div class="np-sub" id="np-sub">Shop · Cliente</div>
 
-        <!-- Header Nequi Negocios -->
-        <div class="nq-header">
-            <div class="nq-logo-wrap">
-                <div class="nequi-logo"><img src="img_nequi.jpeg" alt="Nequi"></div>
-                <div class="nq-logo-text">
-                    <div class="nq-title">Pago con Nequi</div>
-                    <div class="nq-sub">Shop · Jhon Meneses</div>
-                </div>
+            <div class="np-hr"></div>
+
+            <div class="np-total-label">Total a pagar</div>
+            <div class="np-total-amount" id="np-total-amount">$0</div>
+            <div class="np-total-currency">COP</div>
+
+            <div class="np-hr"></div>
+
+            <button class="np-recibir-btn" id="nq-paid-btn" onclick="recibirDatosPago()">
+                <span class="btn-txt">Recibir Datos</span>
+                <div class="btn-spin"></div>
+            </button>
+
+            <div class="np-info-box">
+                <svg class="np-info-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                <span>Una vez realices el pago, recibirás la confirmación por correo.</span>
             </div>
-            <div class="nq-amount-badge" id="nq-amount-badge">$0 COP</div>
         </div>
-
-        <!-- QR -->
-        <div class="nq-qr-section">
-            <div class="nq-qr-wrap">
-                <img src="QR_Negocios.jpeg" alt="QR Nequi Negocios" class="nq-qr-img" id="nq-qr-img">
-                <div class="nq-qr-caption">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-                    Escanea desde nequi usando pagos con QR
-                </div>
-            </div>
-        </div>
-
-        <!-- Divisor -->
-        <div class="nq-divider"><span> checkout </span></div>
-        <!-- Botón abrir Nequi -->
-        <button class="nq-open-btn" id="nq-open-btn" onclick="abrirNequi()">
-            <div class="nequi-logo nequi-logo-sm"><img src="img_nequi.jpeg" alt="N"></div>
-            <span id="nq-btn-label">Pagar con Nequi</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </button>
-
-        <!-- Llave / instrucción -->
-        <div class="nq-key-box">
-            <div class="nq-key-row">
-                <span class="nq-key-icon">🔑</span>
-                <span class="nq-key-val" id="nq-key-val">0092068170</span>
-                <button class="nq-copy-btn" onclick="copiarLlave()">Copiar</button>
-            </div>
-            <div class="nq-key-label">Llave Nequi Negocios — úsala si pagas desde Bre-B</div>
-        </div>
-
-        <!-- Instrucciones colapsables -->
-        <details class="nq-steps">
-            <summary>¿Cómo pagar? <span>Ver pasos</span></summary>
-            <ol class="nq-steps-list">
-                <li>Abre tu app de <strong>Nequi</strong></li>
-                <li>Ve a <strong>Pagar → Escanear QR</strong></li>
-                <li>Escanea el código de arriba</li>
-                <li>Confirma el monto de <strong id="nq-steps-amount">$0 COP</strong></li>
-                <li>Regresa aquí y toca <strong>"Ya realicé el pago"</strong></li>
-                <li>Confirmaremos y te avisaremos</li>
-            </ol>
-        </details>
-
-        <!-- Botón recibir datos de pago -->
-        <button class="nq-paid-btn" id="nq-paid-btn" onclick="recibirDatosPago()">
-            <span class="btn-txt">✓ Recibir datos de pago</span>
-            <div class="btn-spin"></div>
-        </button>
-
-    </div>
-
-    <!-- SCREEN 3: Resultados -->
-    <div class="screen" id="screen-result">
-        <div class="result-box" id="result-box"></div>
     </div>
 
 </div>
@@ -909,7 +783,7 @@ let cart          = [];
 let pedidoData    = null;
 let pedidoId      = null;
 
-const SCREENS = ['screen-entrega','screen-nequi','screen-result'];
+const SCREENS = ['screen-entrega','screen-nequi'];
 const TABS    = ['tab-entrega','tab-pago','tab-confirm'];
 
 // ── INIT ────────────────────────────────────────────────────────
@@ -1073,23 +947,16 @@ function showScreen(idx) {
 
     if (idx === 0) { next.querySelector('.btn-txt').textContent = 'Continuar'; next.style.display = 'flex'; amountDetail.style.display = 'none'; }
     if (idx === 1) {
-        next.style.display = 'none'; // El botón "Ya pagué" está dentro del screen
+        next.style.display = 'none'; // El botón "Recibir Datos" está dentro del screen
         amountDetail.style.display = 'block';
         renderResumen();
-        // Actualizar monto en el badge del QR y en los pasos
+        // Actualizar monto y nombre en la tarjeta de pago
         const { total } = getTotals();
-        const fmtTotal = fmt(total);
-        const badge = document.getElementById('nq-amount-badge');
-        const stepsAmt = document.getElementById('nq-steps-amount');
-        if (badge) badge.textContent = fmtTotal + ' COP';
-        if (stepsAmt) stepsAmt.textContent = fmtTotal + ' COP';
-        // Cambiar label del botón según dispositivo
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        const lbl = document.getElementById('nq-btn-label');
-        if (lbl) lbl.textContent = isMobile ? 'Abrir app Nequi' : 'Estas en PC. Escanea el QR con tu Nequi en el móvil';
+        const totalEl = document.getElementById('np-total-amount');
+        const subEl   = document.getElementById('np-sub');
+        if (totalEl) totalEl.textContent = '$' + fmt(total);
+        if (subEl)   subEl.textContent   = 'Shop · ' + (pedidoData?.nombre || 'Cliente');
     }
-    if (idx === 2) { next.style.display = 'none'; amountDetail.style.display = 'block'; }
-    if (idx === 3) { next.style.display = 'none'; amountDetail.style.display = 'none'; }
 }
 
 async function goNext() {
@@ -1098,38 +965,6 @@ async function goNext() {
         if (!validarDomicilio()) { showToast('⚠️ Completa los datos de envío'); return; }
         showScreen(1);
     }
-}
-
-// ── ABRIR NEQUI (deep link móvil / portal web) ──────────────────
-function abrirNequi() {
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        // Intentar abrir la app de Nequi directamente
-        const deepLink = 'nequi://';
-        window.location.href = deepLink;
-        // Si la app no está instalada, redirigir a la tienda después de 1.5s
-        setTimeout(() => {
-            if (isAndroid) {
-                window.location.href = '';
-            } else if (isIOS) {
-                window.location.href = '';
-            }
-        }, 1500);
-    } else {
-        // En PC: abrir el portal oficial de Nequi
-        window.open('', '_blank');
-    }
-}
-
-// ── COPIAR LLAVE ─────────────────────────────────────────────────
-function copiarLlave() {
-    navigator.clipboard.writeText('0092068170').then(() => {
-        const btn = document.querySelector('.nq-copy-btn');
-        if (btn) { btn.textContent = '✓ Copiado'; setTimeout(() => btn.textContent = 'Copiar', 2000); }
-    });
 }
 
 // ── RECIBIR DATOS DE PAGO ─────────────────────────────────────────
@@ -1240,47 +1075,6 @@ async function actualizarEstadoPago(id, estadoPago, estado) {
 }
 
 // ── MOSTRAR RESULTADO ────────────────────────────────────────────
-function mostrarResultado(tipo) {
-    showScreen(2);
-    const idCorto = pedidoId ? pedidoId.substring(0, 8).toUpperCase() : '--------';
-    const misPedidos = `https://cxr10s.github.io/shop/mispedidos.html`;
-
-    const configs = {
-        success: {
-            icon: '✅', cls: 'success',
-            title: '¡Pago confirmado!',
-            msg: 'Tu pago fue aprobado exitosamente. Tu pedido está siendo procesado.',
-            actions: `<a href="${misPedidos}" class="btn-primary" style="text-decoration:none;">Ver mi pedido</a>
-                      <a href="https://cxr10s.github.io/shop/" class="btn-secondary">Seguir comprando</a>`
-        },
-        failed: {
-            icon: '❌', cls: 'failed',
-            title: 'Pago no completado',
-            msg: 'El pago fue cancelado o rechazado. Tu pedido quedó registrado como pendiente. Puedes intentar de nuevo o contactarnos.',
-            actions: `<button class="btn-primary" onclick="location.reload()">Intentar de nuevo</button>
-                      <a href="${misPedidos}" class="btn-secondary">Ver mis pedidos</a>`
-        },
-        pending: {
-            icon: '⏳', cls: 'pending',
-            title: 'Tiempo agotado',
-            msg: 'No recibimos confirmación a tiempo. Tu pedido quedó guardado. Puedes contactarnos para coordinar el pago.',
-            actions: `<a href="${misPedidos}" class="btn-primary" style="text-decoration:none;">Ver mi pedido</a>
-                      <a href="https://cxr10s.github.io/shop/" class="btn-secondary">Inicio</a>`
-        }
-    };
-
-    const c = configs[tipo];
-    document.getElementById('result-box').innerHTML = `
-        <div class="result-icon ${c.cls}">${c.icon}</div>
-        <div class="result-title">${c.title}</div>
-        <div class="result-msg">${c.msg}</div>
-        <div class="result-id">Pedido #${idCorto}</div>
-        <div class="result-actions">${c.actions}</div>`;
-
-    // Actualizar tab
-    document.getElementById('tab-confirm').className = 'tab ' + (tipo === 'success' ? 'done' : 'active');
-}
-
 init();
 </script>
 </body>
