@@ -375,6 +375,22 @@ function _initCartAuthSync() {
 }
 
 async function _handleAuthCartChange(user) {
+    // Si venimos de una compra recién completada, forzar carrito vacío
+    // (local Y nube) antes de cualquier restauración automática.
+    if (sessionStorage.getItem('store_purchase_complete')) {
+        sessionStorage.removeItem('store_purchase_complete');
+        cart = [];
+        window._lastRemovedGiftId = null;
+        try {
+            localStorage.removeItem('tienda_cart');
+            localStorage.removeItem('tienda_last_removed_gift');
+        } catch(e) {}
+        await saveCart(); // borra también el doc en Firestore si hay usuario
+        updateCartDisplay();
+        updateCartIcon();
+        return;
+    }
+
     if (user) {
         const token = await _getFirebaseToken();
         if (token) {
