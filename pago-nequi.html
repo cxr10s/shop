@@ -1171,6 +1171,7 @@ function cerrarModalPago() {
     sessionStorage.removeItem('store_pedido');
     sessionStorage.removeItem('store_user');
     sessionStorage.removeItem('store_cart');
+    sessionStorage.setItem('store_purchase_complete', '1'); // le indica a index.html que limpie el carrito en la nube también
     cart = [];
     window.location.href = 'https://cxr10s.github.io/shop/';
 }
