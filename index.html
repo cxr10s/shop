@@ -1280,5 +1280,30 @@ function closeLegalModal(e) {
     document.getElementById('legalModal').style.display = 'none';
 }
 </script>
+<script>
+// ── CIERRE DE SESIÓN POR INACTIVIDAD (10 min) ─────────────────────
+(function() {
+    const LIMITE_INACTIVIDAD_MS = 10 * 60 * 1000;
+    let inactividadTimer = null;
+
+    function resetInactividad() {
+        clearTimeout(inactividadTimer);
+        if (!window._currentUser) return; // solo aplica si hay sesión iniciada
+        inactividadTimer = setTimeout(() => {
+            if (window._currentUser && window._firebaseSignOut) {
+                window._firebaseSignOut();
+                if (typeof showToast === 'function') {
+                    showToast('Sesión cerrada por inactividad');
+                }
+            }
+        }, LIMITE_INACTIVIDAD_MS);
+    }
+
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
+        document.addEventListener(ev, resetInactividad)
+    );
+    setInterval(resetInactividad, 30000); // por si _currentUser recién se define tras login
+})();
+</script>
 </body>
 </html>
