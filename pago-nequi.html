@@ -1076,6 +1076,26 @@ async function actualizarEstadoPago(id, estadoPago, estado) {
 
 // ── MOSTRAR RESULTADO ────────────────────────────────────────────
 init();
+
+// ── REDIRECCIÓN POR INACTIVIDAD (10 min) ──────────────────────────
+// Solo redirige — no cancela ni toca el pedido en Supabase si ya se
+// creó (eso lo maneja el auto-cancelado de 15 min en admin.html).
+(function() {
+    const LIMITE_INACTIVIDAD_MS = 10 * 60 * 1000;
+    let inactividadTimer = null;
+
+    function resetInactividad() {
+        clearTimeout(inactividadTimer);
+        inactividadTimer = setTimeout(() => {
+            window.location.href = 'https://cxr10s.github.io/shop/?motivo=inactividad';
+        }, LIMITE_INACTIVIDAD_MS);
+    }
+
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
+        document.addEventListener(ev, resetInactividad)
+    );
+    resetInactividad();
+})();
 </script>
 </body>
 </html>
