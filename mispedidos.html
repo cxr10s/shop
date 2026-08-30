@@ -1047,5 +1047,24 @@ async function buscarPorId() {
 }
 </script>
 <script src="factura.js"></script>
+<script>
+// ── REDIRECCIÓN POR INACTIVIDAD (10 min) ──────────────────────────
+(function() {
+    const LIMITE_INACTIVIDAD_MS = 10 * 60 * 1000;
+    let inactividadTimer = null;
+
+    function resetInactividad() {
+        clearTimeout(inactividadTimer);
+        inactividadTimer = setTimeout(() => {
+            window.location.href = 'https://cxr10s.github.io/shop/?motivo=inactividad';
+        }, LIMITE_INACTIVIDAD_MS);
+    }
+
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
+        document.addEventListener(ev, resetInactividad)
+    );
+    resetInactividad();
+})();
+</script>
 </body>
 </html>
