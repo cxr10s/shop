@@ -1281,10 +1281,36 @@ function closeLegalModal(e) {
 }
 </script>
 <script>
+// ── AVISO VISUAL (para inactividad, ya que no existía un toast global) ──
+function mostrarAvisoSesion(msg) {
+    const div = document.createElement('div');
+    div.textContent = msg;
+    div.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);' +
+        'background:#111;color:#fff;padding:12px 22px;border-radius:10px;' +
+        'font-family:Inter,sans-serif;font-size:14px;z-index:99999;' +
+        'box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transition:opacity .3s;';
+    document.body.appendChild(div);
+    requestAnimationFrame(() => div.style.opacity = '1');
+    setTimeout(() => { div.style.opacity = '0'; setTimeout(() => div.remove(), 300); }, 4000);
+}
+
+// Si llegamos desde otra página tras 10 min de inactividad, avisar
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('motivo') === 'inactividad') {
+        mostrarAvisoSesion('Tu proceso se reinició por inactividad. Puedes continuar de nuevo.');
+        params.delete('motivo');
+        const clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        window.history.replaceState({}, '', clean);
+    }
+})();
+</script>
+<script>
 // ── CIERRE DE SESIÓN POR INACTIVIDAD (10 min) ─────────────────────
 (function() {
     const LIMITE_INACTIVIDAD_MS = 10 * 60 * 1000;
     let inactividadTimer = null;
+    let sesionActivaPrev = false;
 
     function resetInactividad() {
         clearTimeout(inactividadTimer);
@@ -1292,9 +1318,7 @@ function closeLegalModal(e) {
         inactividadTimer = setTimeout(() => {
             if (window._currentUser && window._firebaseSignOut) {
                 window._firebaseSignOut();
-                if (typeof showToast === 'function') {
-                    showToast('Sesión cerrada por inactividad');
-                }
+                mostrarAvisoSesion('Sesión cerrada por inactividad');
             }
         }, LIMITE_INACTIVIDAD_MS);
     }
@@ -1302,7 +1326,16 @@ function closeLegalModal(e) {
     ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
         document.addEventListener(ev, resetInactividad)
     );
-    setInterval(resetInactividad, 30000); // por si _currentUser recién se define tras login
+
+    // Chequeo liviano cada 2s SOLO para detectar el momento en que inicia sesión
+    // (arranca el timer una vez) o la cierra (limpia el timer). No reinicia el
+    // contador en cada tick — eso anularía la detección de inactividad real.
+    setInterval(() => {
+        const sesionActiva = !!window._currentUser;
+        if (sesionActiva && !sesionActivaPrev) resetInactividad();
+        if (!sesionActiva && sesionActivaPrev) clearTimeout(inactividadTimer);
+        sesionActivaPrev = sesionActiva;
+    }, 2000);
 })();
 </script>
 </body>
