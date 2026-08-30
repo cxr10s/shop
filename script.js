@@ -733,7 +733,7 @@ function getCategoryName(category) {
         'jeans': 'Jeans',
         'cascos': 'Cascos para Motos',
         'deportes': 'Equipos Deportivos',
-        'ofertas': '🔥 Ofertas'
+        'ofertas': 'Ofertas'
     };
     return names[category] || category;
 }
