@@ -3301,9 +3301,20 @@ body.modal-open {
 }
 
 .nav-ofertas-link {
-    color: #ff6b35 !important;
-    font-weight: 700 !important;
-    animation: oferta-pulse 2.5s ease-in-out infinite;
+    
+    color: rgba(200, 200, 200, 0.82);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.22s ease, background 0.22s ease;
+    position: relative;
+    padding: 6px 11px;
+    border-radius: 10px;
+    letter-spacing: 0.15px;
+}
+
+.nav-ofertas-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.07);
 }
 
 @keyframes oferta-pulse {
