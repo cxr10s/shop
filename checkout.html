@@ -659,14 +659,12 @@
                         <label for="doc-tipo">Tipo de documento *</label>
                         <div class="input-wrap">
                             <select id="doc-tipo" name="doc-tipo" class="no-icon" style="padding-left:14px;">
-                                <option value="" selected disabled>Selecciona...</option>
                                 <option value="CC">Cédula de ciudadanía</option>
                                 <option value="CE">Cédula de extranjería</option>
                                 <option value="PA">Pasaporte</option>
                                 <option value="TI">Tarjeta de identidad</option>
                             </select>
                         </div>
-                        <span class="field-error" id="err-doc-tipo">Selecciona un tipo de documento</span>
                     </div>
 
                     <div class="field">
@@ -916,7 +914,6 @@ function validateDepto(v)  { return v !== ''; }
 
 const validations = [
     { id: 'nombre',       fn: validateNombre, err: 'err-nombre'      },
-    { id: 'doc-tipo',     fn: v => v !== '',  err: 'err-doc-tipo'    },
     { id: 'documento',    fn: validateDoc,    err: 'err-documento'   },
     { id: 'email',        fn: validateEmail,  err: 'err-email'       },
     { id: 'telefono',     fn: validatePhone,  err: 'err-telefono'    }
@@ -942,11 +939,6 @@ validations.forEach(item => {
     if (!el) return;
     el.addEventListener('blur',  () => { if (el.value) validateField(item); });
     el.addEventListener('input', () => { if (el.classList.contains('error')) validateField(item); });
-});
-
-// Doc-tipo: validar apenas el usuario selecciona una opción
-document.getElementById('doc-tipo').addEventListener('change', function() {
-    validateField(validations.find(v => v.id === 'doc-tipo'));
 });
 
 // Only digits for phone and document
@@ -1252,5 +1244,28 @@ renderOrder();
 prefillFromSession();
 </script>
 
+<script>
+// ── REDIRECCIÓN POR INACTIVIDAD (10 min) ──────────────────────────
+// No hay sesión Firebase viva en esta página (solo se lee un snapshot
+// guardado por index.html), así que "cerrar sesión" aquí es redirigir
+// al inicio. No toca el carrito ni ningún pedido — el auto-cancelado
+// de pedidos abandonados (15 min) es independiente y vive en admin.html.
+(function() {
+    const LIMITE_INACTIVIDAD_MS = 10 * 60 * 1000;
+    let inactividadTimer = null;
+
+    function resetInactividad() {
+        clearTimeout(inactividadTimer);
+        inactividadTimer = setTimeout(() => {
+            window.location.href = 'https://cxr10s.github.io/shop/?motivo=inactividad';
+        }, LIMITE_INACTIVIDAD_MS);
+    }
+
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
+        document.addEventListener(ev, resetInactividad)
+    );
+    resetInactividad();
+})();
+</script>
 </body>
 </html>
