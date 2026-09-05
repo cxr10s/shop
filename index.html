@@ -860,7 +860,7 @@
 
             <p id="auth-error-msg" class="auth-error" style="display:none;"></p>
 
-            <p class="auth-terms">Al continuar aceptas nuestros <a href="javascript:void(0)" onclick="openModal('terminos')">Términos de uso</a> y <a href="javascript:void(0)" onclick="openModal('privacidad')">Política de privacidad</a>.</p>
+            <p class="auth-terms">Al continuar aceptas nuestros <a href="Terminos-y-Privacidad-Shop.pdf" download>Términos de uso y Política de privacidad</a> (PDF).</p>
         </div>
 
         <!-- Estado: autenticado -->
@@ -1151,135 +1151,6 @@ window.location.href = 'https://cxr10s.github.io/shop/checkout.html';
     });
     </script>
  
-    <style>
-    .legal-modal {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-        display: none; justify-content: center; align-items: center; z-index: 100000;
-        padding: 20px;
-    }
-    .legal-content {
-        background: white; width: 100%; max-width: 600px; max-height: 80vh;
-        border-radius: 20px; padding: 30px; overflow-y: auto; position: relative;
-        font-family: sans-serif; line-height: 1.6; color: #333;
-    }
-    .legal-content h2 { color: #111; margin-top: 0; border-bottom: 2px solid #adff2f; display: inline-block; }
-    .legal-content h3 { font-size: 1.1rem; margin-top: 20px; color: #000; }
-    .legal-content p, .legal-content li { font-size: 14px; margin-bottom: 10px; }
-    .close-legal {
-        position: sticky; top: -10px; float: right; background: #eee;
-        border: none; width: 30px; height: 30px; border-radius: 50%;
-        cursor: pointer; font-weight: bold;
-    }
-</style>
-
-<div id="legalModal" class="legal-modal" onclick="closeLegalModal(event)">
-    <div class="legal-content" onclick="event.stopPropagation()">
-        <button class="close-legal" onclick="document.getElementById('legalModal').style.display='none'">✕</button>
-        <div id="legalText"></div>
-    </div>
-</div>
-
-<script>
-const legalData = {
-    terminos: `
-    <h2>Términos de Uso</h2>
-    <p style="color:#888; font-size:13px;">Última actualización: junio de 2026 · Aplica para usuarios en Colombia</p>
-
-    <h3>1. Aceptación</h3>
-    <p>Al navegar o realizar una compra en <b>Shop</b> (cxr10s.github.io/shop), aceptas estos términos en su totalidad. Si no estás de acuerdo, por favor abstente de usar el sitio.</p>
-
-    <h3>2. Quién opera este sitio</h3>
-    <p>Shop es una tienda digital administrada por <b>Carlos</b>, persona natural con domicilio en Bucaramanga, Colombia. No somos una sociedad constituida; operamos como vendedor independiente.</p>
-
-    <h3>3. Productos y precios</h3>
-    <p>Los precios están expresados en <b>pesos colombianos (COP)</b> e incluyen IVA cuando aplica. Nos reservamos el derecho de modificar precios sin previo aviso. El precio válido es el que aparece al momento de confirmar tu pedido.</p>
-
-    <h3>4. Proceso de compra</h3>
-    <p>La compra se perfecciona una vez realizas el pago vía <b>Nequi</b> y recibes confirmación de tu pedido por parte del administrador. El envío o la recogida se coordina directamente por WhatsApp.</p>
-
-    <h3>5. Devoluciones y garantías</h3>
-    <p>Tienes <b>5 días hábiles</b> desde la recepción para reportar productos defectuosos o que no correspondan a lo solicitado. No se aceptan devoluciones por cambio de opinión. Las reclamaciones se gestionan vía WhatsApp o correo electrónico.</p>
-
-    <h3>6. Limitación de responsabilidad</h3>
-    <p>Shop no se hace responsable por demoras en envíos causadas por terceros (transportadoras, fuerza mayor), ni por errores tipográficos en precios o descripciones de productos. Haremos lo posible por corregirlos a la brevedad.</p>
-
-    <h3>7. Conducta del usuario</h3>
-    <p>Queda prohibido usar este sitio para realizar pedidos fraudulentos, suplantar identidades o intentar vulnerar los sistemas de autenticación (Firebase) o base de datos (Supabase/Firestore). Cualquier abuso será reportado a las autoridades competentes.</p>
-
-    <h3>8. Propiedad intelectual</h3>
-    <p>El diseño, código fuente, logotipos y contenidos de Shop son propiedad de Carlos Meneses Peinado. Queda prohibida su reproducción total o parcial sin autorización escrita.</p>
-
-    <h3>9. Ley aplicable</h3>
-    <p>Estos términos se rigen por las leyes de la República de Colombia, incluyendo la <b>Ley 1480 de 2011</b> (Estatuto del Consumidor) y la <b>Ley 1341 de 2009</b>. Cualquier disputa se resolverá ante los jueces competentes de Bucaramanga, Santander.</p>
-
-    <h3>10. Modificaciones</h3>
-    <p>Podemos actualizar estos términos en cualquier momento. El uso continuado del sitio tras los cambios implica su aceptación.</p>
-`,
-
-privacidad: `
-    <h2>Política de Privacidad</h2>
-    <p style="color:#888; font-size:13px;">Última actualización: junio de 2026 · Cumplimiento con la Ley 1581 de 2012 (Colombia)</p>
-
-    <h3>1. Responsable del tratamiento</h3>
-    <p><b>Carlos</b> — Bucaramanga, Colombia. Es la persona responsable del tratamiento de tus datos personales en esta plataforma.</p>
-
-    <h3>2. Datos que recopilamos</h3>
-    <p>Recopilamos únicamente los datos necesarios para operar:</p>
-    <ul>
-        <li><b>Autenticación:</b> nombre, correo electrónico y foto de perfil, obtenidos a través de <b>Google (Firebase Auth)</b> con tu consentimiento explícito al iniciar sesión.</li>
-        <li><b>Pedidos:</b> nombre completo, teléfono, dirección de entrega y notas del pedido, que ingresas voluntariamente en el formulario de compra.</li>
-        <li><b>Técnicos:</b> datos de sesión almacenados temporalmente en <code>sessionStorage</code> de tu navegador. Se eliminan al cerrar la pestaña.</li>
-    </ul>
-
-    <h3>3. Finalidad del tratamiento</h3>
-    <p>Tus datos se usan exclusivamente para:</p>
-    <ul>
-        <li>Procesar y gestionar tu pedido.</li>
-        <li>Coordinar el pago por Nequi y la entrega.</li>
-        <li>Generar tu factura en PDF.</li>
-        <li>Permitirte consultar tu historial en <b>Mis Pedidos</b>.</li>
-    </ul>
-    <p>No usamos tus datos para publicidad ni los vendemos a terceros.</p>
-
-    <h3>4. Almacenamiento</h3>
-    <p>Los pedidos se guardan en <b>Supabase (PostgreSQL)</b> y el carrito se sincroniza con <b>Google Firestore</b>, ambos servicios con cifrado en tránsito (TLS) y en reposo. Los servidores están ubicados en EE.UU. bajo políticas de privacidad de Google y Supabase Inc.</p>
-
-    <h3>5. Cookies y almacenamiento local</h3>
-    <p>Este sitio <b>no usa cookies de rastreo</b> ni publicidad. Usamos <code>localStorage</code> solo para mantener el estado del carrito entre sesiones, y <code>sessionStorage</code> para datos temporales del checkout. Puedes limpiarlos desde la configuración de tu navegador en cualquier momento.</p>
-
-    <h3>6. Compartición de datos</h3>
-    <p>Tus datos <b>no se comparten con terceros comerciales</b>. Solo los servicios técnicos necesarios acceden a ellos: Google Firebase (autenticación), Supabase (base de datos) y el administrador de la tienda para gestionar tu pedido.</p>
-
-    <h3>7. Tus derechos (Ley 1581/2012)</h3>
-    <p>Como titular de los datos, tienes derecho a:</p>
-    <ul>
-        <li><b>Conocer</b> qué datos tenemos sobre ti.</li>
-        <li><b>Actualizar o corregir</b> tu información.</li>
-        <li><b>Solicitar la eliminación</b> de tus datos personales.</li>
-        <li><b>Revocar</b> la autorización de tratamiento.</li>
-    </ul>
-    <p>Para ejercer estos derechos, escríbenos a <b>shops@gmail.com</b> desde el correo con el que creaste tu cuenta. Respondemos en máximo <b>10 días hábiles</b>.</p>
-
-    <h3>8. Seguridad</h3>
-    <p>Implementamos medidas técnicas razonables: autenticación OAuth 2.0 con Google, reglas de seguridad en Firestore, claves API restringidas por dominio, y conexiones HTTPS en todo el sitio. Ningún sistema es 100% infalible; en caso de incidente, te notificaremos a la brevedad.</p>
-
-    <h3>9. Menores de edad</h3>
-    <p>Este sitio no está dirigido a menores de 18 años. Si eres menor, necesitas autorización de un adulto para realizar compras. No recopilamos datos de menores de forma intencional.</p>
-
-    <h3>10. Cambios a esta política</h3>
-    <p>Cualquier actualización se publicará en esta misma sección. El uso continuado del sitio implica aceptación de los cambios.</p>
-`
-};
-function openModal(type) {
-    document.getElementById('legalText').innerHTML = legalData[type];
-    document.getElementById('legalModal').style.display = 'flex';
-}
-
-function closeLegalModal(e) {
-    document.getElementById('legalModal').style.display = 'none';
-}
-</script>
 <script>
 // ── AVISO VISUAL (para inactividad, ya que no existía un toast global) ──
 function mostrarAvisoSesion(msg) {
