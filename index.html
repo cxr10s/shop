@@ -1174,6 +1174,56 @@ function mostrarAvisoSesion(msg) {
         sesionActivaPrev = sesionActiva;
     }, 2000);
 })();
+
+// ── CIERRE DE SESIÓN POR AUSENCIA (5 min) — para móvil ────────────
+// El script de arriba depende de que la página siga ejecutándose (setTimeout).
+// En móvil, al cerrar el navegador o cambiar de app, el sistema operativo
+// mata esa ejecución, así que el timer nunca llega a dispararse y la sesión
+// queda abierta indefinidamente. Esto guarda la hora en localStorage (que
+// SÍ sobrevive a cerrar todo) y, al volver a abrir la página, revisa cuánto
+// tiempo estuvo fuera — si son más de 5 min, cierra sesión de inmediato.
+(function() {
+    const LIMITE_AUSENCIA_MS = 5 * 60 * 1000;
+    const STORAGE_KEY = 'shop_last_active_ts';
+
+    function marcarUltimaActividad() {
+        try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+    }
+
+    function revisarAusencia() {
+        if (!window._currentUser) { marcarUltimaActividad(); return; }
+        let ultima = 0;
+        try { ultima = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10); } catch (e) {}
+        if (ultima && (Date.now() - ultima) > LIMITE_AUSENCIA_MS) {
+            if (window._firebaseSignOut) {
+                window._firebaseSignOut();
+                mostrarAvisoSesion('Sesión cerrada: estuviste fuera más de 5 minutos');
+            }
+        }
+        marcarUltimaActividad();
+    }
+
+    // Guarda la hora cada vez que la app pasa a segundo plano o se oculta
+    // (cambiar de app, bloquear pantalla, cerrar pestaña) — el evento más
+    // confiable en móvil, mucho más que 'beforeunload'.
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) marcarUltimaActividad();
+        else revisarAusencia();
+    });
+
+    // Al volver desde el caché de retroceso/adelanto del navegador (común en iOS)
+    window.addEventListener('pageshow', revisarAusencia);
+
+    // Chequeo al cargar por primera vez (ej. reabrir el navegador tras un día)
+    // con un pequeño margen para que Firebase Auth resuelva el usuario actual.
+    setTimeout(revisarAusencia, 1200);
+
+    // Refrescar la marca de tiempo con actividad normal, para que el conteo
+    // de 5 min de ausencia empiece desde la última interacción real.
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
+        document.addEventListener(ev, marcarUltimaActividad)
+    );
+})();
 </script>
 </body>
 </html>
