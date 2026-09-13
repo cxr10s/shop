@@ -475,7 +475,7 @@ function updateCartDisplay() {
             priceDisplay = `<span style="text-decoration: line-through; color: #888; font-size:0.85em;">$${item.originalPrice.toLocaleString()}</span> <span style="color:#e0e0e0; font-weight:700;">$${item.price.toLocaleString()} COP</span> <span style="background:#c0392b;color:#fff;font-size:0.7em;padding:1px 5px;border-radius:8px;font-weight:700;">-${item.discountPct}%</span>`;
         }
         cartItem.innerHTML = `
-            <img src="${item.image}" alt="${item.name}">
+            <img src="${item.image}" alt="${item.name}" loading="lazy" width="80" height="80">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
                 <p>${priceDisplay}</p>
@@ -696,7 +696,7 @@ function showCatalog(category) {
 
         const hasSizes = product.sizes && product.sizes.length > 0;
         item.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${product.image}" alt="${product.name}" loading="lazy" width="300" height="300">
             <h4>${product.name}</h4>
             <p class="price-wrap">${priceHTML}</p>
             <button class="add-to-cart-btn" onclick='openProductModalGuarded(${JSON.stringify({
@@ -977,7 +977,7 @@ function renderOfertasSection() {
     if (!container) return;
     container.innerHTML = '';
     const pct = OFERTAS_CONFIG.discountPct;
-    OFERTAS_CONFIG.products.forEach(p => {
+    OFERTAS_CONFIG.products.forEach((p, idx) => {
         const salePrice = Math.round(p.basePrice * (1 - pct / 100));
         const hasSizes = p.sizes && p.sizes.length > 0;
         const modalData = JSON.stringify({
@@ -988,9 +988,15 @@ function renderOfertasSection() {
         const card = document.createElement('div');
         card.className = 'product-card oferta-card';
         card.setAttribute('data-product', JSON.stringify({ id: p.id, name: p.name, price: salePrice, category: 'ofertas' }));
+        // La primera oferta se ve sin hacer scroll: se carga de inmediato y con
+        // prioridad alta. Las demás se difieren con loading="lazy" como antes.
+        const esPrimera = idx === 0;
+        const imgAttrs = esPrimera
+            ? 'loading="eager" fetchpriority="high"'
+            : 'loading="lazy"';
         card.innerHTML = `
             <div class="oferta-badge">-${pct}%</div>
-            <img src="${p.image}" alt="${p.name}" loading="lazy">
+            <img src="${p.image}" alt="${p.name}" ${imgAttrs} width="300" height="300">
             <h3>${p.name}</h3>
             <div class="price-block">
                 <span class="price-original-card">$${p.basePrice.toLocaleString()} COP</span>
