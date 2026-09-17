@@ -838,8 +838,7 @@ function getCatalogProducts(category) {
             { id: 'jeans-cat-3', name: 'Jeans Vintage', price: 80000, image: 'jeans ventage dama l.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-4', name: 'Jeans Vintage II', price: 80000, image: 'jeans vintage dama ll.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-5', name: 'Jeans Rotos', price: 101200, image: 'jeans rotos ll.png', sizes: ['28','30','32','34'] },
-            { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 95600, image: 'jeans relaxed ll.png', sizes: ['28','30','32','34'] },
-            { id: 'jeans-cat-7', name: 'Jeans Modernos', price: 88600, image: 'Jeans moderno ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 95600, image: 'jeans relaxed ll.png', sizes: ['28','30','32','34'] }
         ],
         'cascos': [
             { id: 'casco-cat-1', name: 'Casco Moto croos', price: 220600, image: 'cross azul.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
