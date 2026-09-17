@@ -34,8 +34,8 @@
             font-family: 'DM Mono', 'Courier New', monospace;
             font-size: 11.5px;
             font-weight: 600;
-            color: #0d1117;
-            background: #adff2f;
+            color: #FFFFFF;
+            background: #0d1117;
             border-radius: 100px;
             padding: 3px 9px;
             margin-left: 4px;
@@ -1188,7 +1188,7 @@ function mostrarAvisoSesion(msg) {
     const STORAGE_KEY = 'shop_session_expiry';
     let logoutTimer = null;
     let displayTimer = null;
-    let sesionActivaPrev = false;
+    let authResuelto = false; // true solo cuando Firebase ya confirmó si hay usuario o no
 
     function programarCierre(msRestantes) {
         clearTimeout(logoutTimer);
@@ -1230,10 +1230,12 @@ function mostrarAvisoSesion(msg) {
     }
 
     // Calcula/retoma la hora de expiración y programa (o dispara ya) el cierre.
-    // Se llama al iniciar sesión Y cada vez que se vuelve a la pestaña/app,
-    // porque en móvil el setTimeout puede no sobrevivir a cerrar la app —
-    // así, aunque no se haya disparado, al volver igual se detecta que ya venció.
+    // IMPORTANTE: nunca se ejecuta antes de que authResuelto sea true, para no
+    // borrar por error un temporizador válido mientras Firebase aún está
+    // confirmando la sesión (justo lo que causaba el reinicio al recargar).
     function revisarSesion() {
+        if (!authResuelto) return;
+
         if (!window._currentUser) {
             try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
             clearTimeout(logoutTimer);
@@ -1262,17 +1264,23 @@ function mostrarAvisoSesion(msg) {
     });
     window.addEventListener('pageshow', revisarSesion);
 
-    // Detecta el momento de login/logout para arrancar o limpiar el conteo
-    setInterval(() => {
-        const sesionActiva = !!window._currentUser;
-        if (sesionActiva && !sesionActivaPrev) revisarSesion();
-        if (!sesionActiva && sesionActivaPrev) {
-            clearTimeout(logoutTimer);
-            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-            ocultarBadge();
+    // Fuente única de verdad para saber si hay sesión: nos suscribimos
+    // directo al estado real de Firebase Auth, en vez de "adivinarlo" con
+    // un sondeo cada 2s comparando window._currentUser (eso era lo que
+    // causaba la condición de carrera: al recargar, revisarSesion() podía
+    // ejecutarse ANTES de que Firebase confirmara la sesión, borrando el
+    // temporizador guardado y generando uno nuevo cada vez).
+    function suscribirseAuth() {
+        if (window._firebaseAuthModule?.onAuthStateChanged) {
+            window._firebaseAuthModule.onAuthStateChanged(() => {
+                authResuelto = true;
+                revisarSesion();
+            });
+        } else {
+            setTimeout(suscribirseAuth, 150); // el módulo de auth aún no está listo
         }
-        sesionActivaPrev = sesionActiva;
-    }, 2000);
+    }
+    suscribirseAuth();
 })();
 </script>
 </body>
