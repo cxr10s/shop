@@ -26,6 +26,37 @@
     <meta name="twitter:image" content="https://cxr10s.github.io/shop/favicon3.png">
     <link rel="canonical" href="https://cxr10s.github.io/shop/">
     <link rel="stylesheet" href="styles.css?v=1">
+    <style>
+        .session-timer-badge {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            font-family: 'DM Mono', 'Courier New', monospace;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #0d1117;
+            background: #adff2f;
+            border-radius: 100px;
+            padding: 3px 9px;
+            margin-left: 4px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            transition: background .25s, color .25s, transform .25s;
+        }
+        .session-timer-badge.visible { display: inline-flex; }
+        .session-timer-badge.warning {
+            background: #1a1a1a;
+            color: #ff6b6b;
+            animation: sessionPulse 1s ease-in-out infinite;
+        }
+        @keyframes sessionPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        @media (max-width: 640px) {
+            .session-timer-badge { font-size: 10.5px; padding: 3px 7px; }
+        }
+    </style>
     <link rel="icon" type="image/png" sizes="16x16" href="favicon1.png">
     <link rel="icon" type="image/png"  sizes="32x32" href="favicon2.png">
     <link rel="icon" type="image/png"  sizes="192x192" href="favicon3.png">
@@ -189,6 +220,7 @@
                     </span>
                     <span id="nav-registro-label" class="nav-icon-label">Registro</span>
                 </button>
+                <span id="session-timer-badge" class="session-timer-badge" title="Tiempo restante de tu sesión">⏱ 60:00</span>
 
                 <!-- oarrito -->
                 <button class="nav-icon-btn nav-cart-btn" onclick="toggleCart()" title="Carrito" aria-label="Abrir carrito">
@@ -1143,17 +1175,19 @@ function mostrarAvisoSesion(msg) {
 })();
 </script>
 <script>
-// ── SESIÓN DE 30 MINUTOS (fija desde el login) ────────────────────
+// ── SESIÓN DE 60 MINUTOS (fija desde el login) ────────────────────
 // Reemplaza los mecanismos anteriores de "inactividad" (10 min) y de
-// "ausencia" (5 min, para móvil). Ahora la sesión dura exactamente 30
+// "ausencia" (5 min, para móvil). Ahora la sesión dura exactamente 60
 // minutos desde que el usuario inició sesión — NO se reinicia con
 // actividad (clics, scroll, etc.), es un límite fijo. Si el usuario
 // cierra sesión manualmente antes de tiempo, el contador se limpia y
-// ya no hace falta cerrarla de nuevo automáticamente.
+// ya no hace falta cerrarla de nuevo automáticamente. Además muestra
+// un pequeño badge con la cuenta regresiva junto al botón de usuario.
 (function() {
-    const DURACION_SESION_MS = 30 * 60 * 1000;
+    const DURACION_SESION_MS = 60 * 60 * 1000;
     const STORAGE_KEY = 'shop_session_expiry';
     let logoutTimer = null;
+    let displayTimer = null;
     let sesionActivaPrev = false;
 
     function programarCierre(msRestantes) {
@@ -1163,10 +1197,36 @@ function mostrarAvisoSesion(msg) {
 
     function cerrarPorExpiracion() {
         try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        ocultarBadge();
         if (window._currentUser && window._firebaseSignOut) {
             window._firebaseSignOut();
-            mostrarAvisoSesion('Tu sesión expiró (30 min). Vuelve a iniciar sesión.');
+            mostrarAvisoSesion('Tu sesión expiró (60 min). Vuelve a iniciar sesión.');
         }
+    }
+
+    function ocultarBadge() {
+        clearInterval(displayTimer);
+        const badge = document.getElementById('session-timer-badge');
+        if (badge) badge.classList.remove('visible', 'warning');
+    }
+
+    function actualizarBadge(expiry) {
+        const badge = document.getElementById('session-timer-badge');
+        if (!badge) return;
+        clearInterval(displayTimer);
+
+        function tick() {
+            const restanteMs = expiry - Date.now();
+            if (restanteMs <= 0) { ocultarBadge(); return; }
+            const totalSeg = Math.floor(restanteMs / 1000);
+            const min = Math.floor(totalSeg / 60);
+            const seg = totalSeg % 60;
+            badge.textContent = `⏱ ${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
+            badge.classList.toggle('warning', restanteMs <= 60000); // último minuto en rojo
+            badge.classList.add('visible');
+        }
+        tick();
+        displayTimer = setInterval(tick, 1000);
     }
 
     // Calcula/retoma la hora de expiración y programa (o dispara ya) el cierre.
@@ -1177,6 +1237,7 @@ function mostrarAvisoSesion(msg) {
         if (!window._currentUser) {
             try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
             clearTimeout(logoutTimer);
+            ocultarBadge();
             return;
         }
         let expiry = 0;
@@ -1193,6 +1254,7 @@ function mostrarAvisoSesion(msg) {
             return;
         }
         programarCierre(expiry - ahora);
+        actualizarBadge(expiry);
     }
 
     document.addEventListener('visibilitychange', () => {
@@ -1207,6 +1269,7 @@ function mostrarAvisoSesion(msg) {
         if (!sesionActiva && sesionActivaPrev) {
             clearTimeout(logoutTimer);
             try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+            ocultarBadge();
         }
         sesionActivaPrev = sesionActiva;
     }, 2000);
