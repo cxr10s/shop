@@ -1143,86 +1143,73 @@ function mostrarAvisoSesion(msg) {
 })();
 </script>
 <script>
-// ── CIERRE DE SESIÓN POR INACTIVIDAD (10 min) ─────────────────────
+// ── SESIÓN DE 30 MINUTOS (fija desde el login) ────────────────────
+// Reemplaza los mecanismos anteriores de "inactividad" (10 min) y de
+// "ausencia" (5 min, para móvil). Ahora la sesión dura exactamente 30
+// minutos desde que el usuario inició sesión — NO se reinicia con
+// actividad (clics, scroll, etc.), es un límite fijo. Si el usuario
+// cierra sesión manualmente antes de tiempo, el contador se limpia y
+// ya no hace falta cerrarla de nuevo automáticamente.
 (function() {
-    const LIMITE_INACTIVIDAD_MS = 10 * 60 * 1000;
-    let inactividadTimer = null;
+    const DURACION_SESION_MS = 30 * 60 * 1000;
+    const STORAGE_KEY = 'shop_session_expiry';
+    let logoutTimer = null;
     let sesionActivaPrev = false;
 
-    function resetInactividad() {
-        clearTimeout(inactividadTimer);
-        if (!window._currentUser) return; // solo aplica si hay sesión iniciada
-        inactividadTimer = setTimeout(() => {
-            if (window._currentUser && window._firebaseSignOut) {
-                window._firebaseSignOut();
-                mostrarAvisoSesion('Sesión cerrada por inactividad');
-            }
-        }, LIMITE_INACTIVIDAD_MS);
+    function programarCierre(msRestantes) {
+        clearTimeout(logoutTimer);
+        logoutTimer = setTimeout(cerrarPorExpiracion, msRestantes);
     }
 
-    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
-        document.addEventListener(ev, resetInactividad)
-    );
+    function cerrarPorExpiracion() {
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        if (window._currentUser && window._firebaseSignOut) {
+            window._firebaseSignOut();
+            mostrarAvisoSesion('Tu sesión expiró (30 min). Vuelve a iniciar sesión.');
+        }
+    }
 
-    // Chequeo liviano cada 2s SOLO para detectar el momento en que inicia sesión
-    // (arranca el timer una vez) o la cierra (limpia el timer). No reinicia el
-    // contador en cada tick — eso anularía la detección de inactividad real.
+    // Calcula/retoma la hora de expiración y programa (o dispara ya) el cierre.
+    // Se llama al iniciar sesión Y cada vez que se vuelve a la pestaña/app,
+    // porque en móvil el setTimeout puede no sobrevivir a cerrar la app —
+    // así, aunque no se haya disparado, al volver igual se detecta que ya venció.
+    function revisarSesion() {
+        if (!window._currentUser) {
+            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+            clearTimeout(logoutTimer);
+            return;
+        }
+        let expiry = 0;
+        try { expiry = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10); } catch (e) {}
+        const ahora = Date.now();
+
+        if (!expiry) {
+            // Sesión recién iniciada: fija la hora de expiración una sola vez
+            expiry = ahora + DURACION_SESION_MS;
+            try { localStorage.setItem(STORAGE_KEY, String(expiry)); } catch (e) {}
+        } else if (expiry <= ahora) {
+            // Ya venció mientras la app estaba cerrada/en segundo plano
+            cerrarPorExpiracion();
+            return;
+        }
+        programarCierre(expiry - ahora);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) revisarSesion();
+    });
+    window.addEventListener('pageshow', revisarSesion);
+
+    // Detecta el momento de login/logout para arrancar o limpiar el conteo
     setInterval(() => {
         const sesionActiva = !!window._currentUser;
-        if (sesionActiva && !sesionActivaPrev) resetInactividad();
-        if (!sesionActiva && sesionActivaPrev) clearTimeout(inactividadTimer);
+        if (sesionActiva && !sesionActivaPrev) revisarSesion();
+        if (!sesionActiva && sesionActivaPrev) {
+            clearTimeout(logoutTimer);
+            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        }
         sesionActivaPrev = sesionActiva;
     }, 2000);
-})();
-
-// ── CIERRE DE SESIÓN POR AUSENCIA (5 min) — para móvil ────────────
-// El script de arriba depende de que la página siga ejecutándose (setTimeout).
-// En móvil, al cerrar el navegador o cambiar de app, el sistema operativo
-// mata esa ejecución, así que el timer nunca llega a dispararse y la sesión
-// queda abierta indefinidamente. Esto guarda la hora en localStorage (que
-// SÍ sobrevive a cerrar todo) y, al volver a abrir la página, revisa cuánto
-// tiempo estuvo fuera — si son más de 5 min, cierra sesión de inmediato.
-(function() {
-    const LIMITE_AUSENCIA_MS = 5 * 60 * 1000;
-    const STORAGE_KEY = 'shop_last_active_ts';
-
-    function marcarUltimaActividad() {
-        try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
-    }
-
-    function revisarAusencia() {
-        if (!window._currentUser) { marcarUltimaActividad(); return; }
-        let ultima = 0;
-        try { ultima = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10); } catch (e) {}
-        if (ultima && (Date.now() - ultima) > LIMITE_AUSENCIA_MS) {
-            if (window._firebaseSignOut) {
-                window._firebaseSignOut();
-                mostrarAvisoSesion('Sesión cerrada: estuviste fuera más de 5 minutos');
-            }
-        }
-        marcarUltimaActividad();
-    }
-
-    // Guarda la hora cada vez que la app pasa a segundo plano o se oculta
-    // (cambiar de app, bloquear pantalla, cerrar pestaña) — el evento más
-    // confiable en móvil, mucho más que 'beforeunload'.
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) marcarUltimaActividad();
-        else revisarAusencia();
-    });
-
-    // Al volver desde el caché de retroceso/adelanto del navegador (común en iOS)
-    window.addEventListener('pageshow', revisarAusencia);
-
-    // Chequeo al cargar por primera vez (ej. reabrir el navegador tras un día)
-    // con un pequeño margen para que Firebase Auth resuelva el usuario actual.
-    setTimeout(revisarAusencia, 1200);
-
-    // Refrescar la marca de tiempo con actividad normal, para que el conteo
-    // de 5 min de ausencia empiece desde la última interacción real.
-    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(ev =>
-        document.addEventListener(ev, marcarUltimaActividad)
-    );
 })();
 </script>
 </body>
