@@ -13,7 +13,7 @@ const OFERTAS_CONFIG = {
         {
             id: 'oferta-camiseta-1',
             name: 'Camiseta Brasil Retro',
-            basePrice: 99000,
+            basePrice: 112200,
             image: 'CamisetaBrasil.png',
             category: 'camisetas',
             sizes: ['S','M','L','XL'],
@@ -31,7 +31,7 @@ const OFERTAS_CONFIG = {
         {
             id: 'oferta-camiseta-2',
             name: 'Camiseta Adidas Madrid',
-            basePrice: 87400,
+            basePrice: 94200,
             image: 'Camiseta_adidas_Madrid.png',
             category: 'camisetas',
             sizes: ['S','M','L','XL'],
@@ -48,6 +48,81 @@ const OFERTAS_CONFIG = {
         }
     ]
 };
+
+// =============================================
+// CATÁLOGO DE OFERTAS — lista INDEPENDIENTE
+// =============================================
+// Antes el catálogo reutilizaba directamente OFERTAS_CONFIG.products,
+// así que editar un producto ahí también lo cambiaba en la sección
+// principal (y viceversa) — igual que en todas las demás categorías,
+// esta lista es su propia copia separada. Edítala aparte si el catálogo
+// debe mostrar algo distinto a la sección principal de Ofertas.
+const OFERTAS_CATALOG_PRODUCTS = [
+    {
+        id: 'oferta-camiseta-2',
+        name: 'Licra NIKE Hombre',
+        basePrice: 34200,
+        image: 'ofertabuzoDEpor.png',
+        sizes: ['S','M','L','XL'],
+        description: 'Camibuzo deportiva NIKE para hombre. Ideal para entrenamientos '
+    },
+    {
+        id: 'oferta-tenis-2',
+        name: 'Tenis Nike',
+        basePrice: 129000,
+        image: 'tenisoferta.png',
+        sizes: ['36','37','38','39','40','41','42','43','44'],
+        description: 'Un tenis muy cómodo de Nike. Suela Zoom para máxima amortiguación'
+    },
+    {
+        id: 'oferta-tenis-3',
+        name: 'New Balance Blanco',
+        basePrice: 182000,
+        image: 'tenisoferta2.png',
+        sizes: ['36','37','38','39','40','41','42','43','44'],
+        description: 'Tenis New Balance para hombre. Aspecto moderno para el dia a dia'
+    },
+    {
+        id: 'oferta-tenis-4',
+        name: 'New Balance Negro',
+        basePrice: 211300,
+        image: 'tenisoferta3.png',
+        sizes: ['36','37','38','39','40','41','42','43','44'],
+        description: 'El tenis más cómodo de Nike. Suela Zoom para máxima amortiguación.'
+    },
+    {
+        id: 'oferta-camiseta-3',
+        name: 'Camiseta Barcelona',
+        basePrice: 89999,
+        image: 'ofertabarca.png',
+        sizes: ['S','M','L','XL'],
+        description: 'Camiseta calidad 1.1 del club barcelona. Diseño elegante para hincha'
+    },
+    {
+        id: 'oferta-camiseta-4',
+        name: 'Camiseta Borussia',
+        basePrice: 91300,
+        image: 'borussia.png',
+        sizes: ['S','M','L','XL'],
+        description: 'Borussia Dormunt club aleman. Camiseta que combina con todo'
+    },
+    {
+        id: 'oferta-camiseta-5',
+        name: 'Camiseta Bucaramanga',
+        basePrice: 89999,
+        image: 'bucaramanga.png',
+        sizes: ['S','M','L','XL'],
+        description: 'Camiseta que puede hacer sentirte un hincha mas de la ciudad bonita'
+    },
+    {
+        id: 'oferta-camiseta-6',
+        name: 'Camiseta At Nacional',
+        basePrice: 89999,
+        image: 'nacional.png',
+        sizes: ['S','M','L','XL'],
+        description: 'Club verdolaga combina tu estilo con esta camiseta de alta calidad'
+    }
+];
 
 // =============================================
 // MODAL DE PRODUCTO (talla + precio + descripción)
@@ -741,11 +816,11 @@ function getCategoryName(category) {
 function getCatalogProducts(category) {
     const catalogProducts = {
         'camisetas': [
-            { id: 'camiseta-cat-1', name: 'Camiseta Adidas Liverpool ', price: 74900, image: 'Camiseta adidas4.png', sizes: ['S','M','L','XL'] },
-            { id: 'camiseta-cat-2', name: 'Camiseta Adidas Black     ', price: 49900, image: 'Camiseta Adidas2.png', sizes: ['S','M','L','XL'] },
-            { id: 'camiseta-cat-3', name: 'Camiseta Adidas Arsenal Club ', price: 79500, image: 'Camiseta Arsenal.png', sizes: ['S','M','L','XL'] },
-            { id: 'camiseta-cat-5', name: 'Camiseta Adidas Madrid Blue ', price: 78400, image: 'Madridblue.png', sizes: ['S','M','L','XL'] },
-            { id: 'camiseta-cat-6', name: 'Camiseta Adidas Colombia ', price: 52000, image: 'Colombia.png', sizes: ['S','M','L','XL'] }
+            { id: 'camiseta-cat-1', name: 'Camiseta Adidas Liverpool ', price: 90800, image: 'Camiseta adidas4.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-2', name: 'Camiseta Adidas Black     ', price: 60300, image: 'Camiseta Adidas2.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-3', name: 'Camiseta Adidas Arsenal Club ', price: 88500, image: 'Camiseta Arsenal.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-5', name: 'Camiseta Adidas Madrid Blue ', price: 93000, image: 'Madridblue.png', sizes: ['S','M','L','XL'] },
+            { id: 'camiseta-cat-6', name: 'Camiseta Adidas Colombia ', price: 62000, image: 'Colombia.png', sizes: ['S','M','L','XL'] }
         ],
         'tenis': [
             { id: 'tenis-cat-1', name: 'Tenis Adidas Yeezy', price: 295900, image: 'Tenis Adidas yeezy.png', sizes: ['36','37','38','39','40','41','42','43','44'] },
@@ -758,13 +833,13 @@ function getCatalogProducts(category) {
             { id: 'tenis-cat-8', name: 'Tenis Adidas III', price: 99200, image: 'tenisadidas4.png', sizes: ['36','37','38','39','40','41','42','43','44'] }
         ],
         'jeans': [
-            { id: 'jeans-cat-1', name: 'Jeans Clasicos', price: 70800, image: 'Jeans clasico hombre l.png', sizes: ['28','30','32','34'] },
-            { id: 'jeans-cat-2', name: 'Jeans Clasicos II', price: 68200, image: 'Jeans clasico hombre ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-1', name: 'Jeans Clasicos', price: 80300, image: 'Jeans clasico hombre l.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-2', name: 'Jeans Clasicos II', price: 86200, image: 'Jeans clasico hombre ll.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-3', name: 'Jeans Vintage', price: 80000, image: 'jeans ventage dama l.png', sizes: ['28','30','32','34'] },
             { id: 'jeans-cat-4', name: 'Jeans Vintage II', price: 80000, image: 'jeans vintage dama ll.png', sizes: ['28','30','32','34'] },
-            { id: 'jeans-cat-5', name: 'Jeans Rotos', price: 72800, image: 'jeans rotos ll.png', sizes: ['28','30','32','34'] },
-            { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 88700, image: 'jeans relaxed ll.png', sizes: ['28','30','32','34'] },
-            { id: 'jeans-cat-7', name: 'Jeans Modernos', price: 73900, image: 'Jeans moderno ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-5', name: 'Jeans Rotos', price: 101200, image: 'jeans rotos ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-6', name: 'Jeans Relaxed', price: 95600, image: 'jeans relaxed ll.png', sizes: ['28','30','32','34'] },
+            { id: 'jeans-cat-7', name: 'Jeans Modernos', price: 88600, image: 'Jeans moderno ll.png', sizes: ['28','30','32','34'] },
         ],
         'cascos': [
             { id: 'casco-cat-1', name: 'Casco Moto croos', price: 220600, image: 'cross azul.png', sizes: ['XS (53-54cm)','S (55-56cm)','M (57-58cm)','L (59-60cm)','XL (61-62cm)'] },
@@ -793,7 +868,7 @@ function getCatalogProducts(category) {
             { id: 'deportes-cat-16', name: 'Mancuerna 25KG', price: 259200, image: 'Mancuerna25KG.png' },
             { id: 'deportes-cat-17', name: 'Mancuerna 30KG', price: 289400, image: 'Mancuerna30KG.png' }
         ],
-        'ofertas': OFERTAS_CONFIG.products.map(p => {
+        'ofertas': OFERTAS_CATALOG_PRODUCTS.map(p => {
             const salePrice = Math.round(p.basePrice * (1 - OFERTAS_CONFIG.discountPct / 100));
             return { id: p.id, name: p.name, price: p.basePrice, salePrice, discountPct: OFERTAS_CONFIG.discountPct, image: p.image, sizes: p.sizes || null, description: p.description || null };
         })
