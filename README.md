@@ -6,7 +6,7 @@
 
 ![Estado](https://img.shields.io/badge/Estado_De_La_Web_●_-En_Mantenimiento-FF822F?style=flat-square&labelColor=0a0a0a)
 
-> comercio deportivo moderno con autenticación Google, pagos reales con Nequi y carrito sincronizado en la nube.
+> comercio deportivo moderno con autenticación Google, pagos reales y carrito sincronizado en la nube.
 
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
